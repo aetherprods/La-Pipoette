@@ -1,0 +1,19 @@
+{
+  "name": "lepipette",
+  "version": "0.1.0",
+  "description": "Lightweight Box Game. Props to Édouard Lucas.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aetherprods/LePipette.git"
+  },
+  "author": "AEP",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/aetherprods/LePipette/issues"
+  },
+  "homepage": "https://github.com/aetherprods/LePipette#readme"
+}
