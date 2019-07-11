@@ -1,5 +1,5 @@
 import "../pages/style.css";
-import Game from "../Game.js";
+import Game from "../components/Game.js";
 
 const Index = () => (
     <div>

@@ -93,25 +93,265 @@ module.exports =
 /************************************************************************/
 /******/ ({
 
-/***/ "./Game.js":
-/*!*****************!*\
-  !*** ./Game.js ***!
-  \*****************/
+/***/ "./components/Chat.js":
+/*!****************************!*\
+  !*** ./components/Chat.js ***!
+  \****************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_slicedToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/slicedToArray */ "./node_modules/@babel/runtime-corejs2/helpers/esm/slicedToArray.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/classCallCheck */ "./node_modules/@babel/runtime-corejs2/helpers/esm/classCallCheck.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/createClass */ "./node_modules/@babel/runtime-corejs2/helpers/esm/createClass.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/possibleConstructorReturn */ "./node_modules/@babel/runtime-corejs2/helpers/esm/possibleConstructorReturn.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/getPrototypeOf */ "./node_modules/@babel/runtime-corejs2/helpers/esm/getPrototypeOf.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/classCallCheck */ "./node_modules/@babel/runtime-corejs2/helpers/esm/classCallCheck.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/createClass */ "./node_modules/@babel/runtime-corejs2/helpers/esm/createClass.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/possibleConstructorReturn */ "./node_modules/@babel/runtime-corejs2/helpers/esm/possibleConstructorReturn.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/getPrototypeOf */ "./node_modules/@babel/runtime-corejs2/helpers/esm/getPrototypeOf.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/assertThisInitialized */ "./node_modules/@babel/runtime-corejs2/helpers/esm/assertThisInitialized.js");
 /* harmony import */ var _babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/inherits */ "./node_modules/@babel/runtime-corejs2/helpers/esm/inherits.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var react_lineto__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-lineto */ "react-lineto");
-/* harmony import */ var react_lineto__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(react_lineto__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/defineProperty */ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! axios */ "axios");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var pusher_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! pusher-js */ "pusher-js");
+/* harmony import */ var pusher_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(pusher_js__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var _ChatMessage__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./ChatMessage */ "./components/ChatMessage.js");
+
+
+
+
+
+
+
+
+
+
+
+
+var Chat =
+/*#__PURE__*/
+function (_React$Component) {
+  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__["default"])(Chat, _React$Component);
+
+  function Chat(props) {
+    var _this;
+
+    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, Chat);
+
+    _this = Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__["default"])(Chat).call(this, props));
+
+    Object(_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_6__["default"])(Object(_babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4__["default"])(_this), "handleKeyUp", function (evt) {
+      var value = evt.target.value;
+
+      if (evt.keyCode === 13 && !evt.shiftKey) {
+        var user = _this.props.activeUser;
+        var chat = {
+          user: user,
+          message: value,
+          timestamp: +new Date()
+        };
+        evt.target.value = '';
+        axios__WEBPACK_IMPORTED_MODULE_8___default.a.post('/message', chat);
+      }
+    });
+
+    _this.state = {
+      chats: []
+    };
+    return _this;
+  }
+
+  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(Chat, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      this.pusher = new pusher_js__WEBPACK_IMPORTED_MODULE_9___default.a("677dc9670d267bcc5be9", {
+        cluster: "us2",
+        forceTLS: true
+      });
+      this.channel = this.pusher.subscribe('chat-room');
+      this.channel.bind('new-message', function (_ref) {
+        var _ref$chat = _ref.chat,
+            chat = _ref$chat === void 0 ? null : _ref$chat;
+        var chats = _this2.state.chats;
+        chat && chats.push(chat);
+
+        _this2.setState({
+          chats: chats
+        });
+      });
+      this.pusher.connection.bind('connected', function () {
+        axios__WEBPACK_IMPORTED_MODULE_8___default.a.post('/messages').then(function (response) {
+          var chats = response.data.messages;
+
+          _this2.setState({
+            chats: chats
+          });
+        });
+      });
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      this.pusher.disconnect();
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this3 = this;
+
+      return this.props.activeUser && react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", {
+        className: "border-bottom border-gray w-100 d-flex align-items-center bg-white",
+        style: {
+          height: 90
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("h2", {
+        className: "text-dark mb-0 mx-4 px-2"
+      }, this.props.activeUser)), react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", {
+        className: "px-4 pb-4 w-100 d-flex flex-row flex-wrap align-items-start align-content-start position-relative",
+        style: {
+          height: 'calc(100% - 180px)',
+          overflowY: 'scroll'
+        }
+      }, this.state.chats.map(function (chat, index) {
+        var previous = Math.max(0, index - 1);
+        var previousChat = _this3.state.chats[previous];
+        var position = chat.user === _this3.props.activeUser ? "right" : "left";
+        var isFirst = previous === index;
+        var inSequence = chat.user === previousChat.user;
+        var hasDelay = Math.ceil((chat.timestamp - previousChat.timestamp) / (1000 * 60)) > 1;
+        return react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", {
+          key: index
+        }, (isFirst || !inSequence || hasDelay) && react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", {
+          className: "d-block w-100 font-weight-bold text-dark mt-4 pb-1 px-1 text-".concat(position),
+          style: {
+            fontSize: '0.9rem'
+          }
+        }, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("span", null, chat.user || 'Anonymous')), react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement(_ChatMessage__WEBPACK_IMPORTED_MODULE_10__["default"], {
+          message: chat.message,
+          position: position
+        }));
+      })), react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", {
+        className: "border-top border-gray w-100 px-4 d-flex align-items-center bg-light",
+        style: {
+          minHeight: 90
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("textarea", {
+        className: "form-control px-3 py-2",
+        onKeyUp: this.handleKeyUp,
+        placeholder: "Enter a chat message",
+        style: {
+          resize: 'none'
+        }
+      })));
+    }
+  }]);
+
+  return Chat;
+}(react__WEBPACK_IMPORTED_MODULE_7___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (Chat);
+
+/***/ }),
+
+/***/ "./components/ChatMessage.js":
+/*!***********************************!*\
+  !*** ./components/ChatMessage.js ***!
+  \***********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/classCallCheck */ "./node_modules/@babel/runtime-corejs2/helpers/esm/classCallCheck.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/createClass */ "./node_modules/@babel/runtime-corejs2/helpers/esm/createClass.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/possibleConstructorReturn */ "./node_modules/@babel/runtime-corejs2/helpers/esm/possibleConstructorReturn.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/getPrototypeOf */ "./node_modules/@babel/runtime-corejs2/helpers/esm/getPrototypeOf.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/inherits */ "./node_modules/@babel/runtime-corejs2/helpers/esm/inherits.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_5__);
+
+
+
+
+
+
+
+var ChatMessage =
+/*#__PURE__*/
+function (_React$Component) {
+  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_4__["default"])(ChatMessage, _React$Component);
+
+  function ChatMessage() {
+    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, ChatMessage);
+
+    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__["default"])(ChatMessage).apply(this, arguments));
+  }
+
+  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(ChatMessage, [{
+    key: "render",
+    value: function render() {
+      var _this$props = this.props,
+          _this$props$position = _this$props.position,
+          position = _this$props$position === void 0 ? 'left' : _this$props$position,
+          message = _this$props.message;
+      var isRight = position.toLowerCase() === 'right';
+      var align = isRight ? 'text-right' : 'text-left';
+      var justify = isRight ? 'justify-content-end' : 'justify-content-start';
+      var messageBoxStyles = {
+        maxWidth: '70%',
+        flexGrow: 0
+      };
+      var messageStyles = {
+        fontWeight: 500,
+        lineHeight: 1.4,
+        whiteSpace: 'pre-wrap'
+      };
+      return react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", {
+        className: "w-100 my-1 d-flex ".concat(justify)
+      }, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", {
+        className: "bg-light rounded border border-gray p-2",
+        style: messageBoxStyles
+      }, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("span", {
+        className: "d-block text-secondary ".concat(align),
+        style: messageStyles
+      }, message)));
+    }
+  }]);
+
+  return ChatMessage;
+}(react__WEBPACK_IMPORTED_MODULE_5___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (ChatMessage);
+
+/***/ }),
+
+/***/ "./components/Game.js":
+/*!****************************!*\
+  !*** ./components/Game.js ***!
+  \****************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/assertThisInitialized */ "./node_modules/@babel/runtime-corejs2/helpers/esm/assertThisInitialized.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/defineProperty */ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_slicedToArray__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/slicedToArray */ "./node_modules/@babel/runtime-corejs2/helpers/esm/slicedToArray.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/classCallCheck */ "./node_modules/@babel/runtime-corejs2/helpers/esm/classCallCheck.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/createClass */ "./node_modules/@babel/runtime-corejs2/helpers/esm/createClass.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/possibleConstructorReturn */ "./node_modules/@babel/runtime-corejs2/helpers/esm/possibleConstructorReturn.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/getPrototypeOf */ "./node_modules/@babel/runtime-corejs2/helpers/esm/getPrototypeOf.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/inherits */ "./node_modules/@babel/runtime-corejs2/helpers/esm/inherits.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var react_lineto__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-lineto */ "react-lineto");
+/* harmony import */ var react_lineto__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react_lineto__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var _components_Chat_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../components/Chat.js */ "./components/Chat.js");
+
+
+
 
 
 
@@ -124,18 +364,18 @@ __webpack_require__.r(__webpack_exports__);
 var Game =
 /*#__PURE__*/
 function (_React$Component) {
-  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__["default"])(Game, _React$Component);
+  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_7__["default"])(Game, _React$Component);
 
   function Game() {
-    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, Game);
+    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Game);
 
-    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__["default"])(Game).apply(this, arguments));
+    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__["default"])(Game).apply(this, arguments));
   }
 
-  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(Game, [{
+  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_4__["default"])(Game, [{
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(GameInstance, {
+      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(GameInstance, {
         players: [{
           username: "timmy",
           color: "red"
@@ -153,22 +393,22 @@ function (_React$Component) {
   }]);
 
   return Game;
-}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
+}(react__WEBPACK_IMPORTED_MODULE_8___default.a.Component);
 
 var GameInstance =
 /*#__PURE__*/
 function (_React$Component2) {
-  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__["default"])(GameInstance, _React$Component2);
+  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_7__["default"])(GameInstance, _React$Component2);
 
   function GameInstance(props) {
     var _this;
 
-    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, GameInstance);
+    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_3__["default"])(this, GameInstance);
 
+    _this = Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__["default"])(GameInstance).call(this, props));
     var x = props.boardSize[0]['x'],
         y = props.boardSize[1]['y'],
         connectionsArraySize = (x - 1) * y + (y - 1) * x;
-    _this = Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__["default"])(GameInstance).call(this, props));
     _this.state = {
       currentPlayer: _this.props.players[0],
       firstConnector: 0,
@@ -182,7 +422,7 @@ function (_React$Component2) {
     return _this;
   }
 
-  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(GameInstance, [{
+  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_4__["default"])(GameInstance, [{
     key: "generateSquareConditions",
     value: function generateSquareConditions(x, y) {
       var tempArray = [];
@@ -271,7 +511,7 @@ function (_React$Component2) {
             sD = false;
         var tempArray = squareConditions[i];
 
-        var _squareConditions$i = Object(_babel_runtime_corejs2_helpers_esm_slicedToArray__WEBPACK_IMPORTED_MODULE_0__["default"])(squareConditions[i], 4),
+        var _squareConditions$i = Object(_babel_runtime_corejs2_helpers_esm_slicedToArray__WEBPACK_IMPORTED_MODULE_2__["default"])(squareConditions[i], 4),
             a = _squareConditions$i[0],
             b = _squareConditions$i[1],
             c = _squareConditions$i[2],
@@ -361,7 +601,7 @@ function (_React$Component2) {
           legalcombos = this.state.legalCombos;
 
       var _loop = function _loop(i) {
-        var _legalcombos$i = Object(_babel_runtime_corejs2_helpers_esm_slicedToArray__WEBPACK_IMPORTED_MODULE_0__["default"])(legalcombos[i], 2),
+        var _legalcombos$i = Object(_babel_runtime_corejs2_helpers_esm_slicedToArray__WEBPACK_IMPORTED_MODULE_2__["default"])(legalcombos[i], 2),
             x = _legalcombos$i[0],
             y = _legalcombos$i[1];
 
@@ -458,9 +698,9 @@ function (_React$Component2) {
     value: function render() {
       var _this5 = this;
 
-      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
+      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
         className: "game-instance"
-      }, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(Board, {
+      }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(Board, {
         clickHandler: function clickHandler(i) {
           _this5.clickHandler(i);
         },
@@ -476,20 +716,20 @@ function (_React$Component2) {
   }]);
 
   return GameInstance;
-}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
+}(react__WEBPACK_IMPORTED_MODULE_8___default.a.Component);
 
 var Board =
 /*#__PURE__*/
 function (_React$Component3) {
-  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__["default"])(Board, _React$Component3);
+  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_7__["default"])(Board, _React$Component3);
 
   function Board() {
-    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, Board);
+    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Board);
 
-    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__["default"])(Board).apply(this, arguments));
+    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__["default"])(Board).apply(this, arguments));
   }
 
-  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(Board, [{
+  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_4__["default"])(Board, [{
     key: "renderBoard",
     value: function renderBoard(x, y) {
       var _this6 = this;
@@ -515,9 +755,9 @@ function (_React$Component3) {
       }
 
       var iterator = xy.values();
-      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, yArr.map(function (y) {
-        return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("tr", null, xArr.map(function (x) {
-          return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("td", null, _this6.renderConnector(iterator.next().value));
+      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, yArr.map(function (y) {
+        return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("tr", null, xArr.map(function (x) {
+          return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("td", null, _this6.renderConnector(iterator.next().value));
         }));
       }));
     }
@@ -527,7 +767,7 @@ function (_React$Component3) {
       var _this7 = this;
 
       var connectorId = "connector".concat(i);
-      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(Connector, {
+      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(Connector, {
         key: i,
         id: connectorId,
         clickHandler: function clickHandler() {
@@ -551,48 +791,126 @@ function (_React$Component3) {
         }
       }
 
-      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, this.props.playerOne['username'], "'s score: ", playerOneScore, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), this.props.playerTwo['username'], "'s score: ", playerTwoScore);
+      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, this.props.playerOne['username'], "'s score: ", playerOneScore, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("br", null), this.props.playerTwo['username'], "'s score: ", playerTwoScore);
     }
   }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
+      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
         className: "absolute-center"
-      }, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
         className: "game-board"
-      }, this.renderBoard(this.props.x, this.props.y)), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
+      }, this.renderBoard(this.props.x, this.props.y)), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
         className: "game-board-connections"
-      }, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(BoardConnections, {
+      }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(BoardConnections, {
         connectionsArray: this.props.connectionsArray
-      })), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
+      })), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
         className: "square-connections"
-      }, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(SquareConnections, {
+      }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(SquareConnections, {
         squaresArray: this.props.squaresArray,
         playerColor: this.props.currentPlayer['color']
-      })), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
+      })), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
         className: "game-status"
-      }, "It is ", this.props.currentPlayer['username'], "'s turn!", react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), "The current score is: ", this.calculateScore()));
+      }, "It is ", this.props.currentPlayer['username'], "'s turn!", react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("br", null), "The current score is: ", this.calculateScore()), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
+        className: "chat-box"
+      }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(ChatBox, null)));
     }
   }]);
 
   return Board;
-}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
+}(react__WEBPACK_IMPORTED_MODULE_8___default.a.Component);
+
+var ChatBox =
+/*#__PURE__*/
+function (_React$Component4) {
+  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_7__["default"])(ChatBox, _React$Component4);
+
+  function ChatBox(props) {
+    var _this8;
+
+    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_3__["default"])(this, ChatBox);
+
+    _this8 = Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__["default"])(ChatBox).call(this, props));
+
+    Object(_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_1__["default"])(Object(_babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_0__["default"])(_this8), "handleKeyUp", function (evt) {
+      if (evt.keyCode === 13) {
+        var user = evt.target.value;
+
+        _this8.setState({
+          user: user
+        });
+      }
+    });
+
+    _this8.state = {
+      user: null
+    };
+    return _this8;
+  }
+
+  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_4__["default"])(ChatBox, [{
+    key: "render",
+    value: function render() {
+      var user = this.state.user;
+      var nameInputStyles = {
+        background: 'transparent',
+        color: '#999',
+        border: 0,
+        borderBottom: '1px solid #666',
+        borderRadius: 0,
+        fontSize: '3rem',
+        fontWeight: 500,
+        boxShadow: 'none !important'
+      };
+      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("main", {
+        className: "container-fluid position-absolute h-100 bg-dark"
+      }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
+        className: "row position-absolute w-100 h-100"
+      }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("section", {
+        className: "col-md-8 d-flex flex-row flex-wrap align-items-center align-content-center px-5"
+      }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
+        className: "px-5 mx-5"
+      }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("span", {
+        className: "d-block w-100 h1 text-light",
+        style: {
+          marginTop: -50
+        }
+      }, user ? react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("span", null, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("span", {
+        style: {
+          color: '#999'
+        }
+      }, "Hello!"), " ", user) : "What is your name?"), !user && react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("input", {
+        type: "text",
+        className: "form-control mt-3 px-3 py-2",
+        onKeyUp: this.handleKeyUp,
+        autoComplete: "off",
+        style: nameInputStyles
+      }))), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("section", {
+        className: "col-md-4 position-relative d-flex flex-wrap h-100 align-items-start align-content-between bg-white px-0"
+      }, user && react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(_components_Chat_js__WEBPACK_IMPORTED_MODULE_10__["default"], {
+        activeUser: user
+      })))));
+    }
+  }]);
+
+  return ChatBox;
+}(react__WEBPACK_IMPORTED_MODULE_8___default.a.Component);
 
 var SquareConnections =
 /*#__PURE__*/
-function (_React$Component4) {
-  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__["default"])(SquareConnections, _React$Component4);
+function (_React$Component5) {
+  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_7__["default"])(SquareConnections, _React$Component5);
 
   function SquareConnections() {
-    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, SquareConnections);
+    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_3__["default"])(this, SquareConnections);
 
-    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__["default"])(SquareConnections).apply(this, arguments));
+    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__["default"])(SquareConnections).apply(this, arguments));
   }
 
-  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(SquareConnections, [{
+  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_4__["default"])(SquareConnections, [{
     key: "renderSquares",
     value: function renderSquares() {
-      var _this8 = this;
+      var _this9 = this;
 
       var tempArray = [];
 
@@ -600,41 +918,41 @@ function (_React$Component4) {
         tempArray.push(i);
       }
 
-      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, tempArray.map(function (i) {
-        return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(Square, {
-          color: _this8.props.squaresArray[i]['color'],
-          connectorA: _this8.props.squaresArray[i]['square'][0][0],
-          connectorB: _this8.props.squaresArray[i]['square'][1][1],
-          connectorC: _this8.props.squaresArray[i]['square'][0][1],
-          connectorD: _this8.props.squaresArray[i]['square'][1][0]
+      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, tempArray.map(function (i) {
+        return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(Square, {
+          color: _this9.props.squaresArray[i]['color'],
+          connectorA: _this9.props.squaresArray[i]['square'][0][0],
+          connectorB: _this9.props.squaresArray[i]['square'][1][1],
+          connectorC: _this9.props.squaresArray[i]['square'][0][1],
+          connectorD: _this9.props.squaresArray[i]['square'][1][0]
         });
       }));
     }
   }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, this.renderSquares());
+      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, this.renderSquares());
     }
   }]);
 
   return SquareConnections;
-}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
+}(react__WEBPACK_IMPORTED_MODULE_8___default.a.Component);
 
 var BoardConnections =
 /*#__PURE__*/
-function (_React$Component5) {
-  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__["default"])(BoardConnections, _React$Component5);
+function (_React$Component6) {
+  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_7__["default"])(BoardConnections, _React$Component6);
 
   function BoardConnections() {
-    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, BoardConnections);
+    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_3__["default"])(this, BoardConnections);
 
-    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__["default"])(BoardConnections).apply(this, arguments));
+    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__["default"])(BoardConnections).apply(this, arguments));
   }
 
-  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(BoardConnections, [{
+  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_4__["default"])(BoardConnections, [{
     key: "renderConnections",
     value: function renderConnections() {
-      var _this9 = this;
+      var _this10 = this;
 
       var tempArray = [];
 
@@ -643,38 +961,38 @@ function (_React$Component5) {
       }
 
       ;
-      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, tempArray.map(function (i) {
-        return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(Connection, {
-          connectorA: _this9.props.connectionsArray[i][0],
-          connectorB: _this9.props.connectionsArray[i][1]
+      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, tempArray.map(function (i) {
+        return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(Connection, {
+          connectorA: _this10.props.connectionsArray[i][0],
+          connectorB: _this10.props.connectionsArray[i][1]
         });
       }));
     }
   }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, this.renderConnections());
+      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, this.renderConnections());
     }
   }]);
 
   return BoardConnections;
-}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
+}(react__WEBPACK_IMPORTED_MODULE_8___default.a.Component);
 
 var Connector =
 /*#__PURE__*/
-function (_React$Component6) {
-  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__["default"])(Connector, _React$Component6);
+function (_React$Component7) {
+  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_7__["default"])(Connector, _React$Component7);
 
   function Connector() {
-    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, Connector);
+    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Connector);
 
-    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__["default"])(Connector).apply(this, arguments));
+    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__["default"])(Connector).apply(this, arguments));
   }
 
-  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(Connector, [{
+  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_4__["default"])(Connector, [{
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("button", {
+      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("button", {
         className: this.props.id,
         key: this.props.key,
         onClick: this.props.clickHandler
@@ -683,25 +1001,25 @@ function (_React$Component6) {
   }]);
 
   return Connector;
-}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
+}(react__WEBPACK_IMPORTED_MODULE_8___default.a.Component);
 
 var Connection =
 /*#__PURE__*/
-function (_React$Component7) {
-  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__["default"])(Connection, _React$Component7);
+function (_React$Component8) {
+  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_7__["default"])(Connection, _React$Component8);
 
   function Connection() {
-    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, Connection);
+    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Connection);
 
-    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__["default"])(Connection).apply(this, arguments));
+    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__["default"])(Connection).apply(this, arguments));
   }
 
-  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(Connection, [{
+  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_4__["default"])(Connection, [{
     key: "render",
     value: function render() {
       var connectorA = "connector".concat(this.props.connectorA),
           connectorB = "connector".concat(this.props.connectorB);
-      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(react_lineto__WEBPACK_IMPORTED_MODULE_7___default.a, {
+      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(react_lineto__WEBPACK_IMPORTED_MODULE_9___default.a, {
         from: connectorA,
         to: connectorB,
         borderWidth: 2,
@@ -711,52 +1029,52 @@ function (_React$Component7) {
   }]);
 
   return Connection;
-}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
+}(react__WEBPACK_IMPORTED_MODULE_8___default.a.Component);
 
 var Square =
 /*#__PURE__*/
-function (_React$Component8) {
-  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__["default"])(Square, _React$Component8);
+function (_React$Component9) {
+  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_7__["default"])(Square, _React$Component9);
 
   function Square() {
-    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, Square);
+    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Square);
 
-    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__["default"])(Square).apply(this, arguments));
+    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__["default"])(Square).apply(this, arguments));
   }
 
-  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(Square, [{
+  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_4__["default"])(Square, [{
     key: "render",
     value: function render() {
       var connectorA = "connector".concat(this.props.connectorA),
           connectorB = "connector".concat(this.props.connectorB),
           connectorC = "connector".concat(this.props.connectorC),
           connectorD = "connector".concat(this.props.connectorD);
-      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(react_lineto__WEBPACK_IMPORTED_MODULE_7___default.a, {
+      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(react_lineto__WEBPACK_IMPORTED_MODULE_9___default.a, {
         from: connectorA,
         to: connectorB,
         borderColor: this.props.color,
         borderWidth: 3
-      }), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(react_lineto__WEBPACK_IMPORTED_MODULE_7___default.a, {
+      }), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(react_lineto__WEBPACK_IMPORTED_MODULE_9___default.a, {
         from: connectorC,
         to: connectorD,
         borderColor: this.props.color,
         borderWidth: 3
-      }), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(react_lineto__WEBPACK_IMPORTED_MODULE_7___default.a, {
+      }), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(react_lineto__WEBPACK_IMPORTED_MODULE_9___default.a, {
         from: connectorA,
         to: connectorC,
         borderColor: this.props.color,
         borderWidth: 3
-      }), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(react_lineto__WEBPACK_IMPORTED_MODULE_7___default.a, {
+      }), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(react_lineto__WEBPACK_IMPORTED_MODULE_9___default.a, {
         from: connectorA,
         to: connectorD,
         borderColor: this.props.color,
         borderWidth: 3
-      }), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(react_lineto__WEBPACK_IMPORTED_MODULE_7___default.a, {
+      }), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(react_lineto__WEBPACK_IMPORTED_MODULE_9___default.a, {
         from: connectorD,
         to: connectorB,
         borderColor: this.props.color,
         borderWidth: 3
-      }), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(react_lineto__WEBPACK_IMPORTED_MODULE_7___default.a, {
+      }), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(react_lineto__WEBPACK_IMPORTED_MODULE_9___default.a, {
         from: connectorC,
         to: connectorB,
         borderColor: this.props.color,
@@ -766,7 +1084,7 @@ function (_React$Component8) {
   }]);
 
   return Square;
-}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
+}(react__WEBPACK_IMPORTED_MODULE_8___default.a.Component);
 
 /* harmony default export */ __webpack_exports__["default"] = (Game);
 
@@ -946,6 +1264,36 @@ function _createClass(Constructor, protoProps, staticProps) {
   if (protoProps) _defineProperties(Constructor.prototype, protoProps);
   if (staticProps) _defineProperties(Constructor, staticProps);
   return Constructor;
+}
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js":
+/*!***************************************************************************!*\
+  !*** ./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js ***!
+  \***************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return _defineProperty; });
+/* harmony import */ var _core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../core-js/object/define-property */ "./node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+/* harmony import */ var _core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0__);
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    _core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0___default()(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
 }
 
 /***/ }),
@@ -3117,13 +3465,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _pages_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../pages/style.css */ "./pages/style.css");
 /* harmony import */ var _pages_style_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_pages_style_css__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _Game_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Game.js */ "./Game.js");
+/* harmony import */ var _components_Game_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/Game.js */ "./components/Game.js");
 
 
 
 
 var Index = function Index() {
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Game_js__WEBPACK_IMPORTED_MODULE_2__["default"], null));
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Game_js__WEBPACK_IMPORTED_MODULE_2__["default"], null));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Index);
@@ -3150,6 +3498,28 @@ var Index = function Index() {
 
 module.exports = __webpack_require__(/*! /home/jbarreto/Documents/Projects/lepipette/pages/index.js */"./pages/index.js");
 
+
+/***/ }),
+
+/***/ "axios":
+/*!************************!*\
+  !*** external "axios" ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("axios");
+
+/***/ }),
+
+/***/ "pusher-js":
+/*!****************************!*\
+  !*** external "pusher-js" ***!
+  \****************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("pusher-js");
 
 /***/ }),
 

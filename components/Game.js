@@ -1,4 +1,5 @@
 import LineTo from 'react-lineto';
+import Chat from "../components/Chat.js";
 
 class Game extends React.Component {
     render () { return (
@@ -7,11 +8,12 @@ class Game extends React.Component {
 }
 class GameInstance extends React.Component {
     constructor(props) {
+        super(props);
+
         let x = props.boardSize[0]['x'],
             y = props.boardSize[1]['y'],
             connectionsArraySize = ((x-1)*y)+((y-1)*x);
 
-        super(props);
         this.state = {
             currentPlayer: this.props.players[0],
             firstConnector: 0,
@@ -149,7 +151,6 @@ class GameInstance extends React.Component {
         
         return;
     }
-
     checkEndGame(){
         let squaresArray = this.state.squaresArray.slice();
         let x = this.props.boardSize[0]['x'];
@@ -160,7 +161,6 @@ class GameInstance extends React.Component {
         }
         return;
     }
-
     connectTwo(a, b) {
         let testArray = [a, b],
             legalcombos = this.state.legalCombos;
@@ -294,9 +294,80 @@ class Board extends React.Component {
                 It is {this.props.currentPlayer['username']}'s turn!<br></br><br></br>
                 The current score is: {this.calculateScore()}
             </div>
+            <div className="chat-box">
+                <ChatBox />
+
+                
+            </div>
         </div>
     );}
 }
+
+class ChatBox extends React.Component {
+    constructor (props) {
+        super(props);
+        this.state = { user: null }
+    }
+
+    handleKeyUp = evt => {
+        if (evt.keyCode === 13) {
+          const user =  evt.target.value;
+          this.setState({ user });
+        }
+      }
+
+    render() {
+        const { user } = this.state;
+      
+        const nameInputStyles = {
+          background: 'transparent',
+          color: '#999',
+          border: 0,
+          borderBottom: '1px solid #666',
+          borderRadius: 0,
+          fontSize: '3rem',
+          fontWeight: 500,
+          boxShadow: 'none !important'
+        };
+        
+        return (
+          <div>
+          
+            <main className="container-fluid position-absolute h-100 bg-dark">
+            
+              <div className="row position-absolute w-100 h-100">
+              
+                <section className="col-md-8 d-flex flex-row flex-wrap align-items-center align-content-center px-5">
+                  <div className="px-5 mx-5">
+                  
+                    <span className="d-block w-100 h1 text-light" style={{marginTop: -50}}>
+                      {
+                        user
+                          ? (<span>
+                              <span style={{color: '#999'}}>Hello!</span> {user}
+                            </span>)
+                          : `What is your name?`
+                      }
+                    </span>
+                    
+                    { !user && <input type="text" className="form-control mt-3 px-3 py-2" onKeyUp={this.handleKeyUp} autoComplete="off" style={nameInputStyles} /> }
+                    
+                  </div>
+                </section>
+                
+                <section className="col-md-4 position-relative d-flex flex-wrap h-100 align-items-start align-content-between bg-white px-0">
+                    { user && <Chat activeUser={user} /> }
+                </section>
+                
+              </div>
+              
+            </main>
+            
+          </div>
+        );
+    }
+}
+
 class SquareConnections extends React.Component {
     renderSquares() {
         let tempArray = [];

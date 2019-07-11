@@ -18,7 +18,7 @@ const app = next({ dev }),
         key: process.env.PUSHER_APP_KEY,
         secret: process.env.PUSHER_APP_SECRET,
         cluster: process.env.PUSHER_APP_CLUSTER,
-        encrypted: true
+        forceTLS: true
       });
 
 app.prepare()
@@ -31,6 +31,21 @@ app.prepare()
 
         server.get('*', (req, res) => {
             return handler(req, res);
+        });
+
+        const chatHistory = { messages: [] };
+
+        server.post('/message', (req, res, next) => {
+            const { user = null, message = '', timestamp = +new Date } = req.body;
+            const chat = { user, message, timestamp };
+
+            chatHistory.messages.push(chat);
+
+            pusher.trigger('chat-room', 'new-message', { chat });
+        });
+
+        server.post('/messages', (req, res, next) => {
+            res.json({...chatHistory, status: 'success' });
         });
 
         server.listen(port, err => {
