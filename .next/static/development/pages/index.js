@@ -418,7 +418,19 @@ function (_React$Component) {
           }
         }
       });
-      this.channel = this.pusher.subscribe('chat-room');
+      this.channel = this.pusher.subscribe('presence-chat');
+      this.channel.bind('pusher:subscription_succeeded', function (data) {
+        axios__WEBPACK_IMPORTED_MODULE_8___default.a.post('/message').then(function (response) {
+          var chats = response.data.messages;
+
+          _this2.setState({
+            chats: chats
+          });
+        });
+      });
+      this.channel.bind('pusher:subscription_error', function (error) {
+        alert("ok\n" + error);
+      });
       this.channel.bind('new-message', function (_ref) {
         var _ref$chat = _ref.chat,
             chat = _ref$chat === void 0 ? null : _ref$chat;
@@ -427,16 +439,6 @@ function (_React$Component) {
 
         _this2.setState({
           chats: chats
-        });
-      });
-      this.pusher.connection.bind('connected', function () {
-        axios__WEBPACK_IMPORTED_MODULE_8___default.a.post('/messages').then(function (response) {
-          var chats = response.data.messages;
-          alert(chats);
-
-          _this2.setState({
-            chats: chats
-          });
         });
       });
     }
@@ -450,18 +452,7 @@ function (_React$Component) {
     value: function render() {
       var _this3 = this;
 
-      return this.props.activeUser && react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", {
-        className: "border-bottom border-gray w-100 d-flex align-items-center bg-white",
-        style: {
-          height: 90
-        }
-      }, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("h2", null, "Welcome ", this.props.activeUser, "!")), react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", {
-        className: "px-4 pb-4 w-100 d-flex flex-row flex-wrap align-items-start align-content-start position-relative",
-        style: {
-          height: 'calc(100% - 180px)',
-          overflowY: 'scroll'
-        }
-      }, this.state.chats.map(function (chat, index) {
+      return this.props.activeUser && react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("h2", null, "Welcome ", this.props.activeUser, "!")), react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", null, this.state.chats.map(function (chat, index) {
         var previous = Math.max(0, index - 1);
         var previousChat = _this3.state.chats[previous];
         var isFirst = previous === index;
@@ -993,7 +984,7 @@ function (_React$Component2) {
       var y = this.props.boardSize[1]['y'];
 
       if (squaresArray.length == (x - 1) * (y - 1)) {
-        alert("end of game");
+        alert("end of game\n");
         return;
       }
 
@@ -19075,7 +19066,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var Index = function Index() {
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_head__WEBPACK_IMPORTED_MODULE_3___default.a, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("title", null, "Poopycakes")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_lobby_js__WEBPACK_IMPORTED_MODULE_2__["default"], null)));
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_head__WEBPACK_IMPORTED_MODULE_3___default.a, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("title", null, "La Pipoette")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_lobby_js__WEBPACK_IMPORTED_MODULE_2__["default"], null)));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Index); //<div>

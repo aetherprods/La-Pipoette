@@ -20,9 +20,18 @@ class Chat extends React.Component {
                 }
             }
         });
-        
-        this.channel = this.pusher.subscribe('chat-room');
+        this.channel = this.pusher.subscribe('presence-chat');
 
+        this.channel.bind('pusher:subscription_succeeded', (data) => {
+          axios.post('/message')
+                .then(response => {
+                    const chats = response.data.messages;
+                    this.setState({ chats });
+                });
+        });
+        this.channel.bind('pusher:subscription_error', (error) => {
+          alert("ok\n"+error);
+        });
         
 
         this.channel.bind('new-message', ({ chat = null }) => {
@@ -31,14 +40,6 @@ class Chat extends React.Component {
             this.setState({ chats });
         });
 
-        this.pusher.connection.bind('connected', () => {
-            axios.post('/messages')
-                .then(response => {
-                    const chats = response.data.messages;
-                    alert(chats);
-                    this.setState({ chats });
-                });
-        });
     }
     componentWillUnmount() {
         this.pusher.disconnect();
@@ -57,11 +58,11 @@ class Chat extends React.Component {
     render() {
         return (this.props.activeUser && <div>
         
-          <div className="border-bottom border-gray w-100 d-flex align-items-center bg-white" style={{ height: 90 }}>
+          <div >
             <h2>Welcome {this.props.activeUser}!</h2>
           </div>
 
-          <div className="px-4 pb-4 w-100 d-flex flex-row flex-wrap align-items-start align-content-start position-relative" style={{ height: 'calc(100% - 180px)', overflowY: 'scroll' }}>
+          <div >
     
     {this.state.chats.map((chat, index) => {
     
@@ -75,7 +76,6 @@ class Chat extends React.Component {
       
       return (
         <div key={index}>
-        
           { (isFirst || !inSequence || hasDelay) && (
             <div >
               

@@ -73,11 +73,11 @@ app.prepare()
         });
 
         server.post('/message', (req, res, next) => {
-            const { user = null, message = '', timestamp = +new Date } = req.body;
+            const { user, message, timestamp } = req.body;
             const chat = { user, message, timestamp };
 
             chatHistory.messages.push(chat);
-            pusher.trigger('chat-room', 'new-message', { chat });
+            pusher.trigger('presence-chat', 'new-message', { chat });
 
             res.json({...chatHistory, status: 'success' });
         });

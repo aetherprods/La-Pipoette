@@ -236,7 +236,7 @@ class GameInstance extends React.Component {
         let x = this.props.boardSize[0]['x'];
         let y = this.props.boardSize[1]['y']
         if (squaresArray.length == (x-1)*(y-1)) {
-            alert("end of game");
+            alert("end of game\n");
             return;
         }
         return;
