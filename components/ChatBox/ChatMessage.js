@@ -1,5 +1,3 @@
-import React from 'react';
-
 class ChatMessage extends React.Component {
     render() {
         const { position = 'left', message } = this.props;
@@ -19,13 +17,7 @@ class ChatMessage extends React.Component {
         whiteSpace: 'pre-wrap'
         };
 
-        return (<div className={`w-100 my-1 d-flex ${justify}`}>
-          <div className="bg-light rounded border border-gray p-2" style={messageBoxStyles}>
-            <span className={`d-block text-secondary ${align}`} style={messageStyles}>
-              {message}
-            </span>
-          </div>
-        </div>);
+        return (<div>{message}{`\n`}</div>);
     }
 }
 

@@ -93,10 +93,344 @@ module.exports =
 /************************************************************************/
 /******/ ({
 
-/***/ "./components/Chat.js":
-/*!****************************!*\
-  !*** ./components/Chat.js ***!
-  \****************************/
+/***/ "./components/ChatBox/ActiveUsers.js":
+/*!*******************************************!*\
+  !*** ./components/ChatBox/ActiveUsers.js ***!
+  \*******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_names__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/get-own-property-names */ "./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-names.js");
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_names__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_get_own_property_names__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_corejs2_core_js_get_iterator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/get-iterator */ "./node_modules/@babel/runtime-corejs2/core-js/get-iterator.js");
+/* harmony import */ var _babel_runtime_corejs2_core_js_get_iterator__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_get_iterator__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/classCallCheck */ "./node_modules/@babel/runtime-corejs2/helpers/esm/classCallCheck.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/createClass */ "./node_modules/@babel/runtime-corejs2/helpers/esm/createClass.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/possibleConstructorReturn */ "./node_modules/@babel/runtime-corejs2/helpers/esm/possibleConstructorReturn.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/getPrototypeOf */ "./node_modules/@babel/runtime-corejs2/helpers/esm/getPrototypeOf.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/assertThisInitialized */ "./node_modules/@babel/runtime-corejs2/helpers/esm/assertThisInitialized.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/inherits */ "./node_modules/@babel/runtime-corejs2/helpers/esm/inherits.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! axios */ "axios");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var pusher_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! pusher-js */ "pusher-js");
+/* harmony import */ var pusher_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(pusher_js__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var _game_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../game.js */ "./components/game.js");
+
+
+
+
+
+
+
+
+
+
+
+
+
+var ActiveUsers =
+/*#__PURE__*/
+function (_React$Component) {
+  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_7__["default"])(ActiveUsers, _React$Component);
+
+  function ActiveUsers(props) {
+    var _this;
+
+    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_2__["default"])(this, ActiveUsers);
+
+    _this = Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__["default"])(ActiveUsers).call(this, props));
+    _this.state = {
+      users: [],
+      helped: false,
+      gameLink: false,
+      self: {},
+      playerOne: {},
+      playerOneChannel: '',
+      playerTwo: {},
+      playerTwoChannel: '',
+      gameChannel: ''
+    };
+    _this.pusher = new pusher_js__WEBPACK_IMPORTED_MODULE_10___default.a("677dc9670d267bcc5be9", {
+      cluster: "us2",
+      authEndpoint: "/pusher/auth",
+      forceTLS: true,
+      auth: {
+        params: {
+          username: _this.props.userName,
+          color: _this.props.userColor
+        }
+      }
+    });
+    _this.onlineChannel = _this.pusher.subscribe("presence-online-channel");
+    _this.helperFunction = _this.helperFunction.bind(Object(_babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6__["default"])(_this));
+    _this.inviteFunction = _this.inviteFunction.bind(Object(_babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6__["default"])(_this));
+    return _this;
+  }
+
+  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_3__["default"])(ActiveUsers, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      this.onlineChannel.bind('pusher:subscription_succeeded', function (members) {
+        var me = _this2.onlineChannel.members.me;
+        var users = _this2.state.users;
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+          for (var _iterator = _babel_runtime_corejs2_core_js_get_iterator__WEBPACK_IMPORTED_MODULE_1___default()(_babel_runtime_corejs2_core_js_object_get_own_property_names__WEBPACK_IMPORTED_MODULE_0___default()(members['members'])), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var member = _step.value;
+            //alert(members['members'][member]['name']);
+            users.push({
+              id: member,
+              user: members['members'][member]['name'],
+              color: members['members'][member]['color']
+            });
+          }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+              _iterator["return"]();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
+          }
+        }
+
+        ;
+        var userIds = []; //alert(JSON.stringify(members['members']));
+        //update users
+
+        var userToBeAdded = {
+          id: me.id,
+          user: me.info.name,
+          color: me.info.color
+        };
+
+        for (var i = 0; i < users.length; i++) {
+          userIds.push(users[i]['id']);
+        } //alert(userIds);
+
+
+        var found = userIds.find(function (userId) {
+          return userId == userToBeAdded['id'];
+        });
+
+        if (found) {
+          _this2.setState({
+            users: users
+          });
+        } else if (!found) {
+          return null;
+        }
+      });
+      this.onlineChannel.bind('pusher:subscription_error', function (data) {
+        alert("error\n" + data);
+      });
+      this.onlineChannel.bind('pusher:member_added', function (user) {
+        var users = _this2.state.users;
+        var userToBeAdded = {
+          id: user.id,
+          user: user.info.name,
+          color: user.info.color
+        };
+        users.push(userToBeAdded);
+
+        _this2.setState({
+          users: users
+        });
+      });
+      this.onlineChannel.bind('pusher:member_removed', function (user) {
+        var users = _this2.state.users;
+        var userIds = [];
+        var userToBeRemoved = {
+          id: user.id,
+          user: user.info.name,
+          color: user.info.color
+        };
+
+        for (var i = 0; i < users.length; i++) {
+          userIds.push(users[i]['id']);
+        }
+
+        ;
+        var indexToRemove = userIds.findIndex(function (id) {
+          return id == userToBeRemoved['id'];
+        });
+
+        if (indexToRemove > -1) {
+          users.splice(indexToRemove, 1);
+
+          _this2.setState({
+            users: users
+          });
+        }
+
+        ;
+      });
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      this.pusher.disconnect();
+    }
+  }, {
+    key: "helperFunction",
+    value: function helperFunction() {
+      var _this3 = this;
+
+      if (this.state.helped == false) {
+        this.privateChannel = this.pusher.subscribe("private-".concat(this.onlineChannel.members.me.id));
+        this.privateChannel.bind('pusher:subscription_succeeded', function (members) {// alert("ok");
+        });
+        this.privateChannel.bind('pusher:subscription_error', function (error) {
+          alert("error\n".concat(error));
+        });
+        this.privateChannel.bind('game_started', function (response) {
+          //alert(JSON.stringify(response.channels.game))
+          var self = {
+            id: _this3.onlineChannel.members.me.id,
+            name: _this3.onlineChannel.members.me.info.name,
+            color: _this3.onlineChannel.members.me.info.color
+          };
+
+          _this3.setState({
+            gameLink: true,
+            playerOne: response.playerOne,
+            playerOneChannel: response.channels.pOne,
+            playerTwo: response.playerTwo,
+            playerTwoChannel: response.channels.pTwo,
+            gameChannel: response.channels.game,
+            self: self
+          });
+        });
+        this.setState({
+          helped: true
+        });
+      }
+    }
+  }, {
+    key: "inviteFunction",
+    value: function inviteFunction(data) {
+      var target = {
+        id: data.currentTarget.dataset.userid,
+        name: data.currentTarget.dataset.username,
+        color: data.currentTarget.dataset.usercolor
+      };
+      var self = {
+        id: this.onlineChannel.members.me.id,
+        name: this.onlineChannel.members.me.info.name,
+        color: this.onlineChannel.members.me.info.color
+      };
+      axios__WEBPACK_IMPORTED_MODULE_9___default.a.post('/game_daemon', {
+        playerOne: self,
+        playerTwo: target
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this4 = this;
+
+      var users = this.state.users;
+      var gameLink = this.state.gameLink;
+      var tempArray = [];
+
+      for (var i = 0; i <= users.length; i++) {
+        tempArray.push(i);
+      }
+
+      ;
+      var useritr = tempArray.values();
+      var nameitr = tempArray.values();
+      var iditr = tempArray.values();
+      var coloritr = tempArray.values();
+
+      if (users[0]) {
+        this.helperFunction();
+        return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, !!gameLink && react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(_game_js__WEBPACK_IMPORTED_MODULE_11__["default"], {
+          self: {
+            username: this.state.self.name,
+            color: this.state.self.color
+          },
+          players: [{
+            username: this.state.playerOne.name,
+            color: this.state.playerOne.color
+          }, {
+            username: this.state.playerTwo.name,
+            color: this.state.playerTwo.color
+          }],
+          playerOneChannel: this.state.playerOneChannel,
+          playerTwoChannel: this.state.playerTwoChannel,
+          gameChannel: this.state.gameChannel,
+          boardSize: [{
+            x: 4
+          }, {
+            y: 4
+          }]
+        })), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, users.map(function (user) {
+          return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("a", {
+            href: "#",
+            onClick: _this4.inviteFunction,
+            "data-userid": users[iditr.next().value]['id'],
+            "data-username": users[nameitr.next().value]['user'],
+            "data-usercolor": users[coloritr.next().value]['color']
+          }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("u", null, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(User, {
+            user: users[useritr.next().value]['user']
+          }))));
+        })));
+      } else {
+        return null;
+      }
+    }
+  }]);
+
+  return ActiveUsers;
+}(react__WEBPACK_IMPORTED_MODULE_8___default.a.Component);
+
+;
+
+var User =
+/*#__PURE__*/
+function (_React$Component2) {
+  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_7__["default"])(User, _React$Component2);
+
+  function User() {
+    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_2__["default"])(this, User);
+
+    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__["default"])(User).apply(this, arguments));
+  }
+
+  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_3__["default"])(User, [{
+    key: "render",
+    value: function render() {
+      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, this.props.user);
+    }
+  }]);
+
+  return User;
+}(react__WEBPACK_IMPORTED_MODULE_8___default.a.Component);
+
+;
+/* harmony default export */ __webpack_exports__["default"] = (ActiveUsers);
+
+/***/ }),
+
+/***/ "./components/ChatBox/Chat.js":
+/*!************************************!*\
+  !*** ./components/ChatBox/Chat.js ***!
+  \************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -115,7 +449,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_8__);
 /* harmony import */ var pusher_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! pusher-js */ "pusher-js");
 /* harmony import */ var pusher_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(pusher_js__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var _ChatMessage__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./ChatMessage */ "./components/ChatMessage.js");
+/* harmony import */ var _ChatMessage__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./ChatMessage */ "./components/ChatBox/ChatMessage.js");
 
 
 
@@ -168,7 +502,14 @@ function (_React$Component) {
 
       this.pusher = new pusher_js__WEBPACK_IMPORTED_MODULE_9___default.a("677dc9670d267bcc5be9", {
         cluster: "us2",
-        forceTLS: true
+        authEndpoint: "/pusher/auth",
+        forceTLS: true,
+        auth: {
+          params: {
+            username: this.props.activeUser,
+            color: this.props.activeColor
+          }
+        }
       });
       this.channel = this.pusher.subscribe('chat-room');
       this.channel.bind('new-message', function (_ref) {
@@ -184,6 +525,7 @@ function (_React$Component) {
       this.pusher.connection.bind('connected', function () {
         axios__WEBPACK_IMPORTED_MODULE_8___default.a.post('/messages').then(function (response) {
           var chats = response.data.messages;
+          alert(chats);
 
           _this2.setState({
             chats: chats
@@ -206,9 +548,7 @@ function (_React$Component) {
         style: {
           height: 90
         }
-      }, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("h2", {
-        className: "text-dark mb-0 mx-4 px-2"
-      }, this.props.activeUser)), react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("h2", null, "Welcome ", this.props.activeUser, "!")), react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", {
         className: "px-4 pb-4 w-100 d-flex flex-row flex-wrap align-items-start align-content-start position-relative",
         style: {
           height: 'calc(100% - 180px)',
@@ -217,20 +557,13 @@ function (_React$Component) {
       }, this.state.chats.map(function (chat, index) {
         var previous = Math.max(0, index - 1);
         var previousChat = _this3.state.chats[previous];
-        var position = chat.user === _this3.props.activeUser ? "right" : "left";
         var isFirst = previous === index;
         var inSequence = chat.user === previousChat.user;
         var hasDelay = Math.ceil((chat.timestamp - previousChat.timestamp) / (1000 * 60)) > 1;
         return react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", {
           key: index
-        }, (isFirst || !inSequence || hasDelay) && react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", {
-          className: "d-block w-100 font-weight-bold text-dark mt-4 pb-1 px-1 text-".concat(position),
-          style: {
-            fontSize: '0.9rem'
-          }
-        }, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("span", null, chat.user || 'Anonymous')), react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement(_ChatMessage__WEBPACK_IMPORTED_MODULE_10__["default"], {
-          message: chat.message,
-          position: position
+        }, (isFirst || !inSequence || hasDelay) && react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("u", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("b", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("big", null, chat.user || 'Anonymous')))), react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement(_ChatMessage__WEBPACK_IMPORTED_MODULE_10__["default"], {
+          message: chat.message
         }));
       })), react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", {
         className: "border-top border-gray w-100 px-4 d-flex align-items-center bg-light",
@@ -246,6 +579,42 @@ function (_React$Component) {
         }
       })));
     }
+    /* render() {
+    return (this.props.activeUser && <div>
+    
+        <div className="border-bottom border-gray w-100 d-flex align-items-center bg-white" style={{ height: 90 }}>
+            <h2 className="text-dark mb-0 mx-4 px-62">{this.props.activeUser}</h2>
+        </div>
+        <div className="px-4 pb-4 w-100 d-flex flex-row flex-wrap align-items-start align-content-start position-relative" style={{ height: 'calc(100% - 180px)', overflowY: 'scroll' }}>
+        {this.state.chats.map((chat, index) => {
+        
+            const previous = Math.max(0, index - 1);
+            const previousChat = this.state.chats[previous];
+            const position = chat.user === this.props.activeUser ? "right" : "left";
+            
+            const isFirst = previous === index;
+            const inSequence = chat.user === previousChat.user;
+            const hasDelay = Math.ceil((chat.timestamp - previousChat.timestamp) / (1000 * 60)) > 1;
+            
+            
+            return (
+                <div key={index}>
+                
+                <p>
+                <ChatMessage message={chat.message} position={position} />
+                </p>
+                </div>
+            );
+        
+        })}
+        </div>
+        <div className="border-top border-gray w-100 px-4 d-flex align-items-center bg-light" style={{ minHeight: 90 }}>
+            <textarea className="form-control px-3 py-2" onKeyUp={this.handleKeyUp} placeholder="Enter a chat message" style={{ resize: 'none' }}></textarea>
+        </div>
+        
+    </div> )
+    } */
+
   }]);
 
   return Chat;
@@ -255,10 +624,96 @@ function (_React$Component) {
 
 /***/ }),
 
-/***/ "./components/ChatMessage.js":
-/*!***********************************!*\
-  !*** ./components/ChatMessage.js ***!
-  \***********************************/
+/***/ "./components/ChatBox/ChatBox.js":
+/*!***************************************!*\
+  !*** ./components/ChatBox/ChatBox.js ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/classCallCheck */ "./node_modules/@babel/runtime-corejs2/helpers/esm/classCallCheck.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/createClass */ "./node_modules/@babel/runtime-corejs2/helpers/esm/createClass.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/possibleConstructorReturn */ "./node_modules/@babel/runtime-corejs2/helpers/esm/possibleConstructorReturn.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/getPrototypeOf */ "./node_modules/@babel/runtime-corejs2/helpers/esm/getPrototypeOf.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/assertThisInitialized */ "./node_modules/@babel/runtime-corejs2/helpers/esm/assertThisInitialized.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/inherits */ "./node_modules/@babel/runtime-corejs2/helpers/esm/inherits.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/defineProperty */ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _ChatBox_Chat_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../ChatBox/Chat.js */ "./components/ChatBox/Chat.js");
+
+
+
+
+
+
+
+
+
+
+var ChatBox =
+/*#__PURE__*/
+function (_React$Component) {
+  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__["default"])(ChatBox, _React$Component);
+
+  function ChatBox(props) {
+    var _this;
+
+    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, ChatBox);
+
+    _this = Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__["default"])(ChatBox).call(this, props));
+
+    Object(_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_6__["default"])(Object(_babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4__["default"])(_this), "handleKeyUp", function (evt) {
+      if (evt.keyCode === 13) {
+        var user = evt.target.value;
+
+        _this.setState({
+          user: user
+        });
+      }
+    });
+
+    _this.state = {
+      user: props.user,
+      color: props.color
+    };
+    return _this;
+  }
+
+  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(ChatBox, [{
+    key: "render",
+    value: function render() {
+      var user = this.state.user;
+      var nameInputStyles = {
+        background: 'transparent',
+        color: '#999',
+        border: 0,
+        borderBottom: '1px solid #666',
+        borderRadius: 0,
+        fontSize: '3rem',
+        fontWeight: 500,
+        boxShadow: 'none !important'
+      };
+      return react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("section", null, user && react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement(_ChatBox_Chat_js__WEBPACK_IMPORTED_MODULE_8__["default"], {
+        activeUser: this.state.user,
+        activeColor: this.state.color
+      })));
+    }
+  }]);
+
+  return ChatBox;
+}(react__WEBPACK_IMPORTED_MODULE_7___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (ChatBox);
+
+/***/ }),
+
+/***/ "./components/ChatBox/ChatMessage.js":
+/*!*******************************************!*\
+  !*** ./components/ChatBox/ChatMessage.js ***!
+  \*******************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -308,15 +763,7 @@ function (_React$Component) {
         lineHeight: 1.4,
         whiteSpace: 'pre-wrap'
       };
-      return react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", {
-        className: "w-100 my-1 d-flex ".concat(justify)
-      }, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", {
-        className: "bg-light rounded border border-gray p-2",
-        style: messageBoxStyles
-      }, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("span", {
-        className: "d-block text-secondary ".concat(align),
-        style: messageStyles
-      }, message)));
+      return react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", null, message, "\n");
     }
   }]);
 
@@ -327,28 +774,27 @@ function (_React$Component) {
 
 /***/ }),
 
-/***/ "./components/Game.js":
+/***/ "./components/game.js":
 /*!****************************!*\
-  !*** ./components/Game.js ***!
+  !*** ./components/game.js ***!
   \****************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/assertThisInitialized */ "./node_modules/@babel/runtime-corejs2/helpers/esm/assertThisInitialized.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/defineProperty */ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_slicedToArray__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/slicedToArray */ "./node_modules/@babel/runtime-corejs2/helpers/esm/slicedToArray.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/classCallCheck */ "./node_modules/@babel/runtime-corejs2/helpers/esm/classCallCheck.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/createClass */ "./node_modules/@babel/runtime-corejs2/helpers/esm/createClass.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/possibleConstructorReturn */ "./node_modules/@babel/runtime-corejs2/helpers/esm/possibleConstructorReturn.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/getPrototypeOf */ "./node_modules/@babel/runtime-corejs2/helpers/esm/getPrototypeOf.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/inherits */ "./node_modules/@babel/runtime-corejs2/helpers/esm/inherits.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var react_lineto__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-lineto */ "react-lineto");
-/* harmony import */ var react_lineto__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react_lineto__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var _components_Chat_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../components/Chat.js */ "./components/Chat.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_slicedToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/slicedToArray */ "./node_modules/@babel/runtime-corejs2/helpers/esm/slicedToArray.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/classCallCheck */ "./node_modules/@babel/runtime-corejs2/helpers/esm/classCallCheck.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/createClass */ "./node_modules/@babel/runtime-corejs2/helpers/esm/createClass.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/possibleConstructorReturn */ "./node_modules/@babel/runtime-corejs2/helpers/esm/possibleConstructorReturn.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/getPrototypeOf */ "./node_modules/@babel/runtime-corejs2/helpers/esm/getPrototypeOf.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/inherits */ "./node_modules/@babel/runtime-corejs2/helpers/esm/inherits.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var react_lineto__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-lineto */ "react-lineto");
+/* harmony import */ var react_lineto__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(react_lineto__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var pusher_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! pusher-js */ "pusher-js");
+/* harmony import */ var pusher_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(pusher_js__WEBPACK_IMPORTED_MODULE_8__);
 
 
 
@@ -357,72 +803,123 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
-
+ //players={[{username: "timmy", color: "red"}, {username: "bobby", color: "blue"}]} boardSize={[{x: 4}, {y: 4}]};
 
 var Game =
 /*#__PURE__*/
 function (_React$Component) {
-  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_7__["default"])(Game, _React$Component);
+  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__["default"])(Game, _React$Component);
 
-  function Game() {
-    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Game);
+  function Game(props) {
+    var _this;
 
-    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__["default"])(Game).apply(this, arguments));
+    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, Game);
+
+    _this = Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__["default"])(Game).call(this, props));
+    _this.state = {
+      playerOne: _this.props.players[0],
+      playerTwo: _this.props.players[1],
+      currentPlayer: _this.props.players[0],
+      player: _this.props.self,
+      boardSize: _this.props.boardSize
+    };
+    return _this;
   }
 
-  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_4__["default"])(Game, [{
+  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(Game, [{
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(GameInstance, {
-        players: [{
-          username: "timmy",
-          color: "red"
-        }, {
-          username: "bobby",
-          color: "blue"
-        }],
-        boardSize: [{
-          x: 4
-        }, {
-          y: 4
-        }]
+      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(GameInstance, {
+        player: this.state.player,
+        playerOne: this.state.playerOne,
+        playerTwo: this.state.playerTwo,
+        boardSize: this.state.boardSize,
+        opponentChannel: this.state.player.username == this.state.playerOne.username ? this.props.playerTwoChannel : this.props.playerOneChannel,
+        playerChannel: this.state.player.username == this.state.playerOne.username ? this.props.playerOneChannel : this.props.playerTwoChannel
       });
     }
   }]);
 
   return Game;
-}(react__WEBPACK_IMPORTED_MODULE_8___default.a.Component);
+}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
 
 var GameInstance =
 /*#__PURE__*/
 function (_React$Component2) {
-  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_7__["default"])(GameInstance, _React$Component2);
+  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__["default"])(GameInstance, _React$Component2);
 
   function GameInstance(props) {
-    var _this;
+    var _this2;
 
-    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_3__["default"])(this, GameInstance);
+    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, GameInstance);
 
-    _this = Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__["default"])(GameInstance).call(this, props));
+    _this2 = Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__["default"])(GameInstance).call(this, props));
     var x = props.boardSize[0]['x'],
         y = props.boardSize[1]['y'],
         connectionsArraySize = (x - 1) * y + (y - 1) * x;
-    _this.state = {
-      currentPlayer: _this.props.players[0],
+    _this2.state = {
+      currentPlayer: _this2.props.playerOne,
       firstConnector: 0,
       secondConnector: 0,
       //connectionsArray: Array(connectionsArraySize).fill({connection: [], isConnected: false}),
       connectionsArray: [],
-      squareConditions: _this.generateSquareConditions(x, y),
+      squareConditions: _this2.generateSquareConditions(x, y),
       squaresArray: [],
-      legalCombos: _this.generateLegalCombos(x, y)
+      legalCombos: _this2.generateLegalCombos(x, y)
     };
-    return _this;
+    _this2.pusher = new pusher_js__WEBPACK_IMPORTED_MODULE_8___default.a("677dc9670d267bcc5be9", {
+      cluster: "us2",
+      authEndpoint: "/pusher/auth",
+      forceTLS: true,
+      auth: {
+        params: {
+          username: _this2.props.player.username,
+          color: _this2.props.player.color
+        }
+      }
+    });
+    return _this2;
   }
 
-  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_4__["default"])(GameInstance, [{
+  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(GameInstance, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this3 = this;
+
+      this.opponentChannel = this.pusher.subscribe(this.props.opponentChannel);
+      this.playerChannel = this.pusher.subscribe(this.props.playerChannel);
+      this.playerChannel.bind('pusher:subscription_succeeded', function (members) {});
+      this.playerChannel.bind('pusher:subscription_error', function (error) {
+        alert("error\n".concat(error));
+      });
+      this.playerChannel.bind('client-set-connections', function (data) {
+        _this3.setState({
+          connectionsArray: data
+        }, function () {});
+      });
+      this.playerChannel.bind('client-set-squares', function (data) {
+        _this3.setState({
+          squaresArray: data
+        }, function () {});
+      });
+      this.playerChannel.bind('client-change-current-player', function (data) {
+        _this3.setState({
+          currentPlayer: _this3.state.currentPlayer == _this3.props.playerOne ? _this3.props.playerTwo : _this3.props.playerOne
+        }, function () {});
+      });
+      this.opponentChannel.bind('pusher:subscription_succeeded', function (members) {
+        _this3.opponentChannel.trigger('test', 'yesy');
+      });
+      this.opponentChannel.bind('pusher:subscription_error', function (error) {
+        alert("error\n".concat(error));
+      });
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      this.pusher.disconnect();
+    }
+  }, {
     key: "generateSquareConditions",
     value: function generateSquareConditions(x, y) {
       var tempArray = [];
@@ -491,7 +988,7 @@ function (_React$Component2) {
   }, {
     key: "generateSquares",
     value: function generateSquares() {
-      var _this2 = this;
+      var _this4 = this;
 
       //checks connections array and update state as to squares
       var squareConditions = this.state.squareConditions.slice(),
@@ -511,7 +1008,7 @@ function (_React$Component2) {
             sD = false;
         var tempArray = squareConditions[i];
 
-        var _squareConditions$i = Object(_babel_runtime_corejs2_helpers_esm_slicedToArray__WEBPACK_IMPORTED_MODULE_2__["default"])(squareConditions[i], 4),
+        var _squareConditions$i = Object(_babel_runtime_corejs2_helpers_esm_slicedToArray__WEBPACK_IMPORTED_MODULE_0__["default"])(squareConditions[i], 4),
             a = _squareConditions$i[0],
             b = _squareConditions$i[1],
             c = _squareConditions$i[2],
@@ -556,7 +1053,8 @@ function (_React$Component2) {
           this.setState({
             squaresArray: squaresArray
           }, function () {
-            //alert("yep"); 
+            _this4.opponentChannel.trigger('client-set-squares', squaresArray);
+
             return;
           });
         } else if (A && B && C && D) {//only change player if we didn't find a square
@@ -565,14 +1063,16 @@ function (_React$Component2) {
 
       if (squaresArray.length == this.state.squaresArray.length) {
         this.setState({
-          currentPlayer: this.state.currentPlayer == this.props.players[0] ? this.props.players[1] : this.props.players[0]
+          currentPlayer: this.state.currentPlayer == this.props.playerOne ? this.props.playerTwo : this.props.playerOne
         }, function () {
+          _this4.opponentChannel.trigger('client-change-current-player', 'null');
+
           return;
         });
       }
 
       this.setState({}, function () {
-        _this2.checkEndGame();
+        _this4.checkEndGame();
 
         return;
       });
@@ -595,18 +1095,25 @@ function (_React$Component2) {
   }, {
     key: "connectTwo",
     value: function connectTwo(a, b) {
-      var _this3 = this;
+      var _this5 = this;
+
+      //this.opponentChannel.trigger('client-test', { data: "test" });
+      //is it my turn? if not, return
+      if (this.state.currentPlayer['username'] !== this.props.player.username) {
+        alert("it's not your turn!");
+        return;
+      }
 
       var testArray = [a, b],
           legalcombos = this.state.legalCombos;
 
       var _loop = function _loop(i) {
-        var _legalcombos$i = Object(_babel_runtime_corejs2_helpers_esm_slicedToArray__WEBPACK_IMPORTED_MODULE_2__["default"])(legalcombos[i], 2),
+        var _legalcombos$i = Object(_babel_runtime_corejs2_helpers_esm_slicedToArray__WEBPACK_IMPORTED_MODULE_0__["default"])(legalcombos[i], 2),
             x = _legalcombos$i[0],
             y = _legalcombos$i[1];
 
         if (testArray[0] === x && testArray[1] === y || testArray[1] === x && testArray[0] === y) {
-          var tempArray = _this3.state.connectionsArray.slice(); //has it already been connected?
+          var tempArray = _this5.state.connectionsArray.slice(); //has it already been connected?
 
 
           var found = tempArray.find(function (n) {
@@ -635,10 +1142,12 @@ function (_React$Component2) {
 
           tempArray.push([x, y]);
 
-          _this3.setState({
+          _this5.setState({
             connectionsArray: tempArray
           }, function () {
-            _this3.generateSquares(); //this.checkEndGame();
+            _this5.opponentChannel.trigger('client-set-connections', tempArray);
+
+            _this5.generateSquares(); //this.checkEndGame();
 
 
             return;
@@ -668,7 +1177,7 @@ function (_React$Component2) {
   }, {
     key: "clickHandler",
     value: function clickHandler(i) {
-      var _this4 = this;
+      var _this6 = this;
 
       if (!this.state.firstConnector && !this.state.secondConnector) {
         this.setState(function (state, props) {
@@ -682,7 +1191,7 @@ function (_React$Component2) {
             secondConnector: state.secondConnector + i
           };
         }, function () {
-          _this4.connectTwo(_this4.state.firstConnector, _this4.state.secondConnector);
+          _this6.connectTwo(_this6.state.firstConnector, _this6.state.secondConnector);
         });
       } else if (!!this.state.firstConnector && !!this.state.secondConnector) {
         this.setState(function (state, props) {
@@ -696,43 +1205,43 @@ function (_React$Component2) {
   }, {
     key: "render",
     value: function render() {
-      var _this5 = this;
+      var _this7 = this;
 
-      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
+      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
         className: "game-instance"
-      }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(Board, {
+      }, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(Board, {
         clickHandler: function clickHandler(i) {
-          _this5.clickHandler(i);
+          _this7.clickHandler(i);
         },
         x: this.props.boardSize[0]['x'],
         y: this.props.boardSize[1]['y'],
         connectionsArray: this.state.connectionsArray,
         currentPlayer: this.state.currentPlayer,
-        playerOne: this.props.players[0],
-        playerTwo: this.props.players[1],
+        playerOne: this.props.playerOne,
+        playerTwo: this.props.playerTwo,
         squaresArray: this.state.squaresArray
       }));
     }
   }]);
 
   return GameInstance;
-}(react__WEBPACK_IMPORTED_MODULE_8___default.a.Component);
+}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
 
 var Board =
 /*#__PURE__*/
 function (_React$Component3) {
-  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_7__["default"])(Board, _React$Component3);
+  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__["default"])(Board, _React$Component3);
 
   function Board() {
-    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Board);
+    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, Board);
 
-    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__["default"])(Board).apply(this, arguments));
+    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__["default"])(Board).apply(this, arguments));
   }
 
-  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_4__["default"])(Board, [{
+  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(Board, [{
     key: "renderBoard",
     value: function renderBoard(x, y) {
-      var _this6 = this;
+      var _this8 = this;
 
       var xArr = [],
           yArr = [],
@@ -755,23 +1264,26 @@ function (_React$Component3) {
       }
 
       var iterator = xy.values();
-      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, yArr.map(function (y) {
-        return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("tr", null, xArr.map(function (x) {
-          return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("td", null, _this6.renderConnector(iterator.next().value));
+      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, yArr.map(function (y) {
+        return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("tr", {
+          key: y
+        }, xArr.map(function (x) {
+          return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("td", {
+            key: iterator.value
+          }, _this8.renderConnector(iterator.next().value));
         }));
       }));
     }
   }, {
     key: "renderConnector",
     value: function renderConnector(i) {
-      var _this7 = this;
+      var _this9 = this;
 
       var connectorId = "connector".concat(i);
-      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(Connector, {
-        key: i,
+      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(Connector, {
         id: connectorId,
         clickHandler: function clickHandler() {
-          return _this7.props.clickHandler(i);
+          return _this9.props.clickHandler(i);
         }
       });
     }
@@ -791,126 +1303,48 @@ function (_React$Component3) {
         }
       }
 
-      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, this.props.playerOne['username'], "'s score: ", playerOneScore, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("br", null), this.props.playerTwo['username'], "'s score: ", playerTwoScore);
+      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, this.props.playerOne['username'], "'s score: ", playerOneScore, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), this.props.playerTwo['username'], "'s score: ", playerTwoScore);
     }
   }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
+      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
         className: "absolute-center"
-      }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
         className: "game-board"
-      }, this.renderBoard(this.props.x, this.props.y)), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
+      }, this.renderBoard(this.props.x, this.props.y)), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
         className: "game-board-connections"
-      }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(BoardConnections, {
+      }, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(BoardConnections, {
         connectionsArray: this.props.connectionsArray
-      })), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
+      })), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
         className: "square-connections"
-      }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(SquareConnections, {
+      }, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(SquareConnections, {
         squaresArray: this.props.squaresArray,
         playerColor: this.props.currentPlayer['color']
-      })), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
+      })), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
         className: "game-status"
-      }, "It is ", this.props.currentPlayer['username'], "'s turn!", react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("br", null), "The current score is: ", this.calculateScore()), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
-        className: "chat-box"
-      }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(ChatBox, null)));
+      }, "It is ", this.props.currentPlayer['username'], "'s turn!", react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), "The current score is: ", this.calculateScore()));
     }
   }]);
 
   return Board;
-}(react__WEBPACK_IMPORTED_MODULE_8___default.a.Component);
-
-var ChatBox =
-/*#__PURE__*/
-function (_React$Component4) {
-  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_7__["default"])(ChatBox, _React$Component4);
-
-  function ChatBox(props) {
-    var _this8;
-
-    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_3__["default"])(this, ChatBox);
-
-    _this8 = Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__["default"])(ChatBox).call(this, props));
-
-    Object(_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_1__["default"])(Object(_babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_0__["default"])(_this8), "handleKeyUp", function (evt) {
-      if (evt.keyCode === 13) {
-        var user = evt.target.value;
-
-        _this8.setState({
-          user: user
-        });
-      }
-    });
-
-    _this8.state = {
-      user: null
-    };
-    return _this8;
-  }
-
-  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_4__["default"])(ChatBox, [{
-    key: "render",
-    value: function render() {
-      var user = this.state.user;
-      var nameInputStyles = {
-        background: 'transparent',
-        color: '#999',
-        border: 0,
-        borderBottom: '1px solid #666',
-        borderRadius: 0,
-        fontSize: '3rem',
-        fontWeight: 500,
-        boxShadow: 'none !important'
-      };
-      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("main", {
-        className: "container-fluid position-absolute h-100 bg-dark"
-      }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
-        className: "row position-absolute w-100 h-100"
-      }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("section", {
-        className: "col-md-8 d-flex flex-row flex-wrap align-items-center align-content-center px-5"
-      }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", {
-        className: "px-5 mx-5"
-      }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("span", {
-        className: "d-block w-100 h1 text-light",
-        style: {
-          marginTop: -50
-        }
-      }, user ? react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("span", null, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("span", {
-        style: {
-          color: '#999'
-        }
-      }, "Hello!"), " ", user) : "What is your name?"), !user && react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("input", {
-        type: "text",
-        className: "form-control mt-3 px-3 py-2",
-        onKeyUp: this.handleKeyUp,
-        autoComplete: "off",
-        style: nameInputStyles
-      }))), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("section", {
-        className: "col-md-4 position-relative d-flex flex-wrap h-100 align-items-start align-content-between bg-white px-0"
-      }, user && react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(_components_Chat_js__WEBPACK_IMPORTED_MODULE_10__["default"], {
-        activeUser: user
-      })))));
-    }
-  }]);
-
-  return ChatBox;
-}(react__WEBPACK_IMPORTED_MODULE_8___default.a.Component);
+}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
 
 var SquareConnections =
 /*#__PURE__*/
-function (_React$Component5) {
-  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_7__["default"])(SquareConnections, _React$Component5);
+function (_React$Component4) {
+  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__["default"])(SquareConnections, _React$Component4);
 
   function SquareConnections() {
-    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_3__["default"])(this, SquareConnections);
+    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, SquareConnections);
 
-    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__["default"])(SquareConnections).apply(this, arguments));
+    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__["default"])(SquareConnections).apply(this, arguments));
   }
 
-  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_4__["default"])(SquareConnections, [{
+  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(SquareConnections, [{
     key: "renderSquares",
     value: function renderSquares() {
-      var _this9 = this;
+      var _this10 = this;
 
       var tempArray = [];
 
@@ -918,41 +1352,41 @@ function (_React$Component5) {
         tempArray.push(i);
       }
 
-      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, tempArray.map(function (i) {
-        return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(Square, {
-          color: _this9.props.squaresArray[i]['color'],
-          connectorA: _this9.props.squaresArray[i]['square'][0][0],
-          connectorB: _this9.props.squaresArray[i]['square'][1][1],
-          connectorC: _this9.props.squaresArray[i]['square'][0][1],
-          connectorD: _this9.props.squaresArray[i]['square'][1][0]
+      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, tempArray.map(function (i) {
+        return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(Square, {
+          color: _this10.props.squaresArray[i]['color'],
+          connectorA: _this10.props.squaresArray[i]['square'][0][0],
+          connectorB: _this10.props.squaresArray[i]['square'][1][1],
+          connectorC: _this10.props.squaresArray[i]['square'][0][1],
+          connectorD: _this10.props.squaresArray[i]['square'][1][0]
         });
       }));
     }
   }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, this.renderSquares());
+      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, this.renderSquares());
     }
   }]);
 
   return SquareConnections;
-}(react__WEBPACK_IMPORTED_MODULE_8___default.a.Component);
+}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
 
 var BoardConnections =
 /*#__PURE__*/
-function (_React$Component6) {
-  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_7__["default"])(BoardConnections, _React$Component6);
+function (_React$Component5) {
+  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__["default"])(BoardConnections, _React$Component5);
 
   function BoardConnections() {
-    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_3__["default"])(this, BoardConnections);
+    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, BoardConnections);
 
-    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__["default"])(BoardConnections).apply(this, arguments));
+    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__["default"])(BoardConnections).apply(this, arguments));
   }
 
-  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_4__["default"])(BoardConnections, [{
+  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(BoardConnections, [{
     key: "renderConnections",
     value: function renderConnections() {
-      var _this10 = this;
+      var _this11 = this;
 
       var tempArray = [];
 
@@ -961,65 +1395,64 @@ function (_React$Component6) {
       }
 
       ;
-      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, tempArray.map(function (i) {
-        return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(Connection, {
-          connectorA: _this10.props.connectionsArray[i][0],
-          connectorB: _this10.props.connectionsArray[i][1]
+      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, tempArray.map(function (i) {
+        return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(Connection, {
+          connectorA: _this11.props.connectionsArray[i][0],
+          connectorB: _this11.props.connectionsArray[i][1]
         });
       }));
     }
   }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, this.renderConnections());
+      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, this.renderConnections());
     }
   }]);
 
   return BoardConnections;
-}(react__WEBPACK_IMPORTED_MODULE_8___default.a.Component);
+}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
 
 var Connector =
 /*#__PURE__*/
-function (_React$Component7) {
-  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_7__["default"])(Connector, _React$Component7);
+function (_React$Component6) {
+  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__["default"])(Connector, _React$Component6);
 
   function Connector() {
-    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Connector);
+    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, Connector);
 
-    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__["default"])(Connector).apply(this, arguments));
+    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__["default"])(Connector).apply(this, arguments));
   }
 
-  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_4__["default"])(Connector, [{
+  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(Connector, [{
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("button", {
+      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("button", {
         className: this.props.id,
-        key: this.props.key,
         onClick: this.props.clickHandler
-      }, this.props.key);
+      });
     }
   }]);
 
   return Connector;
-}(react__WEBPACK_IMPORTED_MODULE_8___default.a.Component);
+}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
 
 var Connection =
 /*#__PURE__*/
-function (_React$Component8) {
-  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_7__["default"])(Connection, _React$Component8);
+function (_React$Component7) {
+  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__["default"])(Connection, _React$Component7);
 
   function Connection() {
-    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Connection);
+    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, Connection);
 
-    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__["default"])(Connection).apply(this, arguments));
+    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__["default"])(Connection).apply(this, arguments));
   }
 
-  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_4__["default"])(Connection, [{
+  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(Connection, [{
     key: "render",
     value: function render() {
       var connectorA = "connector".concat(this.props.connectorA),
           connectorB = "connector".concat(this.props.connectorB);
-      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(react_lineto__WEBPACK_IMPORTED_MODULE_9___default.a, {
+      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(react_lineto__WEBPACK_IMPORTED_MODULE_7___default.a, {
         from: connectorA,
         to: connectorB,
         borderWidth: 2,
@@ -1029,52 +1462,52 @@ function (_React$Component8) {
   }]);
 
   return Connection;
-}(react__WEBPACK_IMPORTED_MODULE_8___default.a.Component);
+}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
 
 var Square =
 /*#__PURE__*/
-function (_React$Component9) {
-  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_7__["default"])(Square, _React$Component9);
+function (_React$Component8) {
+  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__["default"])(Square, _React$Component8);
 
   function Square() {
-    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Square);
+    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, Square);
 
-    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__["default"])(Square).apply(this, arguments));
+    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__["default"])(Square).apply(this, arguments));
   }
 
-  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_4__["default"])(Square, [{
+  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(Square, [{
     key: "render",
     value: function render() {
       var connectorA = "connector".concat(this.props.connectorA),
           connectorB = "connector".concat(this.props.connectorB),
           connectorC = "connector".concat(this.props.connectorC),
           connectorD = "connector".concat(this.props.connectorD);
-      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(react_lineto__WEBPACK_IMPORTED_MODULE_9___default.a, {
+      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(react_lineto__WEBPACK_IMPORTED_MODULE_7___default.a, {
         from: connectorA,
         to: connectorB,
         borderColor: this.props.color,
         borderWidth: 3
-      }), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(react_lineto__WEBPACK_IMPORTED_MODULE_9___default.a, {
+      }), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(react_lineto__WEBPACK_IMPORTED_MODULE_7___default.a, {
         from: connectorC,
         to: connectorD,
         borderColor: this.props.color,
         borderWidth: 3
-      }), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(react_lineto__WEBPACK_IMPORTED_MODULE_9___default.a, {
+      }), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(react_lineto__WEBPACK_IMPORTED_MODULE_7___default.a, {
         from: connectorA,
         to: connectorC,
         borderColor: this.props.color,
         borderWidth: 3
-      }), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(react_lineto__WEBPACK_IMPORTED_MODULE_9___default.a, {
+      }), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(react_lineto__WEBPACK_IMPORTED_MODULE_7___default.a, {
         from: connectorA,
         to: connectorD,
         borderColor: this.props.color,
         borderWidth: 3
-      }), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(react_lineto__WEBPACK_IMPORTED_MODULE_9___default.a, {
+      }), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(react_lineto__WEBPACK_IMPORTED_MODULE_7___default.a, {
         from: connectorD,
         to: connectorB,
         borderColor: this.props.color,
         borderWidth: 3
-      }), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(react_lineto__WEBPACK_IMPORTED_MODULE_9___default.a, {
+      }), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(react_lineto__WEBPACK_IMPORTED_MODULE_7___default.a, {
         from: connectorC,
         to: connectorB,
         borderColor: this.props.color,
@@ -1084,9 +1517,142 @@ function (_React$Component9) {
   }]);
 
   return Square;
-}(react__WEBPACK_IMPORTED_MODULE_8___default.a.Component);
+}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
 
 /* harmony default export */ __webpack_exports__["default"] = (Game);
+
+/***/ }),
+
+/***/ "./components/lobby.js":
+/*!*****************************!*\
+  !*** ./components/lobby.js ***!
+  \*****************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/classCallCheck */ "./node_modules/@babel/runtime-corejs2/helpers/esm/classCallCheck.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/createClass */ "./node_modules/@babel/runtime-corejs2/helpers/esm/createClass.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/possibleConstructorReturn */ "./node_modules/@babel/runtime-corejs2/helpers/esm/possibleConstructorReturn.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/getPrototypeOf */ "./node_modules/@babel/runtime-corejs2/helpers/esm/getPrototypeOf.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/assertThisInitialized */ "./node_modules/@babel/runtime-corejs2/helpers/esm/assertThisInitialized.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/inherits */ "./node_modules/@babel/runtime-corejs2/helpers/esm/inherits.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _ChatBox_ChatBox_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./ChatBox/ChatBox.js */ "./components/ChatBox/ChatBox.js");
+/* harmony import */ var _ChatBox_ActiveUsers_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./ChatBox/ActiveUsers.js */ "./components/ChatBox/ActiveUsers.js");
+
+
+
+
+
+
+
+
+
+
+var Lobby = function Lobby() {
+  return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
+    className: "info-taker"
+  }, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(InfoTaker, null)));
+};
+
+var InfoTaker =
+/*#__PURE__*/
+function (_React$Component) {
+  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__["default"])(InfoTaker, _React$Component);
+
+  function InfoTaker(props) {
+    var _this;
+
+    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, InfoTaker);
+
+    _this = Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__["default"])(InfoTaker).call(this, props));
+    _this.state = {
+      username: '',
+      color: '',
+      submitted: false
+    };
+    _this.handleSubmit = _this.handleSubmit.bind(Object(_babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4__["default"])(_this));
+    return _this;
+  }
+
+  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(InfoTaker, [{
+    key: "handleSubmit",
+    value: function handleSubmit(event) {
+      var _this2 = this;
+
+      if (event.target.elements.namedItem("username").value) {
+        this.setState({
+          name: event.target.elements.namedItem("username").value,
+          color: event.target.elements.namedItem("color").value
+        }, function () {
+          _this2.setState({
+            submitted: true
+          });
+
+          return;
+        });
+      }
+
+      event.preventDefault();
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      if (!this.state.submitted) {
+        return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("form", {
+          onSubmit: this.handleSubmit
+        }, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("label", null, "Please enter your name and choose a color!", react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("input", {
+          type: "text",
+          name: "username"
+        })), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("label", null, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("select", {
+          name: "color"
+        }, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("option", {
+          value: "blue"
+        }, "Blue"), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("option", {
+          value: "brown"
+        }, "Brown"), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("option", {
+          value: "chartreuse"
+        }, "Chartreuse"), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("option", {
+          value: "coral"
+        }, "Coral"), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("option", {
+          value: "cyan"
+        }, "Cyan"), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("option", {
+          value: "gainsboro"
+        }, "Gainsboro"), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("option", {
+          value: "darkorchid"
+        }, "Dark Orchid"), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("option", {
+          value: "fuchsia"
+        }, "Fuchsia"), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("option", {
+          value: "indigo"
+        }, "Indigo"), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("option", {
+          value: "olive"
+        }, "Olive"), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("option", {
+          value: "royalblue"
+        }, "Royal Blue"), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("option", {
+          value: "turquoise"
+        }, "Turquoise"))), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("input", {
+          type: "submit",
+          value: "Submit"
+        }));
+      } else if (this.state.submitted) {
+        return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(_ChatBox_ChatBox_js__WEBPACK_IMPORTED_MODULE_7__["default"], {
+          user: this.state.name,
+          color: this.state.color
+        })), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(_ChatBox_ActiveUsers_js__WEBPACK_IMPORTED_MODULE_8__["default"], {
+          userName: this.state.name,
+          userColor: this.state.color
+        })));
+      }
+    }
+  }]);
+
+  return InfoTaker;
+}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (Lobby);
 
 /***/ }),
 
@@ -1131,6 +1697,17 @@ module.exports = __webpack_require__(/*! core-js/library/fn/object/create */ "./
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(/*! core-js/library/fn/object/define-property */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/fn/object/define-property.js");
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-names.js":
+/*!**************************************************************************************!*\
+  !*** ./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-names.js ***!
+  \**************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! core-js/library/fn/object/get-own-property-names */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/fn/object/get-own-property-names.js");
 
 /***/ }),
 
@@ -1571,6 +2148,22 @@ __webpack_require__(/*! ../../modules/es6.object.define-property */ "./node_modu
 var $Object = __webpack_require__(/*! ../../modules/_core */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_core.js").Object;
 module.exports = function defineProperty(it, key, desc) {
   return $Object.defineProperty(it, key, desc);
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/fn/object/get-own-property-names.js":
+/*!**************************************************************************************************************!*\
+  !*** ./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/fn/object/get-own-property-names.js ***!
+  \**************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(/*! ../../modules/es6.object.get-own-property-names */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/es6.object.get-own-property-names.js");
+var $Object = __webpack_require__(/*! ../../modules/_core */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_core.js").Object;
+module.exports = function getOwnPropertyNames(it) {
+  return $Object.getOwnPropertyNames(it);
 };
 
 
@@ -3066,6 +3659,21 @@ $export($export.S + $export.F * !__webpack_require__(/*! ./_descriptors */ "./no
 
 /***/ }),
 
+/***/ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/es6.object.get-own-property-names.js":
+/*!***********************************************************************************************************************!*\
+  !*** ./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/es6.object.get-own-property-names.js ***!
+  \***********************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.7 Object.getOwnPropertyNames(O)
+__webpack_require__(/*! ./_object-sap */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_object-sap.js")('getOwnPropertyNames', function () {
+  return __webpack_require__(/*! ./_object-gopn-ext */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_object-gopn-ext.js").f;
+});
+
+
+/***/ }),
+
 /***/ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/es6.object.get-prototype-of.js":
 /*!*****************************************************************************************************************!*\
   !*** ./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/es6.object.get-prototype-of.js ***!
@@ -3465,16 +4073,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _pages_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../pages/style.css */ "./pages/style.css");
 /* harmony import */ var _pages_style_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_pages_style_css__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _components_Game_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/Game.js */ "./components/Game.js");
+/* harmony import */ var _components_lobby_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/lobby.js */ "./components/lobby.js");
+/* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! next/head */ "next/head");
+/* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(next_head__WEBPACK_IMPORTED_MODULE_3__);
+
 
 
 
 
 var Index = function Index() {
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Game_js__WEBPACK_IMPORTED_MODULE_2__["default"], null));
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_head__WEBPACK_IMPORTED_MODULE_3___default.a, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("title", null, "Poopycakes")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_lobby_js__WEBPACK_IMPORTED_MODULE_2__["default"], null)));
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Index);
+/* harmony default export */ __webpack_exports__["default"] = (Index); //<div>
+//<Game player={{username: "timmy", color: "red"}} players={[{username: "timmy", color: "red"}, {username: "bobby", color: "blue"}]} boardSize={[{x: 4}, {y: 4}]}/>
+//</div>
+//we use html color names. check: https://htmlcolorcodes.com/color-names/
 
 /***/ }),
 
@@ -3496,7 +4110,7 @@ var Index = function Index() {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /home/jbarreto/Documents/Projects/lepipette/pages/index.js */"./pages/index.js");
+module.exports = __webpack_require__(/*! /home/jbarreto/Documents/Projects/Le Pipoette/pages/index.js */"./pages/index.js");
 
 
 /***/ }),
@@ -3509,6 +4123,17 @@ module.exports = __webpack_require__(/*! /home/jbarreto/Documents/Projects/lepip
 /***/ (function(module, exports) {
 
 module.exports = require("axios");
+
+/***/ }),
+
+/***/ "next/head":
+/*!****************************!*\
+  !*** external "next/head" ***!
+  \****************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("next/head");
 
 /***/ }),
 

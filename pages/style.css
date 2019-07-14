@@ -7,6 +7,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+a:visited{
+  color:blue;
+}
 
 .poper {
   margin: 0;
@@ -40,8 +43,8 @@ code {
 }
 
 td [class^='connector'] {
-  height: 20px;
-  width: 20px;
+  height: 30px;
+  width: 30px;
   border-radius: 100%;
   text-align: center;
   margin: 35px 35px 35px 35px;

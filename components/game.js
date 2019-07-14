@@ -1,10 +1,32 @@
 import LineTo from 'react-lineto';
-import Chat from "../components/Chat.js";
+import Pusher from 'pusher-js';
+
+//players={[{username: "timmy", color: "red"}, {username: "bobby", color: "blue"}]} boardSize={[{x: 4}, {y: 4}]};
 
 class Game extends React.Component {
-    render () { return (
-        <GameInstance players={[{username: "timmy", color: "red"}, {username: "bobby", color: "blue"}]} boardSize={[{x: 4}, {y: 4}]}/>
-    );}
+    constructor(props) {
+        super(props);
+        this.state = {
+            playerOne: this.props.players[0], 
+            playerTwo: this.props.players[1],
+            currentPlayer: this.props.players[0],
+            player: this.props.self,
+            boardSize: this.props.boardSize
+        };
+
+
+       
+
+
+        
+        
+    }
+    render () { 
+
+        return (
+            <GameInstance player={this.state.player} playerOne={this.state.playerOne} playerTwo={this.state.playerTwo} boardSize={this.state.boardSize} opponentChannel={this.state.player.username==this.state.playerOne.username ? this.props.playerTwoChannel : this.props.playerOneChannel} playerChannel={this.state.player.username==this.state.playerOne.username ? this.props.playerOneChannel : this.props.playerTwoChannel}/>
+        );
+    }
 }
 class GameInstance extends React.Component {
     constructor(props) {
@@ -15,7 +37,7 @@ class GameInstance extends React.Component {
             connectionsArraySize = ((x-1)*y)+((y-1)*x);
 
         this.state = {
-            currentPlayer: this.props.players[0],
+            currentPlayer: this.props.playerOne,
             firstConnector: 0,
             secondConnector: 0,
             //connectionsArray: Array(connectionsArraySize).fill({connection: [], isConnected: false}),
@@ -24,6 +46,63 @@ class GameInstance extends React.Component {
             squaresArray: [],
             legalCombos: this.generateLegalCombos(x, y)
         };
+
+        
+        this.pusher = new Pusher(process.env.PUSHER_APP_KEY, {
+            cluster: process.env.PUSHER_APP_CLUSTER,
+            authEndpoint: "/pusher/auth",
+            forceTLS: true,
+            auth: {
+                params: {
+                    username: this.props.player.username,
+                    color: this.props.player.color
+                }
+            }
+        });
+    }
+
+    componentDidMount () {
+        this.opponentChannel = this.pusher.subscribe(this.props.opponentChannel);
+        this.playerChannel = this.pusher.subscribe(this.props.playerChannel);
+
+
+        this.playerChannel.bind('pusher:subscription_succeeded', (members) => {
+            
+         });
+
+         this.playerChannel.bind('pusher:subscription_error', (error) => {
+            alert(`error\n${error}`);
+         });
+         this.playerChannel.bind('client-set-connections', (data) => {
+            this.setState({connectionsArray: data}, () => {
+                
+            });
+
+         });
+         this.playerChannel.bind('client-set-squares', (data) => {
+            this.setState({squaresArray: data}, () => {
+                
+            });
+
+         });
+         this.playerChannel.bind('client-change-current-player', (data) => {
+            this.setState({currentPlayer: (this.state.currentPlayer==this.props.playerOne ? this.props.playerTwo : this.props.playerOne)}, () => {
+                
+            });
+
+         });
+
+        this.opponentChannel.bind('pusher:subscription_succeeded', (members) => {
+
+            this.opponentChannel.trigger('test', 'yesy'); 
+         });
+         this.opponentChannel.bind('pusher:subscription_error', (error) => {
+            alert(`error\n${error}`);
+         });         
+    }
+
+    componentWillUnmount () {
+        this.pusher.disconnect();
     }
 
     generateSquareConditions(x,y) {
@@ -126,7 +205,7 @@ class GameInstance extends React.Component {
                 //have to check if squaresArray contains squareConditions[i]
                 squaresArray.push({square: tempArray, player: this.state.currentPlayer['username'], color: this.state.currentPlayer['color']});
                 this.setState({squaresArray: squaresArray}, () => {
-                    //alert("yep"); 
+                    this.opponentChannel.trigger('client-set-squares', squaresArray);
                     return;
                 });
                 
@@ -137,7 +216,8 @@ class GameInstance extends React.Component {
 
         }
         if (squaresArray.length == this.state.squaresArray.length) {
-            this.setState({currentPlayer: (this.state.currentPlayer==this.props.players[0] ? this.props.players[1] : this.props.players[0]) }, () => {
+            this.setState({currentPlayer: (this.state.currentPlayer==this.props.playerOne ? this.props.playerTwo : this.props.playerOne) }, () => {
+                this.opponentChannel.trigger('client-change-current-player', 'null');
                 return;
             });
         }
@@ -162,6 +242,15 @@ class GameInstance extends React.Component {
         return;
     }
     connectTwo(a, b) {
+        //this.opponentChannel.trigger('client-test', { data: "test" });
+
+        //is it my turn? if not, return
+        if (this.state.currentPlayer['username']!==this.props.player.username) {
+            alert("it's not your turn!");
+            return;
+        }
+        
+
         let testArray = [a, b],
             legalcombos = this.state.legalCombos;
 
@@ -185,7 +274,10 @@ class GameInstance extends React.Component {
                 //good to go
                 tempArray.push([x,y]);
 
+
                 this.setState({connectionsArray: tempArray}, () => {
+                    this.opponentChannel.trigger('client-set-connections', tempArray);
+
                     this.generateSquares();
                     //this.checkEndGame();
                     return;
@@ -220,9 +312,11 @@ class GameInstance extends React.Component {
         
     }
 
-    render () {return (
+    render () {
+
+        return (
         <div className="game-instance">
-            <Board clickHandler={(i) => {this.clickHandler(i)}} x={this.props.boardSize[0]['x']} y={this.props.boardSize[1]['y']} connectionsArray={this.state.connectionsArray} currentPlayer={this.state.currentPlayer} playerOne={this.props.players[0]} playerTwo={this.props.players[1]} squaresArray={this.state.squaresArray}/>
+            <Board clickHandler={(i) => {this.clickHandler(i)}} x={this.props.boardSize[0]['x']} y={this.props.boardSize[1]['y']} connectionsArray={this.state.connectionsArray} currentPlayer={this.state.currentPlayer} playerOne={this.props.playerOne} playerTwo={this.props.playerTwo} squaresArray={this.state.squaresArray}/>
             
         </div>
     );}
@@ -247,9 +341,9 @@ class Board extends React.Component {
         let iterator = xy.values();
 
         return(<div>
-            {yArr.map(y => <tr>{
+            {yArr.map(y => <tr key={y}>{
                 xArr.map((x) => 
-                <td>{this.renderConnector(iterator.next().value)}</td>
+                <td key={iterator.value}>{this.renderConnector(iterator.next().value)}</td>
             )}</tr>)}
             </div>);
     }
@@ -257,7 +351,7 @@ class Board extends React.Component {
     renderConnector(i) {
         let connectorId = `connector${i}`
         return(
-        <Connector key={i} id={connectorId} clickHandler={() => this.props.clickHandler(i)}/>
+        <Connector id={connectorId} clickHandler={() => this.props.clickHandler(i)}/>
     );}
 
     calculateScore() {
@@ -294,79 +388,11 @@ class Board extends React.Component {
                 It is {this.props.currentPlayer['username']}'s turn!<br></br><br></br>
                 The current score is: {this.calculateScore()}
             </div>
-            <div className="chat-box">
-                <ChatBox />
-
-                
-            </div>
         </div>
     );}
 }
 
-class ChatBox extends React.Component {
-    constructor (props) {
-        super(props);
-        this.state = { user: null }
-    }
 
-    handleKeyUp = evt => {
-        if (evt.keyCode === 13) {
-          const user =  evt.target.value;
-          this.setState({ user });
-        }
-      }
-
-    render() {
-        const { user } = this.state;
-      
-        const nameInputStyles = {
-          background: 'transparent',
-          color: '#999',
-          border: 0,
-          borderBottom: '1px solid #666',
-          borderRadius: 0,
-          fontSize: '3rem',
-          fontWeight: 500,
-          boxShadow: 'none !important'
-        };
-        
-        return (
-          <div>
-          
-            <main className="container-fluid position-absolute h-100 bg-dark">
-            
-              <div className="row position-absolute w-100 h-100">
-              
-                <section className="col-md-8 d-flex flex-row flex-wrap align-items-center align-content-center px-5">
-                  <div className="px-5 mx-5">
-                  
-                    <span className="d-block w-100 h1 text-light" style={{marginTop: -50}}>
-                      {
-                        user
-                          ? (<span>
-                              <span style={{color: '#999'}}>Hello!</span> {user}
-                            </span>)
-                          : `What is your name?`
-                      }
-                    </span>
-                    
-                    { !user && <input type="text" className="form-control mt-3 px-3 py-2" onKeyUp={this.handleKeyUp} autoComplete="off" style={nameInputStyles} /> }
-                    
-                  </div>
-                </section>
-                
-                <section className="col-md-4 position-relative d-flex flex-wrap h-100 align-items-start align-content-between bg-white px-0">
-                    { user && <Chat activeUser={user} /> }
-                </section>
-                
-              </div>
-              
-            </main>
-            
-          </div>
-        );
-    }
-}
 
 class SquareConnections extends React.Component {
     renderSquares() {
@@ -409,7 +435,7 @@ class BoardConnections extends React.Component {
 class Connector extends React.Component {
     render() {
         return (
-        <button className={this.props.id} key={this.props.key} onClick={this.props.clickHandler}>{this.props.key}</button>
+        <button className={this.props.id} onClick={this.props.clickHandler}></button>
     );}
 }
 class Connection extends React.Component {

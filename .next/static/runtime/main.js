@@ -6773,7 +6773,7 @@ function connect(options) {
       error.name = err.name;
       error.stack = err.stack; // __NEXT_DIST_DIR is provided by webpack
 
-      (0, _sourceMapSupport.rewriteStacktrace)(error, "/home/jbarreto/Documents/Projects/lepipette/.next");
+      (0, _sourceMapSupport.rewriteStacktrace)(error, "/home/jbarreto/Documents/Projects/Le Pipoette/.next");
       return error;
     }
   };
