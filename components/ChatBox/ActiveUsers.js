@@ -158,12 +158,25 @@ class ActiveUsers extends React.Component {
                 });
             });
 
+            this.privateChannel.bind('client-game-over', (data) => {
+                this.setState({ gameLink: false });
+            });
+
             this.setState({ helped: true });
         }
     }
 
     inviteFunction(data) {
        
+        if (data.currentTarget.dataset.userid == this.onlineChannel.members.me.id) {
+            alert ("you can't play yourself!");
+            return;
+        };
+
+        if (this.state.gameLink) {
+            alert("you can't play while in game!")
+            return;
+        }
 
         let target = {
             id: data.currentTarget.dataset.userid,
@@ -206,7 +219,7 @@ class ActiveUsers extends React.Component {
 
             return (<div>
                 <div>
-                    {!!gameLink && <Game self={{username: this.state.self.name, color: this.state.self.color}} players={[{username: this.state.playerOne.name, color: this.state.playerOne.color}, {username: this.state.playerTwo.name, color: this.state.playerTwo.color}]} playerOneChannel={this.state.playerOneChannel} playerTwoChannel={this.state.playerTwoChannel} gameChannel={this.state.gameChannel} boardSize={[{x: 4}, {y: 4}]}/>}
+                    {!!gameLink && <Game self={{username: this.state.self.name, color: this.state.self.color}} players={[{username: this.state.playerOne.name, color: this.state.playerOne.color}, {username: this.state.playerTwo.name, color: this.state.playerTwo.color}]} playerOneChannel={this.state.playerOneChannel} playerTwoChannel={this.state.playerTwoChannel} gameChannel={this.state.gameChannel} boardSize={[{x: 6}, {y: 6}]}/>}
                 </div>
                 
                 <div>

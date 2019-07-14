@@ -222,6 +222,11 @@ function (_React$Component) {
             self: self
           });
         });
+        this.privateChannel.bind('client-game-over', function (data) {
+          _this3.setState({
+            gameLink: false
+          });
+        });
         this.setState({
           helped: true
         });
@@ -230,6 +235,18 @@ function (_React$Component) {
   }, {
     key: "inviteFunction",
     value: function inviteFunction(data) {
+      if (data.currentTarget.dataset.userid == this.onlineChannel.members.me.id) {
+        alert("you can't play yourself!");
+        return;
+      }
+
+      ;
+
+      if (this.state.gameLink) {
+        alert("you can't play while in game!");
+        return;
+      }
+
       var target = {
         id: data.currentTarget.dataset.userid,
         name: data.currentTarget.dataset.username,
@@ -282,9 +299,9 @@ function (_React$Component) {
           playerTwoChannel: this.state.playerTwoChannel,
           gameChannel: this.state.gameChannel,
           boardSize: [{
-            x: 4
+            x: 2
           }, {
-            y: 4
+            y: 2
           }]
         })), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, users.map(function (user) {
           return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("a", {
@@ -756,6 +773,7 @@ function (_React$Component2) {
         y = props.boardSize[1]['y'],
         connectionsArraySize = (x - 1) * y + (y - 1) * x;
     _this2.state = {
+      gameOver: false,
       currentPlayer: _this2.props.playerOne,
       firstConnector: 0,
       secondConnector: 0,
@@ -979,12 +997,47 @@ function (_React$Component2) {
   }, {
     key: "checkEndGame",
     value: function checkEndGame() {
+      var _this5 = this;
+
       var squaresArray = this.state.squaresArray.slice();
       var x = this.props.boardSize[0]['x'];
       var y = this.props.boardSize[1]['y'];
 
       if (squaresArray.length == (x - 1) * (y - 1)) {
-        alert("end of game\n");
+        this.setState({
+          gameOver: true
+        }, function () {
+          if (_this5.state.gameOver == true) {
+            var playerOneScore = 0,
+                playerTwoScore = 0;
+
+            for (var i = 0; i < squaresArray.length; i++) {
+              if (squaresArray[i]['player'] == _this5.props.playerOne['username']) {
+                playerOneScore++;
+              }
+
+              if (squaresArray[i]['player'] == _this5.props.playerTwo['username']) {
+                playerTwoScore++;
+              }
+            }
+
+            ;
+
+            if (playerOneScore > playerTwoScore) {
+              alert("".concat(_this5.props.playerOne['username'], " has won!\n+++Final Scores+++\n ").concat(_this5.props.playerOne['username'], ": ").concat(playerOneScore, "\n").concat(_this5.props.playerTwo['username'], ": ").concat(playerTwoScore));
+            } else if (playerTwoScore > playerOneScore) {
+              alert("".concat(_this5.props.playerTwo['username'], " has won!\n+++Final Scores+++\n ").concat(_this5.props.playerTwo['username'], ": ").concat(playerTwoScore, "\n").concat(_this5.props.playerOne['username'], ": ").concat(playerOneScore));
+            } else if (playerOneScore == playerTwoScore) {
+              alert("It's a tie!\n+++Final Scores+++\n ".concat(_this5.props.playerOne['username'], ": ").concat(playerOneScore, "\n").concat(_this5.props.playerTwo['username'], ": ").concat(playerTwoScore));
+            }
+
+            ;
+          }
+
+          ;
+        });
+        this.opponentChannel.trigger('client-game-over', 'null');
+        this.playerChannel.trigger('client-game-over', 'null');
         return;
       }
 
@@ -993,7 +1046,7 @@ function (_React$Component2) {
   }, {
     key: "connectTwo",
     value: function connectTwo(a, b) {
-      var _this5 = this;
+      var _this6 = this;
 
       //this.opponentChannel.trigger('client-test', { data: "test" });
       //is it my turn? if not, return
@@ -1011,7 +1064,7 @@ function (_React$Component2) {
             y = _legalcombos$i[1];
 
         if (testArray[0] === x && testArray[1] === y || testArray[1] === x && testArray[0] === y) {
-          var tempArray = _this5.state.connectionsArray.slice(); //has it already been connected?
+          var tempArray = _this6.state.connectionsArray.slice(); //has it already been connected?
 
 
           var found = tempArray.find(function (n) {
@@ -1040,12 +1093,12 @@ function (_React$Component2) {
 
           tempArray.push([x, y]);
 
-          _this5.setState({
+          _this6.setState({
             connectionsArray: tempArray
           }, function () {
-            _this5.opponentChannel.trigger('client-set-connections', tempArray);
+            _this6.opponentChannel.trigger('client-set-connections', tempArray);
 
-            _this5.generateSquares(); //this.checkEndGame();
+            _this6.generateSquares(); //this.checkEndGame();
 
 
             return;
@@ -1075,7 +1128,7 @@ function (_React$Component2) {
   }, {
     key: "clickHandler",
     value: function clickHandler(i) {
-      var _this6 = this;
+      var _this7 = this;
 
       if (!this.state.firstConnector && !this.state.secondConnector) {
         this.setState(function (state, props) {
@@ -1089,7 +1142,7 @@ function (_React$Component2) {
             secondConnector: state.secondConnector + i
           };
         }, function () {
-          _this6.connectTwo(_this6.state.firstConnector, _this6.state.secondConnector);
+          _this7.connectTwo(_this7.state.firstConnector, _this7.state.secondConnector);
         });
       } else if (!!this.state.firstConnector && !!this.state.secondConnector) {
         this.setState(function (state, props) {
@@ -1103,13 +1156,13 @@ function (_React$Component2) {
   }, {
     key: "render",
     value: function render() {
-      var _this7 = this;
+      var _this8 = this;
 
       return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
         className: "game-instance"
       }, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(Board, {
         clickHandler: function clickHandler(i) {
-          _this7.clickHandler(i);
+          _this8.clickHandler(i);
         },
         x: this.props.boardSize[0]['x'],
         y: this.props.boardSize[1]['y'],
@@ -1139,7 +1192,7 @@ function (_React$Component3) {
   Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(Board, [{
     key: "renderBoard",
     value: function renderBoard(x, y) {
-      var _this8 = this;
+      var _this9 = this;
 
       var xArr = [],
           yArr = [],
@@ -1168,20 +1221,20 @@ function (_React$Component3) {
         }, xArr.map(function (x) {
           return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("td", {
             key: iterator.value
-          }, _this8.renderConnector(iterator.next().value));
+          }, _this9.renderConnector(iterator.next().value));
         }));
       }));
     }
   }, {
     key: "renderConnector",
     value: function renderConnector(i) {
-      var _this9 = this;
+      var _this10 = this;
 
       var connectorId = "connector".concat(i);
       return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(Connector, {
         id: connectorId,
         clickHandler: function clickHandler() {
-          return _this9.props.clickHandler(i);
+          return _this10.props.clickHandler(i);
         }
       });
     }
@@ -1242,7 +1295,7 @@ function (_React$Component4) {
   Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(SquareConnections, [{
     key: "renderSquares",
     value: function renderSquares() {
-      var _this10 = this;
+      var _this11 = this;
 
       var tempArray = [];
 
@@ -1252,11 +1305,11 @@ function (_React$Component4) {
 
       return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, tempArray.map(function (i) {
         return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(Square, {
-          color: _this10.props.squaresArray[i]['color'],
-          connectorA: _this10.props.squaresArray[i]['square'][0][0],
-          connectorB: _this10.props.squaresArray[i]['square'][1][1],
-          connectorC: _this10.props.squaresArray[i]['square'][0][1],
-          connectorD: _this10.props.squaresArray[i]['square'][1][0]
+          color: _this11.props.squaresArray[i]['color'],
+          connectorA: _this11.props.squaresArray[i]['square'][0][0],
+          connectorB: _this11.props.squaresArray[i]['square'][1][1],
+          connectorC: _this11.props.squaresArray[i]['square'][0][1],
+          connectorD: _this11.props.squaresArray[i]['square'][1][0]
         });
       }));
     }
@@ -1284,7 +1337,7 @@ function (_React$Component5) {
   Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(BoardConnections, [{
     key: "renderConnections",
     value: function renderConnections() {
-      var _this11 = this;
+      var _this12 = this;
 
       var tempArray = [];
 
@@ -1295,8 +1348,8 @@ function (_React$Component5) {
       ;
       return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, tempArray.map(function (i) {
         return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(Connection, {
-          connectorA: _this11.props.connectionsArray[i][0],
-          connectorB: _this11.props.connectionsArray[i][1]
+          connectorA: _this12.props.connectionsArray[i][0],
+          connectorB: _this12.props.connectionsArray[i][1]
         });
       }));
     }

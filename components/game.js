@@ -37,6 +37,7 @@ class GameInstance extends React.Component {
             connectionsArraySize = ((x-1)*y)+((y-1)*x);
 
         this.state = {
+            gameOver: false,
             currentPlayer: this.props.playerOne,
             firstConnector: 0,
             secondConnector: 0,
@@ -221,8 +222,12 @@ class GameInstance extends React.Component {
                 return;
             });
         }
+
+        
         this.setState({}, () => {
             this.checkEndGame(); 
+
+            
             return; 
         })
 
@@ -236,11 +241,44 @@ class GameInstance extends React.Component {
         let x = this.props.boardSize[0]['x'];
         let y = this.props.boardSize[1]['y']
         if (squaresArray.length == (x-1)*(y-1)) {
-            alert("end of game\n");
+
+            this.setState({ gameOver: true }, () => {
+                if (this.state.gameOver == true) {
+                
+                    let playerOneScore = 0,
+                    playerTwoScore = 0;
+                    for (let i=0; i<squaresArray.length; i++) {
+                        if (squaresArray[i]['player'] == this.props.playerOne['username']) {
+                            playerOneScore++;
+                        }
+                        if (squaresArray[i]['player'] == this.props.playerTwo['username']) {
+                            playerTwoScore++;
+                        }
+                    };
+    
+    
+                    if(playerOneScore>playerTwoScore){
+                        alert(`${this.props.playerOne['username']} has won!\n+++Final Scores+++\n ${this.props.playerOne['username']}: ${playerOneScore}\n${this.props.playerTwo['username']}: ${playerTwoScore}`);
+                    } else if (playerTwoScore>playerOneScore) {
+                        alert(`${this.props.playerTwo['username']} has won!\n+++Final Scores+++\n ${this.props.playerTwo['username']}: ${playerTwoScore}\n${this.props.playerOne['username']}: ${playerOneScore}`);
+                    } else if (playerOneScore==playerTwoScore) {
+                        alert(`It's a tie!\n+++Final Scores+++\n ${this.props.playerOne['username']}: ${playerOneScore}\n${this.props.playerTwo['username']}: ${playerTwoScore}`);
+                    };
+                };
+            });
+            
+            
+
+            
+            
+            this.opponentChannel.trigger('client-game-over', 'null');
+            this.playerChannel.trigger('client-game-over', 'null');
             return;
         }
         return;
     }
+    
+
     connectTwo(a, b) {
         //this.opponentChannel.trigger('client-test', { data: "test" });
 
