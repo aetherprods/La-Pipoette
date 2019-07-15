@@ -88,7 +88,7 @@ module.exports =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -353,6 +353,12 @@ function (_React$Component) {
           return;
         } else {
           var checkX = function checkX() {
+            if (x == null) {
+              return;
+            }
+
+            ;
+
             if (!/^[0-9]+$/.test(x)) {
               x = prompt("Please only input numbers");
               checkX();
@@ -375,6 +381,12 @@ function (_React$Component) {
           };
 
           var checkY = function checkY() {
+            if (y == null) {
+              return;
+            }
+
+            ;
+
             if (!/^[0-9]+$/.test(y)) {
               y = prompt("Please only input numbers");
               checkY();
@@ -4200,7 +4212,7 @@ var Index = function Index() {
 
 /***/ }),
 
-/***/ 4:
+/***/ 3:
 /*!******************************!*\
   !*** multi ./pages/index.js ***!
   \******************************/

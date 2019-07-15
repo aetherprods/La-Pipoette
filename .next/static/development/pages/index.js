@@ -260,6 +260,12 @@ function (_React$Component) {
           return;
         } else {
           var checkX = function checkX() {
+            if (x == null) {
+              return;
+            }
+
+            ;
+
             if (!/^[0-9]+$/.test(x)) {
               x = prompt("Please only input numbers");
               checkX();
@@ -282,6 +288,12 @@ function (_React$Component) {
           };
 
           var checkY = function checkY() {
+            if (y == null) {
+              return;
+            }
+
+            ;
+
             if (!/^[0-9]+$/.test(y)) {
               y = prompt("Please only input numbers");
               checkY();
@@ -19182,7 +19194,7 @@ var Index = function Index() {
 
 /***/ }),
 
-/***/ 1:
+/***/ 0:
 /*!*********************************************************************************************************************************************!*\
   !*** multi next-client-pages-loader?page=%2F&absolutePagePath=%2Fhome%2Fjbarreto%2FDocuments%2FProjects%2FLe%20Pipoette%2Fpages%2Findex.js ***!
   \*********************************************************************************************************************************************/
@@ -19205,5 +19217,5 @@ module.exports = dll_7aff549c98b978433226;
 
 /***/ })
 
-},[[1,"static/runtime/webpack.js","styles"]]]);
+},[[0,"static/runtime/webpack.js","styles"]]]);
 //# sourceMappingURL=index.js.map

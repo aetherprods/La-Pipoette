@@ -196,6 +196,9 @@ class ActiveUsers extends React.Component {
 
                     let x = prompt("Board width?");
                     function checkX() {
+                        if (x == null) {
+                            return;
+                        };
                         if (!(/^[0-9]+$/.test(x))) {
                             x = prompt("Please only input numbers");
                             checkX();
@@ -212,6 +215,9 @@ class ActiveUsers extends React.Component {
 
                     let y = prompt("Board height?");
                     function checkY() {
+                        if (y == null) {
+                            return;
+                        };
                         if (!(/^[0-9]+$/.test(y))) {
                             y = prompt("Please only input numbers");
                             checkY();
