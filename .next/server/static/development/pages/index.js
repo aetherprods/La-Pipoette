@@ -944,11 +944,6 @@ function (_React$Component2) {
   }, {
     key: "componentWillUnmount",
     value: function componentWillUnmount() {
-      if (this.state.gameOver == false) {
-        alert("test");
-        this.opponentChannel.trigger('client-game-over', 'null');
-      }
-
       this.pusher.disconnect();
     }
   }, {
