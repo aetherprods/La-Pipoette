@@ -4,8 +4,7 @@ const cors = require('cors'),
       Pusher = require('pusher'),
       express = require('express'),
       bodyParser = require('body-parser'),
-      dotEnv = require('dotenv').config(),
-      base64 = require('base-64');
+      dotEnv = require('dotenv').config();
 
 
 //variables
@@ -26,6 +25,7 @@ const app = next({ dev }),
 app.prepare()
     .then(() => {
         const server = express();
+        let playersInGame = []
 
         server.use(cors());
         server.use(bodyParser.json());
@@ -37,19 +37,23 @@ app.prepare()
 
         const chatHistory = { messages: [] };
 
+        server.post('/remove_players', (req, res) => {
+            playersInGame.splice(playersInGame.indexOf(req.body), 1);
+        });
+
+        server.post('/get_players', (req, res) => {
+            res.send(playersInGame);
+        });
 
         server.post('/game_daemon', (req, res) => {
-            let { playerOne, playerTwo } = req.body
-            //let playerOne = { id, name, color } = req.body.playerOne;
+            let { playerOne, playerTwo, boardSize } = req.body
+            playersInGame.push(playerOne.id);
+            playersInGame.push(playerTwo.id);
 
-            testData = base64.encode(playerOne.id.slice(3, 5)+playerTwo.id.slice(1,4));
-
-            let players = { playerOne, playerTwo, channels: {pOne: `private-${playerOne.id}`, pTwo: `private-${playerTwo.id}`, game: `private-${testData}`} };
-
+            let players = { playerOne, playerTwo, boardSize, channels: {pOne: `private-${playerOne.id}`, pTwo: `private-${playerTwo.id}`} };
 
             pusher.trigger(`private-${playerOne.id}`, 'game_started', players);
-            pusher.trigger(`private-${playerTwo.id}`, 'game_started', players);
-            
+            pusher.trigger(`private-${playerTwo.id}`, 'game_started', players);            
 
             res.send(players);
         });
@@ -73,8 +77,8 @@ app.prepare()
         });
 
         server.post('/message', (req, res, next) => {
-            const { user, message, timestamp } = req.body;
-            const chat = { user, message, timestamp };
+            const { activeUser, activeColor, message, timestamp } = req.body;
+            const chat = { activeUser, activeColor, message, timestamp };
 
             chatHistory.messages.push(chat);
             pusher.trigger('presence-chat', 'new-message', { chat });

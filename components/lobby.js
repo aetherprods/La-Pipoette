@@ -23,9 +23,21 @@ class InfoTaker extends React.Component {
     }
 
     handleSubmit(event) {
-        
+        let name = event.target.elements.namedItem("username").value;
+        let nameOk = false;
 
-        if (event.target.elements.namedItem("username").value) {
+        function checkName() {
+            if (/\s/.test(name)) {
+                alert("No whitespace in the name, please")
+                return;
+            } else {
+                nameOk = true;
+            }
+        }
+
+        checkName();
+
+        if (!!name && nameOk) {
             this.setState({
                 name: event.target.elements.namedItem("username").value,
                 color: event.target.elements.namedItem("color").value
@@ -34,9 +46,8 @@ class InfoTaker extends React.Component {
                 return;
             });
         }
+
         event.preventDefault();
-
-
     }
 
     render() {
@@ -69,7 +80,7 @@ class InfoTaker extends React.Component {
                 <div>
                     <ChatBox user={this.state.name} color={this.state.color} />
                 </div>
-                <div>
+                <div className="active-users">
                   <ActiveUsers userName={this.state.name} userColor={this.state.color}/>
                 </div>
                 </div>);

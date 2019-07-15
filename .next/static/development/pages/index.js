@@ -93,7 +93,6 @@ function (_React$Component) {
         try {
           for (var _iterator = _babel_runtime_corejs2_core_js_get_iterator__WEBPACK_IMPORTED_MODULE_1___default()(_babel_runtime_corejs2_core_js_object_get_own_property_names__WEBPACK_IMPORTED_MODULE_0___default()(members['members'])), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
             var member = _step.value;
-            //alert(members['members'][member]['name']);
             users.push({
               id: member,
               user: members['members'][member]['name'],
@@ -116,9 +115,7 @@ function (_React$Component) {
         }
 
         ;
-        var userIds = []; //alert(JSON.stringify(members['members']));
-        //update users
-
+        var userIds = [];
         var userToBeAdded = {
           id: me.id,
           user: me.info.name,
@@ -127,8 +124,7 @@ function (_React$Component) {
 
         for (var i = 0; i < users.length; i++) {
           userIds.push(users[i]['id']);
-        } //alert(userIds);
-
+        }
 
         var found = userIds.find(function (userId) {
           return userId == userToBeAdded['id'];
@@ -199,13 +195,7 @@ function (_React$Component) {
 
       if (this.state.helped == false) {
         this.privateChannel = this.pusher.subscribe("private-".concat(this.onlineChannel.members.me.id));
-        this.privateChannel.bind('pusher:subscription_succeeded', function (members) {// alert("ok");
-        });
-        this.privateChannel.bind('pusher:subscription_error', function (error) {
-          alert("error\n".concat(error));
-        });
         this.privateChannel.bind('game_started', function (response) {
-          //alert(JSON.stringify(response.channels.game))
           var self = {
             id: _this3.onlineChannel.members.me.id,
             name: _this3.onlineChannel.members.me.info.name,
@@ -219,13 +209,16 @@ function (_React$Component) {
             playerTwo: response.playerTwo,
             playerTwoChannel: response.channels.pTwo,
             gameChannel: response.channels.game,
-            self: self
+            self: self,
+            boardSize: response.boardSize
           });
         });
-        this.privateChannel.bind('client-game-over', function (data) {
+        this.privateChannel.bind('client-restart-game', function (data) {
           _this3.setState({
             gameLink: false
           });
+
+          axios__WEBPACK_IMPORTED_MODULE_9___default.a.post('/remove_players', [_this3.onlineChannel.members.me.id]).then(function (response) {});
         });
         this.setState({
           helped: true
@@ -235,6 +228,18 @@ function (_React$Component) {
   }, {
     key: "inviteFunction",
     value: function inviteFunction(data) {
+      var playersInGame;
+      var target = {
+        id: data.currentTarget.dataset.userid,
+        name: data.currentTarget.dataset.username,
+        color: data.currentTarget.dataset.usercolor
+      };
+      var self = {
+        id: this.onlineChannel.members.me.id,
+        name: this.onlineChannel.members.me.info.name,
+        color: this.onlineChannel.members.me.info.color
+      };
+
       if (data.currentTarget.dataset.userid == this.onlineChannel.members.me.id) {
         alert("you can't play yourself!");
         return;
@@ -247,19 +252,79 @@ function (_React$Component) {
         return;
       }
 
-      var target = {
-        id: data.currentTarget.dataset.userid,
-        name: data.currentTarget.dataset.username,
-        color: data.currentTarget.dataset.usercolor
-      };
-      var self = {
-        id: this.onlineChannel.members.me.id,
-        name: this.onlineChannel.members.me.info.name,
-        color: this.onlineChannel.members.me.info.color
-      };
-      axios__WEBPACK_IMPORTED_MODULE_9___default.a.post('/game_daemon', {
-        playerOne: self,
-        playerTwo: target
+      axios__WEBPACK_IMPORTED_MODULE_9___default.a.post('/get_players').then(function (response) {
+        playersInGame = response.data;
+
+        if (playersInGame.includes(target.id)) {
+          alert("you can't play someone who's in a game!");
+          return;
+        } else {
+          var checkX = function checkX() {
+            if (!/^[0-9]+$/.test(x)) {
+              x = prompt("Please only input numbers");
+              checkX();
+            }
+
+            ;
+
+            if (x < 2) {
+              x = prompt("Please only input numbers greater than 1");
+              checkX();
+            }
+
+            ;
+
+            if (/^[0-9]+$/.test(x) && x > 1) {
+              xDone = true;
+            }
+
+            ;
+          };
+
+          var checkY = function checkY() {
+            if (!/^[0-9]+$/.test(y)) {
+              y = prompt("Please only input numbers");
+              checkY();
+            }
+
+            ;
+
+            if (y < 2) {
+              y = prompt("Please only input numbers greater than 1");
+              checkY();
+            }
+
+            ;
+
+            if (/^[0-9]+$/.test(y) && y > 1) {
+              yDone = true;
+            }
+
+            ;
+          };
+
+          var xDone = false,
+              yDone = false;
+          var x = prompt("Board width?");
+          ;
+          checkX();
+          var y = prompt("Board height?");
+          ;
+          checkY();
+
+          if (xDone && yDone) {
+            axios__WEBPACK_IMPORTED_MODULE_9___default.a.post('/game_daemon', {
+              playerOne: self,
+              playerTwo: target,
+              boardSize: {
+                x: x,
+                y: y
+              }
+            });
+          }
+
+          ;
+        }
       });
     }
   }, {
@@ -299,9 +364,9 @@ function (_React$Component) {
           playerTwoChannel: this.state.playerTwoChannel,
           gameChannel: this.state.gameChannel,
           boardSize: [{
-            x: 2
+            x: this.state.boardSize['x']
           }, {
-            y: 2
+            y: this.state.boardSize['y']
           }]
         })), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, users.map(function (user) {
           return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("a", {
@@ -402,9 +467,12 @@ function (_React$Component) {
       var value = evt.target.value;
 
       if (evt.keyCode === 13 && !evt.shiftKey) {
-        var user = _this.props.activeUser;
+        var _this$props = _this.props,
+            activeUser = _this$props.activeUser,
+            activeColor = _this$props.activeColor;
         var chat = {
-          user: user,
+          activeUser: activeUser,
+          activeColor: activeColor,
           message: value,
           timestamp: +new Date()
         };
@@ -442,11 +510,10 @@ function (_React$Component) {
 
           _this2.setState({
             chats: chats
+          }, function () {
+            document.getElementById("chat-box").scrollTop = document.getElementById("chat-box").scrollHeight;
           });
         });
-      });
-      this.channel.bind('pusher:subscription_error', function (error) {
-        alert("ok\n" + error);
       });
       this.channel.bind('new-message', function (_ref) {
         var _ref$chat = _ref.chat,
@@ -456,6 +523,8 @@ function (_React$Component) {
 
         _this2.setState({
           chats: chats
+        }, function () {
+          document.getElementById("chat-box").scrollTop = document.getElementById("chat-box").scrollHeight;
         });
       });
     }
@@ -469,67 +538,26 @@ function (_React$Component) {
     value: function render() {
       var _this3 = this;
 
-      return this.props.activeUser && react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("h2", null, "Welcome ", this.props.activeUser, "!")), react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", null, this.state.chats.map(function (chat, index) {
+      return this.props.activeUser && react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", {
+        className: "chat-box",
+        id: "chat-box"
+      }, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("h2", null, "Welcome ", this.props.activeUser, "!")), react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", null, this.state.chats.map(function (chat, index) {
         var previous = Math.max(0, index - 1);
         var previousChat = _this3.state.chats[previous];
         var isFirst = previous === index;
-        var inSequence = chat.user === previousChat.user;
+        var inSequence = chat.activeUser === previousChat.activeUser;
         var hasDelay = Math.ceil((chat.timestamp - previousChat.timestamp) / (1000 * 60)) > 1;
         return react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", {
           key: index
-        }, (isFirst || !inSequence || hasDelay) && react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("u", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("b", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("big", null, chat.user || 'Anonymous')))), react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement(_ChatMessage__WEBPACK_IMPORTED_MODULE_10__["default"], {
-          message: chat.message
+        }, (isFirst || !inSequence || hasDelay) && react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("u", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("b", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("big", null, !!chat.activeUser ? chat.activeUser : null)))), react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement(_ChatMessage__WEBPACK_IMPORTED_MODULE_10__["default"], {
+          message: chat.message,
+          color: chat.activeColor
         }));
-      })), react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", {
-        className: "border-top border-gray w-100 px-4 d-flex align-items-center bg-light",
-        style: {
-          minHeight: 90
-        }
-      }, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("textarea", {
-        className: "form-control px-3 py-2",
+      }))), react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("textarea", {
         onKeyUp: this.handleKeyUp,
-        placeholder: "Enter a chat message",
-        style: {
-          resize: 'none'
-        }
-      })));
+        placeholder: "Enter a chat message"
+      })), " ");
     }
-    /* render() {
-    return (this.props.activeUser && <div>
-    
-        <div className="border-bottom border-gray w-100 d-flex align-items-center bg-white" style={{ height: 90 }}>
-            <h2 className="text-dark mb-0 mx-4 px-62">{this.props.activeUser}</h2>
-        </div>
-        <div className="px-4 pb-4 w-100 d-flex flex-row flex-wrap align-items-start align-content-start position-relative" style={{ height: 'calc(100% - 180px)', overflowY: 'scroll' }}>
-        {this.state.chats.map((chat, index) => {
-        
-            const previous = Math.max(0, index - 1);
-            const previousChat = this.state.chats[previous];
-            const position = chat.user === this.props.activeUser ? "right" : "left";
-            
-            const isFirst = previous === index;
-            const inSequence = chat.user === previousChat.user;
-            const hasDelay = Math.ceil((chat.timestamp - previousChat.timestamp) / (1000 * 60)) > 1;
-            
-            
-            return (
-                <div key={index}>
-                
-                <p>
-                <ChatMessage message={chat.message} position={position} />
-                </p>
-                </div>
-            );
-        
-        })}
-        </div>
-        <div className="border-top border-gray w-100 px-4 d-flex align-items-center bg-light" style={{ minHeight: 90 }}>
-            <textarea className="form-control px-3 py-2" onKeyUp={this.handleKeyUp} placeholder="Enter a chat message" style={{ resize: 'none' }}></textarea>
-        </div>
-        
-    </div> )
-    } */
-
   }]);
 
   return Chat;
@@ -601,16 +629,6 @@ function (_React$Component) {
     key: "render",
     value: function render() {
       var user = this.state.user;
-      var nameInputStyles = {
-        background: 'transparent',
-        color: '#999',
-        border: 0,
-        borderBottom: '1px solid #666',
-        borderRadius: 0,
-        fontSize: '3rem',
-        fontWeight: 500,
-        boxShadow: 'none !important'
-      };
       return react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("section", null, user && react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement(_ChatBox_Chat_js__WEBPACK_IMPORTED_MODULE_8__["default"], {
         activeUser: this.state.user,
         activeColor: this.state.color
@@ -663,22 +681,13 @@ function (_React$Component) {
     key: "render",
     value: function render() {
       var _this$props = this.props,
-          _this$props$position = _this$props.position,
-          position = _this$props$position === void 0 ? 'left' : _this$props$position,
-          message = _this$props.message;
-      var isRight = position.toLowerCase() === 'right';
-      var align = isRight ? 'text-right' : 'text-left';
-      var justify = isRight ? 'justify-content-end' : 'justify-content-start';
-      var messageBoxStyles = {
-        maxWidth: '70%',
-        flexGrow: 0
-      };
-      var messageStyles = {
-        fontWeight: 500,
-        lineHeight: 1.4,
-        whiteSpace: 'pre-wrap'
-      };
-      return react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", null, message, "\n");
+          message = _this$props.message,
+          color = _this$props.color;
+      return react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", {
+        style: {
+          color: "".concat(color)
+        }
+      }, message);
     }
   }]);
 
@@ -718,7 +727,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
- //players={[{username: "timmy", color: "red"}, {username: "bobby", color: "blue"}]} boardSize={[{x: 4}, {y: 4}]};
+
 
 var Game =
 /*#__PURE__*/
@@ -777,7 +786,6 @@ function (_React$Component2) {
       currentPlayer: _this2.props.playerOne,
       firstConnector: 0,
       secondConnector: 0,
-      //connectionsArray: Array(connectionsArraySize).fill({connection: [], isConnected: false}),
       connectionsArray: [],
       squareConditions: _this2.generateSquareConditions(x, y),
       squaresArray: [],
@@ -804,10 +812,6 @@ function (_React$Component2) {
 
       this.opponentChannel = this.pusher.subscribe(this.props.opponentChannel);
       this.playerChannel = this.pusher.subscribe(this.props.playerChannel);
-      this.playerChannel.bind('pusher:subscription_succeeded', function (members) {});
-      this.playerChannel.bind('pusher:subscription_error', function (error) {
-        alert("error\n".concat(error));
-      });
       this.playerChannel.bind('client-set-connections', function (data) {
         _this3.setState({
           connectionsArray: data
@@ -823,11 +827,10 @@ function (_React$Component2) {
           currentPlayer: _this3.state.currentPlayer == _this3.props.playerOne ? _this3.props.playerTwo : _this3.props.playerOne
         }, function () {});
       });
-      this.opponentChannel.bind('pusher:subscription_succeeded', function (members) {
-        _this3.opponentChannel.trigger('test', 'yesy');
-      });
-      this.opponentChannel.bind('pusher:subscription_error', function (error) {
-        alert("error\n".concat(error));
+      this.playerChannel.bind('client-game-over', function (data) {
+        _this3.setState({
+          gameOver: true
+        });
       });
     }
   }, {
@@ -909,11 +912,9 @@ function (_React$Component2) {
       //checks connections array and update state as to squares
       var squareConditions = this.state.squareConditions.slice(),
           connectionsArray = this.state.connectionsArray.slice();
-      var squaresArray = this.state.squaresArray.slice(); //let tempArray = [];
+      var squaresArray = this.state.squaresArray.slice();
 
       for (var i = 0; i < squareConditions.length; i++) {
-        //A=false; B=false; C=false; D=false;
-        //sA=false; sB=false; sC=false; sD=false;
         var A = false,
             B = false,
             C = false,
@@ -944,7 +945,7 @@ function (_React$Component2) {
 
         for (var l = 0; l < squaresArray.length; l++) {
           for (var k = 0; k < squaresArray[l]['square'].length; k++) {
-            //squaresArray[l]['square'] contains the 4 elements of 
+            //squaresArray[l]['square'] contains the 4 connections describing a square:
             //squaresArray[l]['square'][k] contains the [x,y] to check against squareConditions[i]
             if (squaresArray[l]['square'][k][0] == a[0] && squaresArray[l]['square'][k][1] == a[1]) {
               sA = true;
@@ -960,7 +961,6 @@ function (_React$Component2) {
 
         if (A && B && C && D && !(sA && sB && sC && sD)) {
           //i.e., if (connectionsArray contains all of the elements of a single squareCondition)
-          //have to check if squaresArray contains squareConditions[i]
           squaresArray.push({
             square: tempArray,
             player: this.state.currentPlayer['username'],
@@ -971,9 +971,10 @@ function (_React$Component2) {
           }, function () {
             _this4.opponentChannel.trigger('client-set-squares', squaresArray);
 
+            _this4.checkEndGame();
+
             return;
           });
-        } else if (A && B && C && D) {//only change player if we didn't find a square
         }
       }
 
@@ -988,8 +989,7 @@ function (_React$Component2) {
       }
 
       this.setState({}, function () {
-        _this4.checkEndGame();
-
+        //this.checkEndGame(); 
         return;
       });
       return;
@@ -997,8 +997,6 @@ function (_React$Component2) {
   }, {
     key: "checkEndGame",
     value: function checkEndGame() {
-      var _this5 = this;
-
       var squaresArray = this.state.squaresArray.slice();
       var x = this.props.boardSize[0]['x'];
       var y = this.props.boardSize[1]['y'];
@@ -1007,48 +1005,65 @@ function (_React$Component2) {
         this.setState({
           gameOver: true
         }, function () {
-          if (_this5.state.gameOver == true) {
-            var playerOneScore = 0,
-                playerTwoScore = 0;
-
-            for (var i = 0; i < squaresArray.length; i++) {
-              if (squaresArray[i]['player'] == _this5.props.playerOne['username']) {
-                playerOneScore++;
-              }
-
-              if (squaresArray[i]['player'] == _this5.props.playerTwo['username']) {
-                playerTwoScore++;
-              }
-            }
-
-            ;
-
-            if (playerOneScore > playerTwoScore) {
-              alert("".concat(_this5.props.playerOne['username'], " has won!\n+++Final Scores+++\n ").concat(_this5.props.playerOne['username'], ": ").concat(playerOneScore, "\n").concat(_this5.props.playerTwo['username'], ": ").concat(playerTwoScore));
-            } else if (playerTwoScore > playerOneScore) {
-              alert("".concat(_this5.props.playerTwo['username'], " has won!\n+++Final Scores+++\n ").concat(_this5.props.playerTwo['username'], ": ").concat(playerTwoScore, "\n").concat(_this5.props.playerOne['username'], ": ").concat(playerOneScore));
-            } else if (playerOneScore == playerTwoScore) {
-              alert("It's a tie!\n+++Final Scores+++\n ".concat(_this5.props.playerOne['username'], ": ").concat(playerOneScore, "\n").concat(_this5.props.playerTwo['username'], ": ").concat(playerTwoScore));
-            }
-
-            ;
-          }
-
-          ;
+          /* if (this.state.gameOver == true) {
+          
+              let playerOneScore = 0,
+              playerTwoScore = 0;
+              for (let i=0; i<squaresArray.length; i++) {
+                  if (squaresArray[i]['player'] == this.props.playerOne['username']) {
+                      playerOneScore++;
+                  }
+                  if (squaresArray[i]['player'] == this.props.playerTwo['username']) {
+                      playerTwoScore++;
+                  }
+              };
+                        if(playerOneScore>playerTwoScore){
+                  alert(`${this.props.playerOne['username']} has won!\n+++Final Scores+++\n ${this.props.playerOne['username']}: ${playerOneScore}\n${this.props.playerTwo['username']}: ${playerTwoScore}`);
+              } else if (playerTwoScore>playerOneScore) {
+                  alert(`${this.props.playerTwo['username']} has won!\n+++Final Scores+++\n ${this.props.playerTwo['username']}: ${playerTwoScore}\n${this.props.playerOne['username']}: ${playerOneScore}`);
+              } else if (playerOneScore==playerTwoScore) {
+                  alert(`It's a tie!\n+++Final Scores+++\n ${this.props.playerOne['username']}: ${playerOneScore}\n${this.props.playerTwo['username']}: ${playerTwoScore}`);
+              };
+          }; */
         });
-        this.opponentChannel.trigger('client-game-over', 'null');
-        this.playerChannel.trigger('client-game-over', 'null');
+        this.opponentChannel.trigger('client-game-over', 'null'); //this.playerChannel.trigger('client-game-over', 'null');
+
         return;
       }
 
       return;
     }
   }, {
+    key: "componentDidUpdate",
+    value: function componentDidUpdate() {
+      /* if (this.state.gameOver == true) {
+           let squaresArray = this.state.squaresArray.slice();
+              
+          let playerOneScore = 0,
+          playerTwoScore = 0;
+          for (let i=0; i<squaresArray.length; i++) {
+              if (squaresArray[i]['player'] == this.props.playerOne['username']) {
+                  playerOneScore++;
+              }
+              if (squaresArray[i]['player'] == this.props.playerTwo['username']) {
+                  playerTwoScore++;
+              }
+          };
+            if(playerOneScore>playerTwoScore){
+              alert(`${this.props.playerOne['username']} has won!\n+++Final Scores+++\n ${this.props.playerOne['username']}: ${playerOneScore}\n${this.props.playerTwo['username']}: ${playerTwoScore}`);
+          } else if (playerTwoScore>playerOneScore) {
+              alert(`${this.props.playerTwo['username']} has won!\n+++Final Scores+++\n ${this.props.playerTwo['username']}: ${playerTwoScore}\n${this.props.playerOne['username']}: ${playerOneScore}`);
+          } else if (playerOneScore==playerTwoScore) {
+              alert(`It's a tie!\n+++Final Scores+++\n ${this.props.playerOne['username']}: ${playerOneScore}\n${this.props.playerTwo['username']}: ${playerTwoScore}`);
+          };
+           this.playerChannel.trigger('client-restart-game', 'null');
+      }; */
+    }
+  }, {
     key: "connectTwo",
     value: function connectTwo(a, b) {
-      var _this6 = this;
+      var _this5 = this;
 
-      //this.opponentChannel.trigger('client-test', { data: "test" });
       //is it my turn? if not, return
       if (this.state.currentPlayer['username'] !== this.props.player.username) {
         alert("it's not your turn!");
@@ -1064,7 +1079,7 @@ function (_React$Component2) {
             y = _legalcombos$i[1];
 
         if (testArray[0] === x && testArray[1] === y || testArray[1] === x && testArray[0] === y) {
-          var tempArray = _this6.state.connectionsArray.slice(); //has it already been connected?
+          var tempArray = _this5.state.connectionsArray.slice(); //has it already been connected?
 
 
           var found = tempArray.find(function (n) {
@@ -1093,13 +1108,12 @@ function (_React$Component2) {
 
           tempArray.push([x, y]);
 
-          _this6.setState({
+          _this5.setState({
             connectionsArray: tempArray
           }, function () {
-            _this6.opponentChannel.trigger('client-set-connections', tempArray);
+            _this5.opponentChannel.trigger('client-set-connections', tempArray);
 
-            _this6.generateSquares(); //this.checkEndGame();
-
+            _this5.generateSquares();
 
             return;
           });
@@ -1128,7 +1142,7 @@ function (_React$Component2) {
   }, {
     key: "clickHandler",
     value: function clickHandler(i) {
-      var _this7 = this;
+      var _this6 = this;
 
       if (!this.state.firstConnector && !this.state.secondConnector) {
         this.setState(function (state, props) {
@@ -1142,7 +1156,7 @@ function (_React$Component2) {
             secondConnector: state.secondConnector + i
           };
         }, function () {
-          _this7.connectTwo(_this7.state.firstConnector, _this7.state.secondConnector);
+          _this6.connectTwo(_this6.state.firstConnector, _this6.state.secondConnector);
         });
       } else if (!!this.state.firstConnector && !!this.state.secondConnector) {
         this.setState(function (state, props) {
@@ -1154,15 +1168,20 @@ function (_React$Component2) {
       }
     }
   }, {
+    key: "triggerGameRestart",
+    value: function triggerGameRestart() {
+      this.playerChannel.trigger('client-restart-game', 'null');
+    }
+  }, {
     key: "render",
     value: function render() {
-      var _this8 = this;
+      var _this7 = this;
 
       return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
         className: "game-instance"
       }, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(Board, {
         clickHandler: function clickHandler(i) {
-          _this8.clickHandler(i);
+          _this7.clickHandler(i);
         },
         x: this.props.boardSize[0]['x'],
         y: this.props.boardSize[1]['y'],
@@ -1170,7 +1189,11 @@ function (_React$Component2) {
         currentPlayer: this.state.currentPlayer,
         playerOne: this.props.playerOne,
         playerTwo: this.props.playerTwo,
-        squaresArray: this.state.squaresArray
+        squaresArray: this.state.squaresArray,
+        gameOver: this.state.gameOver,
+        triggerGameRestart: function triggerGameRestart() {
+          _this7.triggerGameRestart();
+        }
       }));
     }
   }]);
@@ -1192,7 +1215,7 @@ function (_React$Component3) {
   Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(Board, [{
     key: "renderBoard",
     value: function renderBoard(x, y) {
-      var _this9 = this;
+      var _this8 = this;
 
       var xArr = [],
           yArr = [],
@@ -1221,20 +1244,20 @@ function (_React$Component3) {
         }, xArr.map(function (x) {
           return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("td", {
             key: iterator.value
-          }, _this9.renderConnector(iterator.next().value));
+          }, _this8.renderConnector(iterator.next().value));
         }));
       }));
     }
   }, {
     key: "renderConnector",
     value: function renderConnector(i) {
-      var _this10 = this;
+      var _this9 = this;
 
       var connectorId = "connector".concat(i);
       return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(Connector, {
         id: connectorId,
         clickHandler: function clickHandler() {
-          return _this10.props.clickHandler(i);
+          return _this9.props.clickHandler(i);
         }
       });
     }
@@ -1254,15 +1277,32 @@ function (_React$Component3) {
         }
       }
 
-      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, this.props.playerOne['username'], "'s score: ", playerOneScore, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), this.props.playerTwo['username'], "'s score: ", playerTwoScore);
+      if (this.props.gameOver == true) {
+        if (playerOneScore > playerTwoScore) {
+          return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("button", {
+            onClick: this.props.triggerGameRestart
+          }, "End Game"), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), this.props.playerOne['username'], " has won!", react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), this.props.playerOne['username'], ": ", playerOneScore, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), this.props.playerTwo['username'], ": ", playerTwoScore);
+        } else if (playerTwoScore > playerOneScore) {
+          return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("button", {
+            onClick: this.props.triggerGameRestart
+          }, "End Game"), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), this.props.playerTwo['username'], " has won!", react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), this.props.playerTwo['username'], ": ", playerTwoScore, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), this.props.playerOne['username'], ": ", playerOneScore);
+        } else if (playerOneScore == playerTwoScore) {
+          return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("button", {
+            onClick: this.props.triggerGameRestart
+          }, "End Game"), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), "It's a tie!", react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), this.props.playerOne['username'], ": ", playerOneScore, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), this.props.playerTwo['username'], ": ", playerTwoScore);
+        }
+
+        ;
+      }
+
+      ;
+      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, "It is ", this.props.currentPlayer['username'], "'s turn!", react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), "The current score is:", react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), this.props.playerOne['username'], "'s score: ", playerOneScore, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), this.props.playerTwo['username'], "'s score: ", playerTwoScore);
     }
   }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
-        className: "absolute-center"
-      }, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
-        className: "game-board"
+      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
+        className: "game-board absolute-center"
       }, this.renderBoard(this.props.x, this.props.y)), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
         className: "game-board-connections"
       }, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(BoardConnections, {
@@ -1274,7 +1314,7 @@ function (_React$Component3) {
         playerColor: this.props.currentPlayer['color']
       })), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
         className: "game-status"
-      }, "It is ", this.props.currentPlayer['username'], "'s turn!", react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), "The current score is: ", this.calculateScore()));
+      }, this.calculateScore()));
     }
   }]);
 
@@ -1295,7 +1335,7 @@ function (_React$Component4) {
   Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(SquareConnections, [{
     key: "renderSquares",
     value: function renderSquares() {
-      var _this11 = this;
+      var _this10 = this;
 
       var tempArray = [];
 
@@ -1305,11 +1345,11 @@ function (_React$Component4) {
 
       return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, tempArray.map(function (i) {
         return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(Square, {
-          color: _this11.props.squaresArray[i]['color'],
-          connectorA: _this11.props.squaresArray[i]['square'][0][0],
-          connectorB: _this11.props.squaresArray[i]['square'][1][1],
-          connectorC: _this11.props.squaresArray[i]['square'][0][1],
-          connectorD: _this11.props.squaresArray[i]['square'][1][0]
+          color: _this10.props.squaresArray[i]['color'],
+          connectorA: _this10.props.squaresArray[i]['square'][0][0],
+          connectorB: _this10.props.squaresArray[i]['square'][1][1],
+          connectorC: _this10.props.squaresArray[i]['square'][0][1],
+          connectorD: _this10.props.squaresArray[i]['square'][1][0]
         });
       }));
     }
@@ -1337,7 +1377,7 @@ function (_React$Component5) {
   Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(BoardConnections, [{
     key: "renderConnections",
     value: function renderConnections() {
-      var _this12 = this;
+      var _this11 = this;
 
       var tempArray = [];
 
@@ -1348,8 +1388,8 @@ function (_React$Component5) {
       ;
       return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, tempArray.map(function (i) {
         return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(Connection, {
-          connectorA: _this12.props.connectionsArray[i][0],
-          connectorB: _this12.props.connectionsArray[i][1]
+          connectorA: _this11.props.connectionsArray[i][0],
+          connectorB: _this11.props.connectionsArray[i][1]
         });
       }));
     }
@@ -1534,7 +1574,21 @@ function (_React$Component) {
     value: function handleSubmit(event) {
       var _this2 = this;
 
-      if (event.target.elements.namedItem("username").value) {
+      var name = event.target.elements.namedItem("username").value;
+      var nameOk = false;
+
+      function checkName() {
+        if (/\s/.test(name)) {
+          alert("No whitespace in the name, please");
+          return;
+        } else {
+          nameOk = true;
+        }
+      }
+
+      checkName();
+
+      if (!!name && nameOk) {
         this.setState({
           name: event.target.elements.namedItem("username").value,
           color: event.target.elements.namedItem("color").value
@@ -1592,7 +1646,9 @@ function (_React$Component) {
         return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(_ChatBox_ChatBox_js__WEBPACK_IMPORTED_MODULE_7__["default"], {
           user: this.state.name,
           color: this.state.color
-        })), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(_ChatBox_ActiveUsers_js__WEBPACK_IMPORTED_MODULE_8__["default"], {
+        })), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
+          className: "active-users"
+        }, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(_ChatBox_ActiveUsers_js__WEBPACK_IMPORTED_MODULE_8__["default"], {
           userName: this.state.name,
           userColor: this.state.color
         })));
@@ -19122,14 +19178,11 @@ var Index = function Index() {
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_head__WEBPACK_IMPORTED_MODULE_3___default.a, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("title", null, "La Pipoette")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_lobby_js__WEBPACK_IMPORTED_MODULE_2__["default"], null)));
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Index); //<div>
-//<Game player={{username: "timmy", color: "red"}} players={[{username: "timmy", color: "red"}, {username: "bobby", color: "blue"}]} boardSize={[{x: 4}, {y: 4}]}/>
-//</div>
-//we use html color names. check: https://htmlcolorcodes.com/color-names/
+/* harmony default export */ __webpack_exports__["default"] = (Index);
 
 /***/ }),
 
-/***/ 0:
+/***/ 1:
 /*!*********************************************************************************************************************************************!*\
   !*** multi next-client-pages-loader?page=%2F&absolutePagePath=%2Fhome%2Fjbarreto%2FDocuments%2FProjects%2FLe%20Pipoette%2Fpages%2Findex.js ***!
   \*********************************************************************************************************************************************/
@@ -19152,5 +19205,5 @@ module.exports = dll_7aff549c98b978433226;
 
 /***/ })
 
-},[[0,"static/runtime/webpack.js","styles"]]]);
+},[[1,"static/runtime/webpack.js","styles"]]]);
 //# sourceMappingURL=index.js.map

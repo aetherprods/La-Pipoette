@@ -7,6 +7,19 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+
+.chat-box {
+  height: 70vh;
+  width: 500px;
+  overflow-y: scroll;
+  word-wrap: break-word;
+}
+
+.active-users {
+  height: 20vh;
+  overflow: scroll;
+}
+
 a:visited{
   color:blue;
 }
@@ -22,10 +35,6 @@ a:visited{
 }
 
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
-}
 
 .absolute-center {
   margin: 0;
@@ -48,8 +57,4 @@ td [class^='connector'] {
   border-radius: 100%;
   text-align: center;
   margin: 35px 35px 35px 35px;
-}
-
-td [class^='connector']:focus {
-  outline: none;
 }

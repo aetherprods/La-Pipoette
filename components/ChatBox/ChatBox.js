@@ -19,23 +19,12 @@ class ChatBox extends React.Component {
 
     render() {
         const { user } = this.state;
-      
-        const nameInputStyles = {
-          background: 'transparent',
-          color: '#999',
-          border: 0,
-          borderBottom: '1px solid #666',
-          borderRadius: 0,
-          fontSize: '3rem',
-          fontWeight: 500,
-          boxShadow: 'none !important'
-        };
         
         return (
-          <div>
-                <section>
+          <div >
+                <section> 
                     { user && <Chat activeUser={this.state.user} activeColor={this.state.color}/> }
-                </section>
+                </section> 
           </div>
               
         );

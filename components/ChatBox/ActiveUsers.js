@@ -45,7 +45,6 @@ class ActiveUsers extends React.Component {
             let users = this.state.users;
 
             for (let member of Object.getOwnPropertyNames(members['members'])) {
-                //alert(members['members'][member]['name']);
                 users.push({
                     id: member,
                     user: members['members'][member]['name'],
@@ -56,8 +55,6 @@ class ActiveUsers extends React.Component {
 
             let userIds = [];
 
-            //alert(JSON.stringify(members['members']));
-            //update users
             
 
             let userToBeAdded = {
@@ -69,7 +66,6 @@ class ActiveUsers extends React.Component {
                 userIds.push(users[i]['id']);
             }
 
-            //alert(userIds);
 
             
             let found = userIds.find((userId) => {
@@ -131,17 +127,8 @@ class ActiveUsers extends React.Component {
     helperFunction() {
         if(this.state.helped == false){
             this.privateChannel = this.pusher.subscribe(`private-${this.onlineChannel.members.me.id}`);
-        
-        
-            this.privateChannel.bind('pusher:subscription_succeeded', (members) => {
-               // alert("ok");
-            });
-            this.privateChannel.bind('pusher:subscription_error', (error) => {
-                alert(`error\n${error}`);
-            });
-
+            
             this.privateChannel.bind('game_started', (response) => {
-                //alert(JSON.stringify(response.channels.game))
                 let self = {
                     id: this.onlineChannel.members.me.id,
                     name: this.onlineChannel.members.me.info.name,
@@ -154,12 +141,17 @@ class ActiveUsers extends React.Component {
                     playerTwo: response.playerTwo,
                     playerTwoChannel: response.channels.pTwo,
                     gameChannel: response.channels.game,
-                    self: self
+                    self: self,
+                    boardSize: response.boardSize
                 });
             });
 
-            this.privateChannel.bind('client-game-over', (data) => {
+            this.privateChannel.bind('client-restart-game', (data) => {
                 this.setState({ gameLink: false });
+                axios.post('/remove_players', [this.onlineChannel.members.me.id])
+                    .then((response) => {
+
+                    });
             });
 
             this.setState({ helped: true });
@@ -167,17 +159,7 @@ class ActiveUsers extends React.Component {
     }
 
     inviteFunction(data) {
-       
-        if (data.currentTarget.dataset.userid == this.onlineChannel.members.me.id) {
-            alert ("you can't play yourself!");
-            return;
-        };
-
-        if (this.state.gameLink) {
-            alert("you can't play while in game!")
-            return;
-        }
-
+        let playersInGame;
         let target = {
             id: data.currentTarget.dataset.userid,
             name: data.currentTarget.dataset.username,
@@ -189,11 +171,66 @@ class ActiveUsers extends React.Component {
             name: this.onlineChannel.members.me.info.name,
             color: this.onlineChannel.members.me.info.color
         };
+        
 
 
-        axios.post('/game_daemon', { playerOne: self, playerTwo: target });
+        if (data.currentTarget.dataset.userid == this.onlineChannel.members.me.id) {
+            alert ("you can't play yourself!");
+            return;
+        };
+
+        if (this.state.gameLink) {
+            alert("you can't play while in game!")
+            return;
+        }
 
 
+        axios.post('/get_players')
+            .then((response) => {
+                playersInGame = response.data;
+                if (playersInGame.includes(target.id)) {
+                    alert("you can't play someone who's in a game!");
+                    return;
+                } else {
+                    let xDone = false, yDone = false;
+
+                    let x = prompt("Board width?");
+                    function checkX() {
+                        if (!(/^[0-9]+$/.test(x))) {
+                            x = prompt("Please only input numbers");
+                            checkX();
+                        };
+                        if (x<2) {
+                            x = prompt("Please only input numbers greater than 1");
+                            checkX();
+                        };
+                        if ((/^[0-9]+$/.test(x)) && x>1) {
+                            xDone = true;
+                        };
+                    };
+                    checkX();
+
+                    let y = prompt("Board height?");
+                    function checkY() {
+                        if (!(/^[0-9]+$/.test(y))) {
+                            y = prompt("Please only input numbers");
+                            checkY();
+                        };
+                        if (y<2) {
+                            y = prompt("Please only input numbers greater than 1");
+                            checkY();
+                        };
+                        if ((/^[0-9]+$/.test(y)) && y>1) {
+                            yDone = true;
+                        };
+                    };
+                    checkY();
+
+                    if (xDone && yDone) {
+                        axios.post('/game_daemon', { playerOne: self, playerTwo: target, boardSize: {x: x, y: y} });
+                    };
+                }
+            });
     }
 
 
@@ -215,11 +252,10 @@ class ActiveUsers extends React.Component {
             this.helperFunction();
 
 
-        
 
             return (<div>
                 <div>
-                    {!!gameLink && <Game self={{username: this.state.self.name, color: this.state.self.color}} players={[{username: this.state.playerOne.name, color: this.state.playerOne.color}, {username: this.state.playerTwo.name, color: this.state.playerTwo.color}]} playerOneChannel={this.state.playerOneChannel} playerTwoChannel={this.state.playerTwoChannel} gameChannel={this.state.gameChannel} boardSize={[{x: 6}, {y: 6}]}/>}
+                    {!!gameLink && <Game self={{username: this.state.self.name, color: this.state.self.color}} players={[{username: this.state.playerOne.name, color: this.state.playerOne.color}, {username: this.state.playerTwo.name, color: this.state.playerTwo.color}]} playerOneChannel={this.state.playerOneChannel} playerTwoChannel={this.state.playerTwoChannel} gameChannel={this.state.gameChannel} boardSize={[{x: this.state.boardSize['x']}, {y: this.state.boardSize['y']}]}/>}
                 </div>
                 
                 <div>

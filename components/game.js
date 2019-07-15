@@ -1,7 +1,6 @@
 import LineTo from 'react-lineto';
 import Pusher from 'pusher-js';
 
-//players={[{username: "timmy", color: "red"}, {username: "bobby", color: "blue"}]} boardSize={[{x: 4}, {y: 4}]};
 
 class Game extends React.Component {
     constructor(props) {
@@ -13,13 +12,7 @@ class Game extends React.Component {
             player: this.props.self,
             boardSize: this.props.boardSize
         };
-
-
-       
-
-
-        
-        
+ 
     }
     render () { 
 
@@ -41,7 +34,6 @@ class GameInstance extends React.Component {
             currentPlayer: this.props.playerOne,
             firstConnector: 0,
             secondConnector: 0,
-            //connectionsArray: Array(connectionsArraySize).fill({connection: [], isConnected: false}),
             connectionsArray: [],
             squareConditions: this.generateSquareConditions(x, y),
             squaresArray: [],
@@ -67,39 +59,21 @@ class GameInstance extends React.Component {
         this.playerChannel = this.pusher.subscribe(this.props.playerChannel);
 
 
-        this.playerChannel.bind('pusher:subscription_succeeded', (members) => {
-            
-         });
 
-         this.playerChannel.bind('pusher:subscription_error', (error) => {
-            alert(`error\n${error}`);
-         });
          this.playerChannel.bind('client-set-connections', (data) => {
-            this.setState({connectionsArray: data}, () => {
-                
-            });
-
+            this.setState({connectionsArray: data}, () => {});
          });
          this.playerChannel.bind('client-set-squares', (data) => {
-            this.setState({squaresArray: data}, () => {
-                
-            });
-
+            this.setState({squaresArray: data}, () => {});
          });
          this.playerChannel.bind('client-change-current-player', (data) => {
-            this.setState({currentPlayer: (this.state.currentPlayer==this.props.playerOne ? this.props.playerTwo : this.props.playerOne)}, () => {
-                
-            });
-
+            this.setState({currentPlayer: (this.state.currentPlayer==this.props.playerOne ? this.props.playerTwo : this.props.playerOne)}, () => {});
          });
+         this.playerChannel.bind('client-game-over', (data) => {
+            this.setState({ gameOver: true });
+            
+        });
 
-        this.opponentChannel.bind('pusher:subscription_succeeded', (members) => {
-
-            this.opponentChannel.trigger('test', 'yesy'); 
-         });
-         this.opponentChannel.bind('pusher:subscription_error', (error) => {
-            alert(`error\n${error}`);
-         });         
     }
 
     componentWillUnmount () {
@@ -164,11 +138,8 @@ class GameInstance extends React.Component {
             connectionsArray = this.state.connectionsArray.slice();
         let squaresArray = this.state.squaresArray.slice();
         
-        //let tempArray = [];
         
         for (let i=0; i<squareConditions.length; i++) {
-            //A=false; B=false; C=false; D=false;
-            //sA=false; sB=false; sC=false; sD=false;
             let A=false, B=false, C=false, D=false;
             let sA=false, sB=false, sC=false, sD=false;
 
@@ -189,7 +160,7 @@ class GameInstance extends React.Component {
 
             for(let l=0; l<squaresArray.length; l++) {
                 for (let k=0; k<squaresArray[l]['square'].length; k++) {
-                    //squaresArray[l]['square'] contains the 4 elements of 
+                    //squaresArray[l]['square'] contains the 4 connections describing a square:
                     //squaresArray[l]['square'][k] contains the [x,y] to check against squareConditions[i]
                     if(squaresArray[l]['square'][k][0]==a[0] && squaresArray[l]['square'][k][1]==a[1]) {
                         sA = true;
@@ -203,17 +174,15 @@ class GameInstance extends React.Component {
                 }
             }
             if ((A && B && C && D) && !(sA && sB && sC && sD)) { //i.e., if (connectionsArray contains all of the elements of a single squareCondition)
-                //have to check if squaresArray contains squareConditions[i]
+                
                 squaresArray.push({square: tempArray, player: this.state.currentPlayer['username'], color: this.state.currentPlayer['color']});
                 this.setState({squaresArray: squaresArray}, () => {
                     this.opponentChannel.trigger('client-set-squares', squaresArray);
+                    this.checkEndGame(); 
                     return;
                 });
                 
-            } else if ((A && B && C && D)) {//only change player if we didn't find a square
-                
             }
-
 
         }
         if (squaresArray.length == this.state.squaresArray.length) {
@@ -225,7 +194,7 @@ class GameInstance extends React.Component {
 
         
         this.setState({}, () => {
-            this.checkEndGame(); 
+            //this.checkEndGame(); 
 
             
             return; 
@@ -243,7 +212,7 @@ class GameInstance extends React.Component {
         if (squaresArray.length == (x-1)*(y-1)) {
 
             this.setState({ gameOver: true }, () => {
-                if (this.state.gameOver == true) {
+                /* if (this.state.gameOver == true) {
                 
                     let playerOneScore = 0,
                     playerTwoScore = 0;
@@ -264,7 +233,7 @@ class GameInstance extends React.Component {
                     } else if (playerOneScore==playerTwoScore) {
                         alert(`It's a tie!\n+++Final Scores+++\n ${this.props.playerOne['username']}: ${playerOneScore}\n${this.props.playerTwo['username']}: ${playerTwoScore}`);
                     };
-                };
+                }; */
             });
             
             
@@ -272,16 +241,42 @@ class GameInstance extends React.Component {
             
             
             this.opponentChannel.trigger('client-game-over', 'null');
-            this.playerChannel.trigger('client-game-over', 'null');
+            //this.playerChannel.trigger('client-game-over', 'null');
             return;
         }
         return;
     }
+    componentDidUpdate () {
+        /* if (this.state.gameOver == true) {
+
+            let squaresArray = this.state.squaresArray.slice();
+                
+            let playerOneScore = 0,
+            playerTwoScore = 0;
+            for (let i=0; i<squaresArray.length; i++) {
+                if (squaresArray[i]['player'] == this.props.playerOne['username']) {
+                    playerOneScore++;
+                }
+                if (squaresArray[i]['player'] == this.props.playerTwo['username']) {
+                    playerTwoScore++;
+                }
+            };
+
+
+            if(playerOneScore>playerTwoScore){
+                alert(`${this.props.playerOne['username']} has won!\n+++Final Scores+++\n ${this.props.playerOne['username']}: ${playerOneScore}\n${this.props.playerTwo['username']}: ${playerTwoScore}`);
+            } else if (playerTwoScore>playerOneScore) {
+                alert(`${this.props.playerTwo['username']} has won!\n+++Final Scores+++\n ${this.props.playerTwo['username']}: ${playerTwoScore}\n${this.props.playerOne['username']}: ${playerOneScore}`);
+            } else if (playerOneScore==playerTwoScore) {
+                alert(`It's a tie!\n+++Final Scores+++\n ${this.props.playerOne['username']}: ${playerOneScore}\n${this.props.playerTwo['username']}: ${playerTwoScore}`);
+            };
+
+            this.playerChannel.trigger('client-restart-game', 'null');
+        }; */
+    }
     
 
     connectTwo(a, b) {
-        //this.opponentChannel.trigger('client-test', { data: "test" });
-
         //is it my turn? if not, return
         if (this.state.currentPlayer['username']!==this.props.player.username) {
             alert("it's not your turn!");
@@ -317,7 +312,7 @@ class GameInstance extends React.Component {
                     this.opponentChannel.trigger('client-set-connections', tempArray);
 
                     this.generateSquares();
-                    //this.checkEndGame();
+                    
                     return;
                 });
                 
@@ -349,12 +344,15 @@ class GameInstance extends React.Component {
         }
         
     }
+    triggerGameRestart () {
+        this.playerChannel.trigger('client-restart-game', 'null');
+    }
 
     render () {
 
         return (
         <div className="game-instance">
-            <Board clickHandler={(i) => {this.clickHandler(i)}} x={this.props.boardSize[0]['x']} y={this.props.boardSize[1]['y']} connectionsArray={this.state.connectionsArray} currentPlayer={this.state.currentPlayer} playerOne={this.props.playerOne} playerTwo={this.props.playerTwo} squaresArray={this.state.squaresArray}/>
+            <Board clickHandler={(i) => {this.clickHandler(i)}} x={this.props.boardSize[0]['x']} y={this.props.boardSize[1]['y']} connectionsArray={this.state.connectionsArray} currentPlayer={this.state.currentPlayer} playerOne={this.props.playerOne} playerTwo={this.props.playerTwo} squaresArray={this.state.squaresArray} gameOver={this.state.gameOver} triggerGameRestart={() => {this.triggerGameRestart()}}/>
             
         </div>
     );}
@@ -403,8 +401,46 @@ class Board extends React.Component {
                 playerTwoScore++;
             }
         }
+
+        if (this.props.gameOver == true) {
+            
+            if(playerOneScore>playerTwoScore){
+                return (
+                    <div>
+                        <button onClick={this.props.triggerGameRestart}>End Game</button><br></br>
+                        {this.props.playerOne['username']} has won!<br></br>
+                        {this.props.playerOne['username']}: {playerOneScore}<br></br>
+                        {this.props.playerTwo['username']}: {playerTwoScore}
+                    </div>
+                );
+            } else if (playerTwoScore>playerOneScore) {
+                return (
+                    <div>
+                        <button onClick={this.props.triggerGameRestart}>End Game</button><br></br>
+                        {this.props.playerTwo['username']} has won!<br></br>
+                        {this.props.playerTwo['username']}: {playerTwoScore}<br></br>
+                        {this.props.playerOne['username']}: {playerOneScore}
+                    </div>
+                );
+            } else if (playerOneScore==playerTwoScore) {
+                return (
+                    <div>
+                        <button onClick={this.props.triggerGameRestart}>End Game</button><br></br>
+                        It's a tie!<br></br>
+                        {this.props.playerOne['username']}: {playerOneScore}<br></br>
+                        {this.props.playerTwo['username']}: {playerTwoScore}
+                    </div>
+                );
+                
+            };
+
+        };
+
+
         return (
             <div>
+                It is {this.props.currentPlayer['username']}'s turn!<br></br><br></br>
+                The current score is:<br></br>
                 {this.props.playerOne['username']}'s score: {playerOneScore}<br></br>
                 {this.props.playerTwo['username']}'s score: {playerTwoScore}
             </div>
@@ -412,8 +448,8 @@ class Board extends React.Component {
     }
 
     render() {return (
-        <div className="absolute-center">
-            <div className="game-board">
+        <div >
+            <div className="game-board absolute-center">
                 {this.renderBoard(this.props.x,this.props.y)}
             </div>
             <div className="game-board-connections">
@@ -423,8 +459,8 @@ class Board extends React.Component {
                 <SquareConnections squaresArray={this.props.squaresArray} playerColor={this.props.currentPlayer['color']}/>
             </div>
             <div className="game-status">
-                It is {this.props.currentPlayer['username']}'s turn!<br></br><br></br>
-                The current score is: {this.calculateScore()}
+                
+                {this.calculateScore()}
             </div>
         </div>
     );}
