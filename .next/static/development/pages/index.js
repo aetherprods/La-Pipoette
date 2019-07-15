@@ -9,23 +9,26 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_names__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/get-own-property-names */ "./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-names.js");
-/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_names__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_get_own_property_names__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _babel_runtime_corejs2_core_js_get_iterator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/get-iterator */ "./node_modules/@babel/runtime-corejs2/core-js/get-iterator.js");
-/* harmony import */ var _babel_runtime_corejs2_core_js_get_iterator__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_get_iterator__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/classCallCheck */ "./node_modules/@babel/runtime-corejs2/helpers/esm/classCallCheck.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/createClass */ "./node_modules/@babel/runtime-corejs2/helpers/esm/createClass.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/possibleConstructorReturn */ "./node_modules/@babel/runtime-corejs2/helpers/esm/possibleConstructorReturn.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/getPrototypeOf */ "./node_modules/@babel/runtime-corejs2/helpers/esm/getPrototypeOf.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/assertThisInitialized */ "./node_modules/@babel/runtime-corejs2/helpers/esm/assertThisInitialized.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/inherits */ "./node_modules/@babel/runtime-corejs2/helpers/esm/inherits.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var pusher_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
-/* harmony import */ var pusher_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(pusher_js__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var _game_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../game.js */ "./components/game.js");
+/* harmony import */ var _babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/parse-int */ "./node_modules/@babel/runtime-corejs2/core-js/parse-int.js");
+/* harmony import */ var _babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_names__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/get-own-property-names */ "./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-names.js");
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_names__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_get_own_property_names__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _babel_runtime_corejs2_core_js_get_iterator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/get-iterator */ "./node_modules/@babel/runtime-corejs2/core-js/get-iterator.js");
+/* harmony import */ var _babel_runtime_corejs2_core_js_get_iterator__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_get_iterator__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/classCallCheck */ "./node_modules/@babel/runtime-corejs2/helpers/esm/classCallCheck.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/createClass */ "./node_modules/@babel/runtime-corejs2/helpers/esm/createClass.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/possibleConstructorReturn */ "./node_modules/@babel/runtime-corejs2/helpers/esm/possibleConstructorReturn.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/getPrototypeOf */ "./node_modules/@babel/runtime-corejs2/helpers/esm/getPrototypeOf.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/assertThisInitialized */ "./node_modules/@babel/runtime-corejs2/helpers/esm/assertThisInitialized.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/inherits */ "./node_modules/@babel/runtime-corejs2/helpers/esm/inherits.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var pusher_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
+/* harmony import */ var pusher_js__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(pusher_js__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var _game_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../game.js */ "./components/game.js");
+
 
 
 
@@ -42,14 +45,14 @@ __webpack_require__.r(__webpack_exports__);
 var ActiveUsers =
 /*#__PURE__*/
 function (_React$Component) {
-  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_7__["default"])(ActiveUsers, _React$Component);
+  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_8__["default"])(ActiveUsers, _React$Component);
 
   function ActiveUsers(props) {
     var _this;
 
-    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_2__["default"])(this, ActiveUsers);
+    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_3__["default"])(this, ActiveUsers);
 
-    _this = Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__["default"])(ActiveUsers).call(this, props));
+    _this = Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__["default"])(ActiveUsers).call(this, props));
     _this.state = {
       users: [],
       helped: false,
@@ -61,7 +64,7 @@ function (_React$Component) {
       playerTwoChannel: '',
       gameChannel: ''
     };
-    _this.pusher = new pusher_js__WEBPACK_IMPORTED_MODULE_10___default.a("677dc9670d267bcc5be9", {
+    _this.pusher = new pusher_js__WEBPACK_IMPORTED_MODULE_11___default.a("677dc9670d267bcc5be9", {
       cluster: "us2",
       authEndpoint: "/pusher/auth",
       forceTLS: true,
@@ -73,12 +76,12 @@ function (_React$Component) {
       }
     });
     _this.onlineChannel = _this.pusher.subscribe("presence-online-channel");
-    _this.helperFunction = _this.helperFunction.bind(Object(_babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6__["default"])(_this));
-    _this.inviteFunction = _this.inviteFunction.bind(Object(_babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6__["default"])(_this));
+    _this.helperFunction = _this.helperFunction.bind(Object(_babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7__["default"])(_this));
+    _this.inviteFunction = _this.inviteFunction.bind(Object(_babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7__["default"])(_this));
     return _this;
   }
 
-  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_3__["default"])(ActiveUsers, [{
+  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_4__["default"])(ActiveUsers, [{
     key: "componentDidMount",
     value: function componentDidMount() {
       var _this2 = this;
@@ -91,7 +94,7 @@ function (_React$Component) {
         var _iteratorError = undefined;
 
         try {
-          for (var _iterator = _babel_runtime_corejs2_core_js_get_iterator__WEBPACK_IMPORTED_MODULE_1___default()(_babel_runtime_corejs2_core_js_object_get_own_property_names__WEBPACK_IMPORTED_MODULE_0___default()(members['members'])), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          for (var _iterator = _babel_runtime_corejs2_core_js_get_iterator__WEBPACK_IMPORTED_MODULE_2___default()(_babel_runtime_corejs2_core_js_object_get_own_property_names__WEBPACK_IMPORTED_MODULE_1___default()(members['members'])), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
             var member = _step.value;
             users.push({
               id: member,
@@ -218,7 +221,7 @@ function (_React$Component) {
             gameLink: false
           });
 
-          axios__WEBPACK_IMPORTED_MODULE_9___default.a.post('/remove_players', [_this3.onlineChannel.members.me.id]).then(function (response) {});
+          axios__WEBPACK_IMPORTED_MODULE_10___default.a.post('/remove_players', [_this3.onlineChannel.members.me.id]).then(function (response) {});
         });
         this.setState({
           helped: true
@@ -252,7 +255,7 @@ function (_React$Component) {
         return;
       }
 
-      axios__WEBPACK_IMPORTED_MODULE_9___default.a.post('/get_players').then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_10___default.a.post('/get_players').then(function (response) {
         playersInGame = response.data;
 
         if (playersInGame.includes(target.id)) {
@@ -325,7 +328,7 @@ function (_React$Component) {
           checkY();
 
           if (xDone && yDone) {
-            axios__WEBPACK_IMPORTED_MODULE_9___default.a.post('/game_daemon', {
+            axios__WEBPACK_IMPORTED_MODULE_10___default.a.post('/game_daemon', {
               playerOne: self,
               playerTwo: target,
               boardSize: {
@@ -360,7 +363,7 @@ function (_React$Component) {
 
       if (users[0]) {
         this.helperFunction();
-        return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, !!gameLink && react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(_game_js__WEBPACK_IMPORTED_MODULE_11__["default"], {
+        return react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", null, !!gameLink && react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement(_game_js__WEBPACK_IMPORTED_MODULE_12__["default"], {
           self: {
             username: this.state.self.name,
             color: this.state.self.color
@@ -376,18 +379,18 @@ function (_React$Component) {
           playerTwoChannel: this.state.playerTwoChannel,
           gameChannel: this.state.gameChannel,
           boardSize: [{
-            x: this.state.boardSize['x']
+            x: _babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_0___default()(this.state.boardSize['x'], 10)
           }, {
-            y: this.state.boardSize['y']
+            y: _babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_0___default()(this.state.boardSize['y'], 10)
           }]
-        })), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, users.map(function (user) {
-          return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("a", {
+        })), react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", null, users.map(function (user) {
+          return react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("a", {
             href: "#",
             onClick: _this4.inviteFunction,
             "data-userid": users[iditr.next().value]['id'],
             "data-username": users[nameitr.next().value]['user'],
             "data-usercolor": users[coloritr.next().value]['color']
-          }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("u", null, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(User, {
+          }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("u", null, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement(User, {
             user: users[useritr.next().value]['user']
           }))));
         })));
@@ -398,30 +401,30 @@ function (_React$Component) {
   }]);
 
   return ActiveUsers;
-}(react__WEBPACK_IMPORTED_MODULE_8___default.a.Component);
+}(react__WEBPACK_IMPORTED_MODULE_9___default.a.Component);
 
 ;
 
 var User =
 /*#__PURE__*/
 function (_React$Component2) {
-  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_7__["default"])(User, _React$Component2);
+  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_8__["default"])(User, _React$Component2);
 
   function User() {
-    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_2__["default"])(this, User);
+    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_3__["default"])(this, User);
 
-    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__["default"])(User).apply(this, arguments));
+    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__["default"])(User).apply(this, arguments));
   }
 
-  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_3__["default"])(User, [{
+  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_4__["default"])(User, [{
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("div", null, this.props.user);
+      return react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", null, this.props.user);
     }
   }]);
 
   return User;
-}(react__WEBPACK_IMPORTED_MODULE_8___default.a.Component);
+}(react__WEBPACK_IMPORTED_MODULE_9___default.a.Component);
 
 ;
 /* harmony default export */ __webpack_exports__["default"] = (ActiveUsers);
@@ -848,6 +851,11 @@ function (_React$Component2) {
   }, {
     key: "componentWillUnmount",
     value: function componentWillUnmount() {
+      if (this.state.gameOver == false) {
+        alert("test");
+        this.opponentChannel.trigger('client-game-over', 'null');
+      }
+
       this.pusher.disconnect();
     }
   }, {
@@ -1000,10 +1008,6 @@ function (_React$Component2) {
         });
       }
 
-      this.setState({}, function () {
-        //this.checkEndGame(); 
-        return;
-      });
       return;
     }
   }, {
@@ -1016,60 +1020,12 @@ function (_React$Component2) {
       if (squaresArray.length == (x - 1) * (y - 1)) {
         this.setState({
           gameOver: true
-        }, function () {
-          /* if (this.state.gameOver == true) {
-          
-              let playerOneScore = 0,
-              playerTwoScore = 0;
-              for (let i=0; i<squaresArray.length; i++) {
-                  if (squaresArray[i]['player'] == this.props.playerOne['username']) {
-                      playerOneScore++;
-                  }
-                  if (squaresArray[i]['player'] == this.props.playerTwo['username']) {
-                      playerTwoScore++;
-                  }
-              };
-                        if(playerOneScore>playerTwoScore){
-                  alert(`${this.props.playerOne['username']} has won!\n+++Final Scores+++\n ${this.props.playerOne['username']}: ${playerOneScore}\n${this.props.playerTwo['username']}: ${playerTwoScore}`);
-              } else if (playerTwoScore>playerOneScore) {
-                  alert(`${this.props.playerTwo['username']} has won!\n+++Final Scores+++\n ${this.props.playerTwo['username']}: ${playerTwoScore}\n${this.props.playerOne['username']}: ${playerOneScore}`);
-              } else if (playerOneScore==playerTwoScore) {
-                  alert(`It's a tie!\n+++Final Scores+++\n ${this.props.playerOne['username']}: ${playerOneScore}\n${this.props.playerTwo['username']}: ${playerTwoScore}`);
-              };
-          }; */
-        });
-        this.opponentChannel.trigger('client-game-over', 'null'); //this.playerChannel.trigger('client-game-over', 'null');
-
+        }, function () {});
+        this.opponentChannel.trigger('client-game-over', 'null');
         return;
       }
 
       return;
-    }
-  }, {
-    key: "componentDidUpdate",
-    value: function componentDidUpdate() {
-      /* if (this.state.gameOver == true) {
-           let squaresArray = this.state.squaresArray.slice();
-              
-          let playerOneScore = 0,
-          playerTwoScore = 0;
-          for (let i=0; i<squaresArray.length; i++) {
-              if (squaresArray[i]['player'] == this.props.playerOne['username']) {
-                  playerOneScore++;
-              }
-              if (squaresArray[i]['player'] == this.props.playerTwo['username']) {
-                  playerTwoScore++;
-              }
-          };
-            if(playerOneScore>playerTwoScore){
-              alert(`${this.props.playerOne['username']} has won!\n+++Final Scores+++\n ${this.props.playerOne['username']}: ${playerOneScore}\n${this.props.playerTwo['username']}: ${playerTwoScore}`);
-          } else if (playerTwoScore>playerOneScore) {
-              alert(`${this.props.playerTwo['username']} has won!\n+++Final Scores+++\n ${this.props.playerTwo['username']}: ${playerTwoScore}\n${this.props.playerOne['username']}: ${playerOneScore}`);
-          } else if (playerOneScore==playerTwoScore) {
-              alert(`It's a tie!\n+++Final Scores+++\n ${this.props.playerOne['username']}: ${playerOneScore}\n${this.props.playerTwo['username']}: ${playerTwoScore}`);
-          };
-           this.playerChannel.trigger('client-restart-game', 'null');
-      }; */
     }
   }, {
     key: "connectTwo",
@@ -1586,6 +1542,7 @@ function (_React$Component) {
     value: function handleSubmit(event) {
       var _this2 = this;
 
+      event.preventDefault();
       var name = event.target.elements.namedItem("username").value;
       var nameOk = false;
 
@@ -1612,8 +1569,6 @@ function (_React$Component) {
           return;
         });
       }
-
-      event.preventDefault();
     }
   }, {
     key: "render",
@@ -1624,33 +1579,10 @@ function (_React$Component) {
         }, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("label", null, "Please enter your name and choose a color!", react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("input", {
           type: "text",
           name: "username"
-        })), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("label", null, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("select", {
+        })), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("label", null, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("input", {
+          type: "color",
           name: "color"
-        }, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("option", {
-          value: "blue"
-        }, "Blue"), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("option", {
-          value: "brown"
-        }, "Brown"), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("option", {
-          value: "chartreuse"
-        }, "Chartreuse"), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("option", {
-          value: "coral"
-        }, "Coral"), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("option", {
-          value: "cyan"
-        }, "Cyan"), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("option", {
-          value: "gainsboro"
-        }, "Gainsboro"), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("option", {
-          value: "darkorchid"
-        }, "Dark Orchid"), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("option", {
-          value: "fuchsia"
-        }, "Fuchsia"), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("option", {
-          value: "indigo"
-        }, "Indigo"), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("option", {
-          value: "olive"
-        }, "Olive"), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("option", {
-          value: "royalblue"
-        }, "Royal Blue"), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("option", {
-          value: "turquoise"
-        }, "Turquoise"))), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("input", {
+        })), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("input", {
           type: "submit",
           value: "Submit"
         }));
@@ -1771,6 +1703,17 @@ module.exports = __webpack_require__(/*! core-js/library/fn/object/get-prototype
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(/*! core-js/library/fn/object/set-prototype-of */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/fn/object/set-prototype-of.js");
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime-corejs2/core-js/parse-int.js":
+/*!******************************************************************!*\
+  !*** ./node_modules/@babel/runtime-corejs2/core-js/parse-int.js ***!
+  \******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! core-js/library/fn/parse-int */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/fn/parse-int.js");
 
 /***/ }),
 
@@ -2373,6 +2316,19 @@ module.exports = __webpack_require__(/*! ../../modules/_core */ "./node_modules/
 
 __webpack_require__(/*! ../../modules/es6.object.set-prototype-of */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/es6.object.set-prototype-of.js");
 module.exports = __webpack_require__(/*! ../../modules/_core */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_core.js").Object.setPrototypeOf;
+
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/fn/parse-int.js":
+/*!******************************************************************************************!*\
+  !*** ./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/fn/parse-int.js ***!
+  \******************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(/*! ../modules/es6.parse-int */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/es6.parse-int.js");
+module.exports = __webpack_require__(/*! ../modules/_core */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_core.js").parseInt;
 
 
 /***/ }),
@@ -3915,6 +3871,26 @@ module.exports = function (KEY, exec) {
 
 /***/ }),
 
+/***/ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_parse-int.js":
+/*!************************************************************************************************!*\
+  !*** ./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_parse-int.js ***!
+  \************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var $parseInt = __webpack_require__(/*! ./_global */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_global.js").parseInt;
+var $trim = __webpack_require__(/*! ./_string-trim */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_string-trim.js").trim;
+var ws = __webpack_require__(/*! ./_string-ws */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_string-ws.js");
+var hex = /^[-+]?0[xX]/;
+
+module.exports = $parseInt(ws + '08') !== 8 || $parseInt(ws + '0x16') !== 22 ? function parseInt(str, radix) {
+  var string = $trim(String(str), 3);
+  return $parseInt(string, (radix >>> 0) || (hex.test(string) ? 16 : 10));
+} : $parseInt;
+
+
+/***/ }),
+
 /***/ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_property-desc.js":
 /*!****************************************************************************************************!*\
   !*** ./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_property-desc.js ***!
@@ -4171,6 +4147,60 @@ module.exports = function (TO_STRING) {
       : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
   };
 };
+
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_string-trim.js":
+/*!**************************************************************************************************!*\
+  !*** ./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_string-trim.js ***!
+  \**************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var $export = __webpack_require__(/*! ./_export */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_export.js");
+var defined = __webpack_require__(/*! ./_defined */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_defined.js");
+var fails = __webpack_require__(/*! ./_fails */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_fails.js");
+var spaces = __webpack_require__(/*! ./_string-ws */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_string-ws.js");
+var space = '[' + spaces + ']';
+var non = '\u200b\u0085';
+var ltrim = RegExp('^' + space + space + '*');
+var rtrim = RegExp(space + space + '*$');
+
+var exporter = function (KEY, exec, ALIAS) {
+  var exp = {};
+  var FORCE = fails(function () {
+    return !!spaces[KEY]() || non[KEY]() != non;
+  });
+  var fn = exp[KEY] = FORCE ? exec(trim) : spaces[KEY];
+  if (ALIAS) exp[ALIAS] = fn;
+  $export($export.P + $export.F * FORCE, 'String', exp);
+};
+
+// 1 -> String#trimLeft
+// 2 -> String#trimRight
+// 3 -> String#trim
+var trim = exporter.trim = function (string, TYPE) {
+  string = String(defined(string));
+  if (TYPE & 1) string = string.replace(ltrim, '');
+  if (TYPE & 2) string = string.replace(rtrim, '');
+  return string;
+};
+
+module.exports = exporter;
+
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_string-ws.js":
+/*!************************************************************************************************!*\
+  !*** ./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_string-ws.js ***!
+  \************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = '\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003' +
+  '\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFF';
 
 
 /***/ }),
@@ -4621,6 +4651,21 @@ $export($export.S, 'Object', { setPrototypeOf: __webpack_require__(/*! ./_set-pr
 /*! no static exports found */
 /***/ (function(module, exports) {
 
+
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/es6.parse-int.js":
+/*!***************************************************************************************************!*\
+  !*** ./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/es6.parse-int.js ***!
+  \***************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var $export = __webpack_require__(/*! ./_export */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_export.js");
+var $parseInt = __webpack_require__(/*! ./_parse-int */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_parse-int.js");
+// 18.2.5 parseInt(string, radix)
+$export($export.G + $export.F * (parseInt != $parseInt), { parseInt: $parseInt });
 
 
 /***/ }),

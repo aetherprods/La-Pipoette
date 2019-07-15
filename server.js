@@ -62,7 +62,7 @@ app.prepare()
             
             let socketId = req.body.socket_id;
             let channel = req.body.channel_name;
-            let userId = req.body.color+req.body.username+Math.random().toString(10).slice(2,7);
+            let userId = req.body.color.slice(1,req.body.length+1)+req.body.username+Math.random().toString(10).slice(2,7);
 
             let presenceData = {
                 user_id: userId,

@@ -23,6 +23,9 @@ class InfoTaker extends React.Component {
     }
 
     handleSubmit(event) {
+        event.preventDefault();
+
+
         let name = event.target.elements.namedItem("username").value;
         let nameOk = false;
 
@@ -47,7 +50,6 @@ class InfoTaker extends React.Component {
             });
         }
 
-        event.preventDefault();
     }
 
     render() {
@@ -57,21 +59,10 @@ class InfoTaker extends React.Component {
                     <label>
                         Please enter your name and choose a color!<br></br>
                         <input type="text" name="username" />
+                    </label>
+                    <label>
+                        <input type="color" name="color" />
                     </label><br></br>
-                    <label><select name="color">
-                        <option value="blue">Blue</option>
-                        <option value="brown">Brown</option>
-                        <option value="chartreuse">Chartreuse</option>
-                        <option value="coral">Coral</option>
-                        <option value="cyan">Cyan</option>
-                        <option value="gainsboro">Gainsboro</option>
-                        <option value="darkorchid">Dark Orchid</option>
-                        <option value="fuchsia">Fuchsia</option>
-                        <option value="indigo">Indigo</option>
-                        <option value="olive">Olive</option>
-                        <option value="royalblue">Royal Blue</option>
-                        <option value="turquoise">Turquoise</option>
-                    </select></label>
                     <input type="submit" value="Submit" />
                 </form>
             );

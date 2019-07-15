@@ -77,6 +77,10 @@ class GameInstance extends React.Component {
     }
 
     componentWillUnmount () {
+        if (this.state.gameOver == false) {
+            alert("test");
+            this.opponentChannel.trigger('client-game-over', 'null');
+        }
         this.pusher.disconnect();
     }
 
@@ -192,15 +196,7 @@ class GameInstance extends React.Component {
             });
         }
 
-        
-        this.setState({}, () => {
-            //this.checkEndGame(); 
-
-            
-            return; 
-        })
-
-        
+               
 
         
         return;
@@ -211,69 +207,14 @@ class GameInstance extends React.Component {
         let y = this.props.boardSize[1]['y']
         if (squaresArray.length == (x-1)*(y-1)) {
 
-            this.setState({ gameOver: true }, () => {
-                /* if (this.state.gameOver == true) {
-                
-                    let playerOneScore = 0,
-                    playerTwoScore = 0;
-                    for (let i=0; i<squaresArray.length; i++) {
-                        if (squaresArray[i]['player'] == this.props.playerOne['username']) {
-                            playerOneScore++;
-                        }
-                        if (squaresArray[i]['player'] == this.props.playerTwo['username']) {
-                            playerTwoScore++;
-                        }
-                    };
-    
-    
-                    if(playerOneScore>playerTwoScore){
-                        alert(`${this.props.playerOne['username']} has won!\n+++Final Scores+++\n ${this.props.playerOne['username']}: ${playerOneScore}\n${this.props.playerTwo['username']}: ${playerTwoScore}`);
-                    } else if (playerTwoScore>playerOneScore) {
-                        alert(`${this.props.playerTwo['username']} has won!\n+++Final Scores+++\n ${this.props.playerTwo['username']}: ${playerTwoScore}\n${this.props.playerOne['username']}: ${playerOneScore}`);
-                    } else if (playerOneScore==playerTwoScore) {
-                        alert(`It's a tie!\n+++Final Scores+++\n ${this.props.playerOne['username']}: ${playerOneScore}\n${this.props.playerTwo['username']}: ${playerTwoScore}`);
-                    };
-                }; */
-            });
-            
-            
-
-            
-            
+            this.setState({ gameOver: true }, () => {});
             this.opponentChannel.trigger('client-game-over', 'null');
-            //this.playerChannel.trigger('client-game-over', 'null');
+
             return;
         }
         return;
     }
-    componentDidUpdate () {
-        /* if (this.state.gameOver == true) {
-
-            let squaresArray = this.state.squaresArray.slice();
-                
-            let playerOneScore = 0,
-            playerTwoScore = 0;
-            for (let i=0; i<squaresArray.length; i++) {
-                if (squaresArray[i]['player'] == this.props.playerOne['username']) {
-                    playerOneScore++;
-                }
-                if (squaresArray[i]['player'] == this.props.playerTwo['username']) {
-                    playerTwoScore++;
-                }
-            };
-
-
-            if(playerOneScore>playerTwoScore){
-                alert(`${this.props.playerOne['username']} has won!\n+++Final Scores+++\n ${this.props.playerOne['username']}: ${playerOneScore}\n${this.props.playerTwo['username']}: ${playerTwoScore}`);
-            } else if (playerTwoScore>playerOneScore) {
-                alert(`${this.props.playerTwo['username']} has won!\n+++Final Scores+++\n ${this.props.playerTwo['username']}: ${playerTwoScore}\n${this.props.playerOne['username']}: ${playerOneScore}`);
-            } else if (playerOneScore==playerTwoScore) {
-                alert(`It's a tie!\n+++Final Scores+++\n ${this.props.playerOne['username']}: ${playerOneScore}\n${this.props.playerTwo['username']}: ${playerTwoScore}`);
-            };
-
-            this.playerChannel.trigger('client-restart-game', 'null');
-        }; */
-    }
+    
     
 
     connectTwo(a, b) {

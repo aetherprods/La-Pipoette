@@ -144,6 +144,7 @@ class ActiveUsers extends React.Component {
                     self: self,
                     boardSize: response.boardSize
                 });
+
             });
 
             this.privateChannel.bind('client-restart-game', (data) => {
@@ -232,6 +233,8 @@ class ActiveUsers extends React.Component {
                     };
                     checkY();
 
+
+
                     if (xDone && yDone) {
                         axios.post('/game_daemon', { playerOne: self, playerTwo: target, boardSize: {x: x, y: y} });
                     };
@@ -257,11 +260,9 @@ class ActiveUsers extends React.Component {
         if(users[0]) {
             this.helperFunction();
 
-
-
             return (<div>
                 <div>
-                    {!!gameLink && <Game self={{username: this.state.self.name, color: this.state.self.color}} players={[{username: this.state.playerOne.name, color: this.state.playerOne.color}, {username: this.state.playerTwo.name, color: this.state.playerTwo.color}]} playerOneChannel={this.state.playerOneChannel} playerTwoChannel={this.state.playerTwoChannel} gameChannel={this.state.gameChannel} boardSize={[{x: this.state.boardSize['x']}, {y: this.state.boardSize['y']}]}/>}
+                    {!!gameLink && <Game self={{username: this.state.self.name, color: this.state.self.color}} players={[{username: this.state.playerOne.name, color: this.state.playerOne.color}, {username: this.state.playerTwo.name, color: this.state.playerTwo.color}]} playerOneChannel={this.state.playerOneChannel} playerTwoChannel={this.state.playerTwoChannel} gameChannel={this.state.gameChannel} boardSize={[{x: parseInt(this.state.boardSize['x'], 10)}, {y: parseInt(this.state.boardSize['y'], 10)}]}/>}
                 </div>
                 
                 <div>
