@@ -388,6 +388,7 @@ class Board extends React.Component {
         <div >
             <div className="game-board absolute-center">
                 {this.renderBoard(this.props.x,this.props.y)}
+                {this.calculateScore()}
             </div>
             <div className="game-board-connections">
                 <BoardConnections connectionsArray={this.props.connectionsArray} />
@@ -397,7 +398,6 @@ class Board extends React.Component {
             </div>
             <div className="game-status">
                 
-                {this.calculateScore()}
             </div>
         </div>
     );}

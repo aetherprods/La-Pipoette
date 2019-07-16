@@ -1359,7 +1359,7 @@ function (_React$Component3) {
     value: function render() {
       return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
         className: "game-board absolute-center"
-      }, this.renderBoard(this.props.x, this.props.y)), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
+      }, this.renderBoard(this.props.x, this.props.y), this.calculateScore()), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
         className: "game-board-connections"
       }, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(BoardConnections, {
         connectionsArray: this.props.connectionsArray
@@ -1370,7 +1370,7 @@ function (_React$Component3) {
         playerColor: this.props.currentPlayer['color']
       })), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
         className: "game-status"
-      }, this.calculateScore()));
+      }));
     }
   }]);
 
