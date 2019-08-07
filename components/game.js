@@ -283,8 +283,6 @@ class GameInstance extends React.Component {
         
     }
     triggerGameRestart () {
-        alert(`${this.props.player.id}`);
-
         this.playerChannel.trigger('client-restart-game', 'null');
 
         axios.post('/remove_players', { player: this.props.player.id })
