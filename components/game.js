@@ -1,5 +1,6 @@
 import LineTo from 'react-lineto';
 import Pusher from 'pusher-js';
+import axios from 'axios';
 
 
 class Game extends React.Component {
@@ -282,7 +283,14 @@ class GameInstance extends React.Component {
         
     }
     triggerGameRestart () {
+        alert(`${this.props.player.id}`);
+
         this.playerChannel.trigger('client-restart-game', 'null');
+
+        axios.post('/remove_players', { player: this.props.player.id })
+                    .then((response) => {
+
+                    });
     }
 
     render () {

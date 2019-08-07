@@ -38,7 +38,8 @@ app.prepare()
         const chatHistory = { messages: [] };
 
         server.post('/remove_players', (req, res) => {
-            playersInGame.splice(playersInGame.indexOf(req.body), 1);
+            playersInGame.splice(playersInGame.indexOf(req.body.player), 1);
+            res.send();
         });
 
         server.post('/get_players', (req, res) => {

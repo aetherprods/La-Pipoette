@@ -149,10 +149,6 @@ class ActiveUsers extends React.Component {
 
             this.privateChannel.bind('client-restart-game', (data) => {
                 this.setState({ gameLink: false });
-                axios.post('/remove_players', [this.onlineChannel.members.me.id])
-                    .then((response) => {
-
-                    });
             });
 
             this.setState({ helped: true });
@@ -262,7 +258,7 @@ class ActiveUsers extends React.Component {
 
             return (<div>
                 <div>
-                    {!!gameLink && <Game self={{username: this.state.self.name, color: this.state.self.color}} players={[{username: this.state.playerOne.name, color: this.state.playerOne.color}, {username: this.state.playerTwo.name, color: this.state.playerTwo.color}]} playerOneChannel={this.state.playerOneChannel} playerTwoChannel={this.state.playerTwoChannel} gameChannel={this.state.gameChannel} boardSize={[{x: parseInt(this.state.boardSize['x'], 10)}, {y: parseInt(this.state.boardSize['y'], 10)}]}/>}
+                    {!!gameLink && <Game self={{username: this.state.self.name, color: this.state.self.color, id: this.state.self.id}} players={[{username: this.state.playerOne.name, color: this.state.playerOne.color}, {username: this.state.playerTwo.name, color: this.state.playerTwo.color}]} playerOneChannel={this.state.playerOneChannel} playerTwoChannel={this.state.playerTwoChannel} gameChannel={this.state.gameChannel} boardSize={[{x: parseInt(this.state.boardSize['x'], 10)}, {y: parseInt(this.state.boardSize['y'], 10)}]}/>}
                 </div>
                 
                 <div>
