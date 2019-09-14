@@ -3,6 +3,12 @@ module.exports =
 /******/ 	// The module cache
 /******/ 	var installedModules = require('../../../ssr-module-cache.js');
 /******/
+/******/ 	// object to store loaded chunks
+/******/ 	// "0" means "already loaded"
+/******/ 	var installedChunks = {
+/******/ 		"static/development/pages/index.js": 0
+/******/ 	};
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
 /******/
@@ -33,6 +39,26 @@ module.exports =
 /******/ 		return module.exports;
 /******/ 	}
 /******/
+/******/ 	// This file contains only the entry chunk.
+/******/ 	// The chunk loading function for additional chunks
+/******/ 	__webpack_require__.e = function requireEnsure(chunkId) {
+/******/ 		var promises = [];
+/******/
+/******/
+/******/ 		// require() chunk loading for javascript
+/******/
+/******/ 		// "0" is the signal for "already loaded"
+/******/ 		if(installedChunks[chunkId] !== 0) {
+/******/ 			var chunk = require("../../../" + ({}[chunkId]||chunkId) + ".js");
+/******/ 			var moreModules = chunk.modules, chunkIds = chunk.ids;
+/******/ 			for(var moduleId in moreModules) {
+/******/ 				modules[moduleId] = moreModules[moduleId];
+/******/ 			}
+/******/ 			for(var i = 0; i < chunkIds.length; i++)
+/******/ 				installedChunks[chunkIds[i]] = 0;
+/******/ 		}
+/******/ 		return Promise.all(promises);
+/******/ 	};
 /******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
@@ -86,1636 +112,19 @@ module.exports =
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
 /******/
+/******/ 	// uncaught error handler for webpack runtime
+/******/ 	__webpack_require__.oe = function(err) {
+/******/ 		process.nextTick(function() {
+/******/ 			throw err; // catch this error by using import().catch()
+/******/ 		});
+/******/ 	};
+/******/
 /******/
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ({
-
-/***/ "./components/ChatBox/ActiveUsers.js":
-/*!*******************************************!*\
-  !*** ./components/ChatBox/ActiveUsers.js ***!
-  \*******************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/parse-int */ "./node_modules/@babel/runtime-corejs2/core-js/parse-int.js");
-/* harmony import */ var _babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_names__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/get-own-property-names */ "./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-names.js");
-/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_names__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_get_own_property_names__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _babel_runtime_corejs2_core_js_get_iterator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/get-iterator */ "./node_modules/@babel/runtime-corejs2/core-js/get-iterator.js");
-/* harmony import */ var _babel_runtime_corejs2_core_js_get_iterator__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_get_iterator__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/classCallCheck */ "./node_modules/@babel/runtime-corejs2/helpers/esm/classCallCheck.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/createClass */ "./node_modules/@babel/runtime-corejs2/helpers/esm/createClass.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/possibleConstructorReturn */ "./node_modules/@babel/runtime-corejs2/helpers/esm/possibleConstructorReturn.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/getPrototypeOf */ "./node_modules/@babel/runtime-corejs2/helpers/esm/getPrototypeOf.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/assertThisInitialized */ "./node_modules/@babel/runtime-corejs2/helpers/esm/assertThisInitialized.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/inherits */ "./node_modules/@babel/runtime-corejs2/helpers/esm/inherits.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! axios */ "axios");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var pusher_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! pusher-js */ "pusher-js");
-/* harmony import */ var pusher_js__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(pusher_js__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony import */ var _game_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../game.js */ "./components/game.js");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var ActiveUsers =
-/*#__PURE__*/
-function (_React$Component) {
-  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_8__["default"])(ActiveUsers, _React$Component);
-
-  function ActiveUsers(props) {
-    var _this;
-
-    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_3__["default"])(this, ActiveUsers);
-
-    _this = Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__["default"])(ActiveUsers).call(this, props));
-    _this.state = {
-      users: [],
-      helped: false,
-      gameLink: false,
-      self: {},
-      playerOne: {},
-      playerOneChannel: '',
-      playerTwo: {},
-      playerTwoChannel: '',
-      gameChannel: ''
-    };
-    _this.pusher = new pusher_js__WEBPACK_IMPORTED_MODULE_11___default.a("677dc9670d267bcc5be9", {
-      cluster: "us2",
-      authEndpoint: "/pusher/auth",
-      forceTLS: true,
-      auth: {
-        params: {
-          username: _this.props.userName,
-          color: _this.props.userColor
-        }
-      }
-    });
-    _this.onlineChannel = _this.pusher.subscribe("presence-online-channel");
-    _this.helperFunction = _this.helperFunction.bind(Object(_babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7__["default"])(_this));
-    _this.inviteFunction = _this.inviteFunction.bind(Object(_babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7__["default"])(_this));
-    return _this;
-  }
-
-  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_4__["default"])(ActiveUsers, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      var _this2 = this;
-
-      this.onlineChannel.bind('pusher:subscription_succeeded', function (members) {
-        var me = _this2.onlineChannel.members.me;
-        var users = _this2.state.users;
-        var _iteratorNormalCompletion = true;
-        var _didIteratorError = false;
-        var _iteratorError = undefined;
-
-        try {
-          for (var _iterator = _babel_runtime_corejs2_core_js_get_iterator__WEBPACK_IMPORTED_MODULE_2___default()(_babel_runtime_corejs2_core_js_object_get_own_property_names__WEBPACK_IMPORTED_MODULE_1___default()(members['members'])), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var member = _step.value;
-            users.push({
-              id: member,
-              user: members['members'][member]['name'],
-              color: members['members'][member]['color']
-            });
-          }
-        } catch (err) {
-          _didIteratorError = true;
-          _iteratorError = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion && _iterator["return"] != null) {
-              _iterator["return"]();
-            }
-          } finally {
-            if (_didIteratorError) {
-              throw _iteratorError;
-            }
-          }
-        }
-
-        ;
-        var userIds = [];
-        var userToBeAdded = {
-          id: me.id,
-          user: me.info.name,
-          color: me.info.color
-        };
-
-        for (var i = 0; i < users.length; i++) {
-          userIds.push(users[i]['id']);
-        }
-
-        var found = userIds.find(function (userId) {
-          return userId == userToBeAdded['id'];
-        });
-
-        if (found) {
-          _this2.setState({
-            users: users
-          });
-        } else if (!found) {
-          return null;
-        }
-      });
-      this.onlineChannel.bind('pusher:subscription_error', function (data) {
-        alert("error\n" + data);
-      });
-      this.onlineChannel.bind('pusher:member_added', function (user) {
-        var users = _this2.state.users;
-        var userToBeAdded = {
-          id: user.id,
-          user: user.info.name,
-          color: user.info.color
-        };
-        users.push(userToBeAdded);
-
-        _this2.setState({
-          users: users
-        });
-      });
-      this.onlineChannel.bind('pusher:member_removed', function (user) {
-        var users = _this2.state.users;
-        var userIds = [];
-        var userToBeRemoved = {
-          id: user.id,
-          user: user.info.name,
-          color: user.info.color
-        };
-
-        for (var i = 0; i < users.length; i++) {
-          userIds.push(users[i]['id']);
-        }
-
-        ;
-        var indexToRemove = userIds.findIndex(function (id) {
-          return id == userToBeRemoved['id'];
-        });
-
-        if (indexToRemove > -1) {
-          users.splice(indexToRemove, 1);
-
-          _this2.setState({
-            users: users
-          });
-        }
-
-        ;
-      });
-    }
-  }, {
-    key: "componentWillUnmount",
-    value: function componentWillUnmount() {
-      this.pusher.disconnect();
-    }
-  }, {
-    key: "helperFunction",
-    value: function helperFunction() {
-      var _this3 = this;
-
-      if (this.state.helped == false) {
-        this.privateChannel = this.pusher.subscribe("private-".concat(this.onlineChannel.members.me.id));
-        this.privateChannel.bind('game_started', function (response) {
-          var self = {
-            id: _this3.onlineChannel.members.me.id,
-            name: _this3.onlineChannel.members.me.info.name,
-            color: _this3.onlineChannel.members.me.info.color
-          };
-
-          _this3.setState({
-            gameLink: true,
-            playerOne: response.playerOne,
-            playerOneChannel: response.channels.pOne,
-            playerTwo: response.playerTwo,
-            playerTwoChannel: response.channels.pTwo,
-            gameChannel: response.channels.game,
-            self: self,
-            boardSize: response.boardSize
-          });
-        });
-        this.privateChannel.bind('client-restart-game', function (data) {
-          _this3.setState({
-            gameLink: false
-          });
-
-          axios__WEBPACK_IMPORTED_MODULE_10___default.a.post('/remove_players', [_this3.onlineChannel.members.me.id]).then(function (response) {});
-        });
-        this.setState({
-          helped: true
-        });
-      }
-    }
-  }, {
-    key: "inviteFunction",
-    value: function inviteFunction(data) {
-      var playersInGame;
-      var target = {
-        id: data.currentTarget.dataset.userid,
-        name: data.currentTarget.dataset.username,
-        color: data.currentTarget.dataset.usercolor
-      };
-      var self = {
-        id: this.onlineChannel.members.me.id,
-        name: this.onlineChannel.members.me.info.name,
-        color: this.onlineChannel.members.me.info.color
-      };
-
-      if (data.currentTarget.dataset.userid == this.onlineChannel.members.me.id) {
-        alert("you can't play yourself!");
-        return;
-      }
-
-      ;
-
-      if (this.state.gameLink) {
-        alert("you can't play while in game!");
-        return;
-      }
-
-      axios__WEBPACK_IMPORTED_MODULE_10___default.a.post('/get_players').then(function (response) {
-        playersInGame = response.data;
-
-        if (playersInGame.includes(target.id)) {
-          alert("you can't play someone who's in a game!");
-          return;
-        } else {
-          var checkX = function checkX() {
-            if (x == null) {
-              return;
-            }
-
-            ;
-
-            if (!/^[0-9]+$/.test(x)) {
-              x = prompt("Please only input numbers");
-              checkX();
-            }
-
-            ;
-
-            if (x < 2) {
-              x = prompt("Please only input numbers greater than 1");
-              checkX();
-            }
-
-            ;
-
-            if (/^[0-9]+$/.test(x) && x > 1) {
-              xDone = true;
-            }
-
-            ;
-          };
-
-          var checkY = function checkY() {
-            if (y == null) {
-              return;
-            }
-
-            ;
-
-            if (!/^[0-9]+$/.test(y)) {
-              y = prompt("Please only input numbers");
-              checkY();
-            }
-
-            ;
-
-            if (y < 2) {
-              y = prompt("Please only input numbers greater than 1");
-              checkY();
-            }
-
-            ;
-
-            if (/^[0-9]+$/.test(y) && y > 1) {
-              yDone = true;
-            }
-
-            ;
-          };
-
-          var xDone = false,
-              yDone = false;
-          var x = prompt("Board width?");
-          ;
-          checkX();
-          var y = prompt("Board height?");
-          ;
-          checkY();
-
-          if (xDone && yDone) {
-            axios__WEBPACK_IMPORTED_MODULE_10___default.a.post('/game_daemon', {
-              playerOne: self,
-              playerTwo: target,
-              boardSize: {
-                x: x,
-                y: y
-              }
-            });
-          }
-
-          ;
-        }
-      });
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this4 = this;
-
-      var users = this.state.users;
-      var gameLink = this.state.gameLink;
-      var tempArray = [];
-
-      for (var i = 0; i <= users.length; i++) {
-        tempArray.push(i);
-      }
-
-      ;
-      var useritr = tempArray.values();
-      var nameitr = tempArray.values();
-      var iditr = tempArray.values();
-      var coloritr = tempArray.values();
-
-      if (users[0]) {
-        this.helperFunction();
-        return react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", null, !!gameLink && react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement(_game_js__WEBPACK_IMPORTED_MODULE_12__["default"], {
-          self: {
-            username: this.state.self.name,
-            color: this.state.self.color
-          },
-          players: [{
-            username: this.state.playerOne.name,
-            color: this.state.playerOne.color
-          }, {
-            username: this.state.playerTwo.name,
-            color: this.state.playerTwo.color
-          }],
-          playerOneChannel: this.state.playerOneChannel,
-          playerTwoChannel: this.state.playerTwoChannel,
-          gameChannel: this.state.gameChannel,
-          boardSize: [{
-            x: _babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_0___default()(this.state.boardSize['x'], 10)
-          }, {
-            y: _babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_0___default()(this.state.boardSize['y'], 10)
-          }]
-        })), react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", null, users.map(function (user) {
-          return react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("a", {
-            href: "#",
-            onClick: _this4.inviteFunction,
-            "data-userid": users[iditr.next().value]['id'],
-            "data-username": users[nameitr.next().value]['user'],
-            "data-usercolor": users[coloritr.next().value]['color']
-          }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("u", null, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement(User, {
-            user: users[useritr.next().value]['user']
-          }))));
-        })));
-      } else {
-        return null;
-      }
-    }
-  }]);
-
-  return ActiveUsers;
-}(react__WEBPACK_IMPORTED_MODULE_9___default.a.Component);
-
-;
-
-var User =
-/*#__PURE__*/
-function (_React$Component2) {
-  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_8__["default"])(User, _React$Component2);
-
-  function User() {
-    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_3__["default"])(this, User);
-
-    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__["default"])(User).apply(this, arguments));
-  }
-
-  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_4__["default"])(User, [{
-    key: "render",
-    value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("div", null, this.props.user);
-    }
-  }]);
-
-  return User;
-}(react__WEBPACK_IMPORTED_MODULE_9___default.a.Component);
-
-;
-/* harmony default export */ __webpack_exports__["default"] = (ActiveUsers);
-
-/***/ }),
-
-/***/ "./components/ChatBox/Chat.js":
-/*!************************************!*\
-  !*** ./components/ChatBox/Chat.js ***!
-  \************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/classCallCheck */ "./node_modules/@babel/runtime-corejs2/helpers/esm/classCallCheck.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/createClass */ "./node_modules/@babel/runtime-corejs2/helpers/esm/createClass.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/possibleConstructorReturn */ "./node_modules/@babel/runtime-corejs2/helpers/esm/possibleConstructorReturn.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/getPrototypeOf */ "./node_modules/@babel/runtime-corejs2/helpers/esm/getPrototypeOf.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/assertThisInitialized */ "./node_modules/@babel/runtime-corejs2/helpers/esm/assertThisInitialized.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/inherits */ "./node_modules/@babel/runtime-corejs2/helpers/esm/inherits.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/defineProperty */ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! axios */ "axios");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var pusher_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! pusher-js */ "pusher-js");
-/* harmony import */ var pusher_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(pusher_js__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var _ChatMessage__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./ChatMessage */ "./components/ChatBox/ChatMessage.js");
-
-
-
-
-
-
-
-
-
-
-
-
-var Chat =
-/*#__PURE__*/
-function (_React$Component) {
-  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__["default"])(Chat, _React$Component);
-
-  function Chat(props) {
-    var _this;
-
-    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, Chat);
-
-    _this = Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__["default"])(Chat).call(this, props));
-
-    Object(_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_6__["default"])(Object(_babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4__["default"])(_this), "handleKeyUp", function (evt) {
-      var value = evt.target.value;
-
-      if (evt.keyCode === 13 && !evt.shiftKey) {
-        var _this$props = _this.props,
-            activeUser = _this$props.activeUser,
-            activeColor = _this$props.activeColor;
-        var chat = {
-          activeUser: activeUser,
-          activeColor: activeColor,
-          message: value,
-          timestamp: +new Date()
-        };
-        evt.target.value = '';
-        axios__WEBPACK_IMPORTED_MODULE_8___default.a.post('/message', chat);
-      }
-    });
-
-    _this.state = {
-      chats: []
-    };
-    return _this;
-  }
-
-  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(Chat, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      var _this2 = this;
-
-      this.pusher = new pusher_js__WEBPACK_IMPORTED_MODULE_9___default.a("677dc9670d267bcc5be9", {
-        cluster: "us2",
-        authEndpoint: "/pusher/auth",
-        forceTLS: true,
-        auth: {
-          params: {
-            username: this.props.activeUser,
-            color: this.props.activeColor
-          }
-        }
-      });
-      this.channel = this.pusher.subscribe('presence-chat');
-      this.channel.bind('pusher:subscription_succeeded', function (data) {
-        axios__WEBPACK_IMPORTED_MODULE_8___default.a.post('/message').then(function (response) {
-          var chats = response.data.messages;
-
-          _this2.setState({
-            chats: chats
-          }, function () {
-            document.getElementById("chat-box").scrollTop = document.getElementById("chat-box").scrollHeight;
-          });
-        });
-      });
-      this.channel.bind('new-message', function (_ref) {
-        var _ref$chat = _ref.chat,
-            chat = _ref$chat === void 0 ? null : _ref$chat;
-        var chats = _this2.state.chats;
-        chat && chats.push(chat);
-
-        _this2.setState({
-          chats: chats
-        }, function () {
-          document.getElementById("chat-box").scrollTop = document.getElementById("chat-box").scrollHeight;
-        });
-      });
-    }
-  }, {
-    key: "componentWillUnmount",
-    value: function componentWillUnmount() {
-      this.pusher.disconnect();
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this3 = this;
-
-      return this.props.activeUser && react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", {
-        className: "chat-box",
-        id: "chat-box"
-      }, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("h2", null, "Welcome ", this.props.activeUser, "!")), react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", null, this.state.chats.map(function (chat, index) {
-        var previous = Math.max(0, index - 1);
-        var previousChat = _this3.state.chats[previous];
-        var isFirst = previous === index;
-        var inSequence = chat.activeUser === previousChat.activeUser;
-        var hasDelay = Math.ceil((chat.timestamp - previousChat.timestamp) / (1000 * 60)) > 1;
-        return react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", {
-          key: index
-        }, (isFirst || !inSequence || hasDelay) && react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("u", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("b", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("big", null, !!chat.activeUser ? chat.activeUser : null)))), react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement(_ChatMessage__WEBPACK_IMPORTED_MODULE_10__["default"], {
-          message: chat.message,
-          color: chat.activeColor
-        }));
-      }))), react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("textarea", {
-        onKeyUp: this.handleKeyUp,
-        placeholder: "Enter a chat message"
-      })), " ");
-    }
-  }]);
-
-  return Chat;
-}(react__WEBPACK_IMPORTED_MODULE_7___default.a.Component);
-
-/* harmony default export */ __webpack_exports__["default"] = (Chat);
-
-/***/ }),
-
-/***/ "./components/ChatBox/ChatBox.js":
-/*!***************************************!*\
-  !*** ./components/ChatBox/ChatBox.js ***!
-  \***************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/classCallCheck */ "./node_modules/@babel/runtime-corejs2/helpers/esm/classCallCheck.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/createClass */ "./node_modules/@babel/runtime-corejs2/helpers/esm/createClass.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/possibleConstructorReturn */ "./node_modules/@babel/runtime-corejs2/helpers/esm/possibleConstructorReturn.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/getPrototypeOf */ "./node_modules/@babel/runtime-corejs2/helpers/esm/getPrototypeOf.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/assertThisInitialized */ "./node_modules/@babel/runtime-corejs2/helpers/esm/assertThisInitialized.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/inherits */ "./node_modules/@babel/runtime-corejs2/helpers/esm/inherits.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/defineProperty */ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var _ChatBox_Chat_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../ChatBox/Chat.js */ "./components/ChatBox/Chat.js");
-
-
-
-
-
-
-
-
-
-
-var ChatBox =
-/*#__PURE__*/
-function (_React$Component) {
-  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__["default"])(ChatBox, _React$Component);
-
-  function ChatBox(props) {
-    var _this;
-
-    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, ChatBox);
-
-    _this = Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__["default"])(ChatBox).call(this, props));
-
-    Object(_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_6__["default"])(Object(_babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4__["default"])(_this), "handleKeyUp", function (evt) {
-      if (evt.keyCode === 13) {
-        var user = evt.target.value;
-
-        _this.setState({
-          user: user
-        });
-      }
-    });
-
-    _this.state = {
-      user: props.user,
-      color: props.color
-    };
-    return _this;
-  }
-
-  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(ChatBox, [{
-    key: "render",
-    value: function render() {
-      var user = this.state.user;
-      return react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement("section", null, user && react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement(_ChatBox_Chat_js__WEBPACK_IMPORTED_MODULE_8__["default"], {
-        activeUser: this.state.user,
-        activeColor: this.state.color
-      })));
-    }
-  }]);
-
-  return ChatBox;
-}(react__WEBPACK_IMPORTED_MODULE_7___default.a.Component);
-
-/* harmony default export */ __webpack_exports__["default"] = (ChatBox);
-
-/***/ }),
-
-/***/ "./components/ChatBox/ChatMessage.js":
-/*!*******************************************!*\
-  !*** ./components/ChatBox/ChatMessage.js ***!
-  \*******************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/classCallCheck */ "./node_modules/@babel/runtime-corejs2/helpers/esm/classCallCheck.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/createClass */ "./node_modules/@babel/runtime-corejs2/helpers/esm/createClass.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/possibleConstructorReturn */ "./node_modules/@babel/runtime-corejs2/helpers/esm/possibleConstructorReturn.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/getPrototypeOf */ "./node_modules/@babel/runtime-corejs2/helpers/esm/getPrototypeOf.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/inherits */ "./node_modules/@babel/runtime-corejs2/helpers/esm/inherits.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_5__);
-
-
-
-
-
-
-
-var ChatMessage =
-/*#__PURE__*/
-function (_React$Component) {
-  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_4__["default"])(ChatMessage, _React$Component);
-
-  function ChatMessage() {
-    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, ChatMessage);
-
-    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__["default"])(ChatMessage).apply(this, arguments));
-  }
-
-  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(ChatMessage, [{
-    key: "render",
-    value: function render() {
-      var _this$props = this.props,
-          message = _this$props.message,
-          color = _this$props.color;
-      return react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", {
-        style: {
-          color: "".concat(color)
-        }
-      }, message);
-    }
-  }]);
-
-  return ChatMessage;
-}(react__WEBPACK_IMPORTED_MODULE_5___default.a.Component);
-
-/* harmony default export */ __webpack_exports__["default"] = (ChatMessage);
-
-/***/ }),
-
-/***/ "./components/game.js":
-/*!****************************!*\
-  !*** ./components/game.js ***!
-  \****************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_slicedToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/slicedToArray */ "./node_modules/@babel/runtime-corejs2/helpers/esm/slicedToArray.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/classCallCheck */ "./node_modules/@babel/runtime-corejs2/helpers/esm/classCallCheck.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/createClass */ "./node_modules/@babel/runtime-corejs2/helpers/esm/createClass.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/possibleConstructorReturn */ "./node_modules/@babel/runtime-corejs2/helpers/esm/possibleConstructorReturn.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/getPrototypeOf */ "./node_modules/@babel/runtime-corejs2/helpers/esm/getPrototypeOf.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/inherits */ "./node_modules/@babel/runtime-corejs2/helpers/esm/inherits.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var react_lineto__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-lineto */ "react-lineto");
-/* harmony import */ var react_lineto__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(react_lineto__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var pusher_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! pusher-js */ "pusher-js");
-/* harmony import */ var pusher_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(pusher_js__WEBPACK_IMPORTED_MODULE_8__);
-
-
-
-
-
-
-
-
-
-
-var Game =
-/*#__PURE__*/
-function (_React$Component) {
-  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__["default"])(Game, _React$Component);
-
-  function Game(props) {
-    var _this;
-
-    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, Game);
-
-    _this = Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__["default"])(Game).call(this, props));
-    _this.state = {
-      playerOne: _this.props.players[0],
-      playerTwo: _this.props.players[1],
-      currentPlayer: _this.props.players[0],
-      player: _this.props.self,
-      boardSize: _this.props.boardSize
-    };
-    return _this;
-  }
-
-  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(Game, [{
-    key: "render",
-    value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(GameInstance, {
-        player: this.state.player,
-        playerOne: this.state.playerOne,
-        playerTwo: this.state.playerTwo,
-        boardSize: this.state.boardSize,
-        opponentChannel: this.state.player.username == this.state.playerOne.username ? this.props.playerTwoChannel : this.props.playerOneChannel,
-        playerChannel: this.state.player.username == this.state.playerOne.username ? this.props.playerOneChannel : this.props.playerTwoChannel
-      });
-    }
-  }]);
-
-  return Game;
-}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
-
-var GameInstance =
-/*#__PURE__*/
-function (_React$Component2) {
-  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__["default"])(GameInstance, _React$Component2);
-
-  function GameInstance(props) {
-    var _this2;
-
-    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, GameInstance);
-
-    _this2 = Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__["default"])(GameInstance).call(this, props));
-    var x = props.boardSize[0]['x'],
-        y = props.boardSize[1]['y'],
-        connectionsArraySize = (x - 1) * y + (y - 1) * x;
-    _this2.state = {
-      gameOver: false,
-      currentPlayer: _this2.props.playerOne,
-      firstConnector: 0,
-      secondConnector: 0,
-      connectionsArray: [],
-      squareConditions: _this2.generateSquareConditions(x, y),
-      squaresArray: [],
-      legalCombos: _this2.generateLegalCombos(x, y)
-    };
-    _this2.pusher = new pusher_js__WEBPACK_IMPORTED_MODULE_8___default.a("677dc9670d267bcc5be9", {
-      cluster: "us2",
-      authEndpoint: "/pusher/auth",
-      forceTLS: true,
-      auth: {
-        params: {
-          username: _this2.props.player.username,
-          color: _this2.props.player.color
-        }
-      }
-    });
-    return _this2;
-  }
-
-  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(GameInstance, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      var _this3 = this;
-
-      this.opponentChannel = this.pusher.subscribe(this.props.opponentChannel);
-      this.playerChannel = this.pusher.subscribe(this.props.playerChannel);
-      this.playerChannel.bind('client-set-connections', function (data) {
-        _this3.setState({
-          connectionsArray: data
-        }, function () {});
-      });
-      this.playerChannel.bind('client-set-squares', function (data) {
-        _this3.setState({
-          squaresArray: data
-        }, function () {});
-      });
-      this.playerChannel.bind('client-change-current-player', function (data) {
-        _this3.setState({
-          currentPlayer: _this3.state.currentPlayer == _this3.props.playerOne ? _this3.props.playerTwo : _this3.props.playerOne
-        }, function () {});
-      });
-      this.playerChannel.bind('client-game-over', function (data) {
-        _this3.setState({
-          gameOver: true
-        });
-      });
-    }
-  }, {
-    key: "componentWillUnmount",
-    value: function componentWillUnmount() {
-      this.pusher.disconnect();
-    }
-  }, {
-    key: "generateSquareConditions",
-    value: function generateSquareConditions(x, y) {
-      var tempArray = [];
-
-      for (var i = 1; i <= (x - 1) * (y - 1) + y; i++) {
-        if (i % x != 0 && i < x * y - x) {
-          tempArray.push([[i, i + 1], [i + x, i + 1 + x], [i, i + x], [i + 1, i + 1 + x]]);
-        }
-      }
-
-      return tempArray;
-    }
-  }, {
-    key: "generateLegalCombos",
-    value: function generateLegalCombos(x, y) {
-      var tempArray = [];
-
-      for (var i = 1; i <= x * y; i++) {
-        if (i == 1) {
-          //if isTopLeftCorner
-          tempArray.push([i, i + 1]);
-          tempArray.push([i, i + x]);
-        } else if (i == x) {
-          //if isTopRightCorner
-          tempArray.push([i, i - 1]);
-          tempArray.push([i, i + x]);
-        } else if (i == x * y - x + 1) {
-          //if isBottomLeftCorner
-          tempArray.push([i, i - x]);
-          tempArray.push([i, i + 1]);
-        } else if (i == x * y) {
-          //if isBottomRightCorner
-          tempArray.push([i, i - 1]);
-          tempArray.push([i, i - x]);
-        } else if (i > 1 && i < x) {
-          //if isTopEdge
-          tempArray.push([i, i - 1]);
-          tempArray.push([i, i + x]);
-          tempArray.push([i, i + 1]);
-        } else if (i > x * y - x + 1 && i < x * y) {
-          //if isBottomEdge
-          tempArray.push([i, i - 1]);
-          tempArray.push([i, i - x]);
-          tempArray.push([i, i + 1]);
-        } else if ((i - 1) % x == 0 && i > 1 && i < x * y - x) {
-          //if isLeftEdge
-          tempArray.push([i, i - x]);
-          tempArray.push([i, i + 1]);
-          tempArray.push([i, i + x]);
-        } else if (i % x == 0 && i > x && i < x * y - 1) {
-          //if isRightEdge
-          tempArray.push([i, i - x]);
-          tempArray.push([i, i - 1]);
-          tempArray.push([i, i + x]);
-        } else {
-          //is central
-          tempArray.push([i, i - x]);
-          tempArray.push([i, i - 1]);
-          tempArray.push([i, i + x]);
-          tempArray.push([i, i + 1]);
-        }
-      }
-
-      return tempArray;
-    }
-  }, {
-    key: "generateSquares",
-    value: function generateSquares() {
-      var _this4 = this;
-
-      //checks connections array and update state as to squares
-      var squareConditions = this.state.squareConditions.slice(),
-          connectionsArray = this.state.connectionsArray.slice();
-      var squaresArray = this.state.squaresArray.slice();
-
-      for (var i = 0; i < squareConditions.length; i++) {
-        var A = false,
-            B = false,
-            C = false,
-            D = false;
-        var sA = false,
-            sB = false,
-            sC = false,
-            sD = false;
-        var tempArray = squareConditions[i];
-
-        var _squareConditions$i = Object(_babel_runtime_corejs2_helpers_esm_slicedToArray__WEBPACK_IMPORTED_MODULE_0__["default"])(squareConditions[i], 4),
-            a = _squareConditions$i[0],
-            b = _squareConditions$i[1],
-            c = _squareConditions$i[2],
-            d = _squareConditions$i[3];
-
-        for (var j = 0; j < connectionsArray.length; j++) {
-          if (connectionsArray[j][0] == a[0] && connectionsArray[j][1] == a[1]) {
-            A = true;
-          } else if (connectionsArray[j][0] == b[0] && connectionsArray[j][1] == b[1]) {
-            B = true;
-          } else if (connectionsArray[j][0] == c[0] && connectionsArray[j][1] == c[1]) {
-            C = true;
-          } else if (connectionsArray[j][0] == d[0] && connectionsArray[j][1] == d[1]) {
-            D = true;
-          }
-        }
-
-        for (var l = 0; l < squaresArray.length; l++) {
-          for (var k = 0; k < squaresArray[l]['square'].length; k++) {
-            //squaresArray[l]['square'] contains the 4 connections describing a square:
-            //squaresArray[l]['square'][k] contains the [x,y] to check against squareConditions[i]
-            if (squaresArray[l]['square'][k][0] == a[0] && squaresArray[l]['square'][k][1] == a[1]) {
-              sA = true;
-            } else if (squaresArray[l]['square'][k][0] == b[0] && squaresArray[l]['square'][k][1] == b[1]) {
-              sB = true;
-            } else if (squaresArray[l]['square'][k][0] == c[0] && squaresArray[l]['square'][k][1] == c[1]) {
-              sC = true;
-            } else if (squaresArray[l]['square'][k][0] == d[0] && squaresArray[l]['square'][k][1] == d[1]) {
-              sD = true;
-            }
-          }
-        }
-
-        if (A && B && C && D && !(sA && sB && sC && sD)) {
-          //i.e., if (connectionsArray contains all of the elements of a single squareCondition)
-          squaresArray.push({
-            square: tempArray,
-            player: this.state.currentPlayer['username'],
-            color: this.state.currentPlayer['color']
-          });
-          this.setState({
-            squaresArray: squaresArray
-          }, function () {
-            _this4.opponentChannel.trigger('client-set-squares', squaresArray);
-
-            _this4.checkEndGame();
-
-            return;
-          });
-        }
-      }
-
-      if (squaresArray.length == this.state.squaresArray.length) {
-        this.setState({
-          currentPlayer: this.state.currentPlayer == this.props.playerOne ? this.props.playerTwo : this.props.playerOne
-        }, function () {
-          _this4.opponentChannel.trigger('client-change-current-player', 'null');
-
-          return;
-        });
-      }
-
-      return;
-    }
-  }, {
-    key: "checkEndGame",
-    value: function checkEndGame() {
-      var squaresArray = this.state.squaresArray.slice();
-      var x = this.props.boardSize[0]['x'];
-      var y = this.props.boardSize[1]['y'];
-
-      if (squaresArray.length == (x - 1) * (y - 1)) {
-        this.setState({
-          gameOver: true
-        }, function () {});
-        this.opponentChannel.trigger('client-game-over', 'null');
-        return;
-      }
-
-      return;
-    }
-  }, {
-    key: "connectTwo",
-    value: function connectTwo(a, b) {
-      var _this5 = this;
-
-      //is it my turn? if not, return
-      if (this.state.currentPlayer['username'] !== this.props.player.username) {
-        alert("it's not your turn!");
-        return;
-      }
-
-      var testArray = [a, b],
-          legalcombos = this.state.legalCombos;
-
-      var _loop = function _loop(i) {
-        var _legalcombos$i = Object(_babel_runtime_corejs2_helpers_esm_slicedToArray__WEBPACK_IMPORTED_MODULE_0__["default"])(legalcombos[i], 2),
-            x = _legalcombos$i[0],
-            y = _legalcombos$i[1];
-
-        if (testArray[0] === x && testArray[1] === y || testArray[1] === x && testArray[0] === y) {
-          var tempArray = _this5.state.connectionsArray.slice(); //has it already been connected?
-
-
-          var found = tempArray.find(function (n) {
-            return n[0] == [x, y][0] && n[1] == [x, y][1];
-          });
-
-          if (!!found == true) {
-            alert("invalid selection");
-            return {
-              v: void 0
-            };
-          } //has its inverse been connecter?
-
-
-          found = tempArray.find(function (n) {
-            return n[0] == [x, y][1] && n[1] == [x, y][0];
-          });
-
-          if (!!found == true) {
-            alert("invalid selection");
-            return {
-              v: void 0
-            };
-          } //good to go
-
-
-          tempArray.push([x, y]);
-
-          _this5.setState({
-            connectionsArray: tempArray
-          }, function () {
-            _this5.opponentChannel.trigger('client-set-connections', tempArray);
-
-            _this5.generateSquares();
-
-            return;
-          });
-
-          return {
-            v: void 0
-          };
-        }
-      };
-
-      for (var i = 0; i < legalcombos.length; i++) {
-        var _ret = _loop(i);
-
-        if (typeof _ret === "object") return _ret.v;
-      }
-
-      alert("invalid selection");
-      this.setState(function (state, props) {
-        return {
-          firstConnector: state.firstConnector * 0,
-          secondConnector: state.secondConnector * 0
-        };
-      });
-      return;
-    }
-  }, {
-    key: "clickHandler",
-    value: function clickHandler(i) {
-      var _this6 = this;
-
-      if (!this.state.firstConnector && !this.state.secondConnector) {
-        this.setState(function (state, props) {
-          return {
-            firstConnector: state.firstConnector + i
-          };
-        });
-      } else if (!!this.state.firstConnector && !this.state.secondConnector) {
-        this.setState(function (state, props) {
-          return {
-            secondConnector: state.secondConnector + i
-          };
-        }, function () {
-          _this6.connectTwo(_this6.state.firstConnector, _this6.state.secondConnector);
-        });
-      } else if (!!this.state.firstConnector && !!this.state.secondConnector) {
-        this.setState(function (state, props) {
-          return {
-            firstConnector: state.firstConnector * 0 + i,
-            secondConnector: state.secondConnector * 0
-          };
-        });
-      }
-    }
-  }, {
-    key: "triggerGameRestart",
-    value: function triggerGameRestart() {
-      this.playerChannel.trigger('client-restart-game', 'null');
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this7 = this;
-
-      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
-        className: "game-instance"
-      }, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(Board, {
-        clickHandler: function clickHandler(i) {
-          _this7.clickHandler(i);
-        },
-        x: this.props.boardSize[0]['x'],
-        y: this.props.boardSize[1]['y'],
-        connectionsArray: this.state.connectionsArray,
-        currentPlayer: this.state.currentPlayer,
-        playerOne: this.props.playerOne,
-        playerTwo: this.props.playerTwo,
-        squaresArray: this.state.squaresArray,
-        gameOver: this.state.gameOver,
-        triggerGameRestart: function triggerGameRestart() {
-          _this7.triggerGameRestart();
-        }
-      }));
-    }
-  }]);
-
-  return GameInstance;
-}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
-
-var Board =
-/*#__PURE__*/
-function (_React$Component3) {
-  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__["default"])(Board, _React$Component3);
-
-  function Board() {
-    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, Board);
-
-    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__["default"])(Board).apply(this, arguments));
-  }
-
-  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(Board, [{
-    key: "renderBoard",
-    value: function renderBoard(x, y) {
-      var _this8 = this;
-
-      var xArr = [],
-          yArr = [],
-          xy = [];
-
-      for (var i = 0; i < x; i++) {
-        xArr.push(i);
-      }
-
-      ;
-
-      for (var j = 0; j < y; j++) {
-        yArr.push(j);
-      }
-
-      ;
-
-      for (var l = 1; l <= x * y; l++) {
-        xy.push(l);
-      }
-
-      var iterator = xy.values();
-      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, yArr.map(function (y) {
-        return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("tr", {
-          key: y
-        }, xArr.map(function (x) {
-          return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("td", {
-            key: iterator.value
-          }, _this8.renderConnector(iterator.next().value));
-        }));
-      }));
-    }
-  }, {
-    key: "renderConnector",
-    value: function renderConnector(i) {
-      var _this9 = this;
-
-      var connectorId = "connector".concat(i);
-      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(Connector, {
-        id: connectorId,
-        clickHandler: function clickHandler() {
-          return _this9.props.clickHandler(i);
-        }
-      });
-    }
-  }, {
-    key: "calculateScore",
-    value: function calculateScore() {
-      var playerOneScore = 0,
-          playerTwoScore = 0;
-
-      for (var i = 0; i < this.props.squaresArray.length; i++) {
-        if (this.props.squaresArray[i]['player'] == this.props.playerOne['username']) {
-          playerOneScore++;
-        }
-
-        if (this.props.squaresArray[i]['player'] == this.props.playerTwo['username']) {
-          playerTwoScore++;
-        }
-      }
-
-      if (this.props.gameOver == true) {
-        if (playerOneScore > playerTwoScore) {
-          return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("button", {
-            onClick: this.props.triggerGameRestart
-          }, "End Game"), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), this.props.playerOne['username'], " has won!", react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), this.props.playerOne['username'], ": ", playerOneScore, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), this.props.playerTwo['username'], ": ", playerTwoScore);
-        } else if (playerTwoScore > playerOneScore) {
-          return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("button", {
-            onClick: this.props.triggerGameRestart
-          }, "End Game"), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), this.props.playerTwo['username'], " has won!", react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), this.props.playerTwo['username'], ": ", playerTwoScore, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), this.props.playerOne['username'], ": ", playerOneScore);
-        } else if (playerOneScore == playerTwoScore) {
-          return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("button", {
-            onClick: this.props.triggerGameRestart
-          }, "End Game"), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), "It's a tie!", react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), this.props.playerOne['username'], ": ", playerOneScore, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), this.props.playerTwo['username'], ": ", playerTwoScore);
-        }
-
-        ;
-      }
-
-      ;
-      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, "It is ", this.props.currentPlayer['username'], "'s turn!", react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), "The current score is:", react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), this.props.playerOne['username'], "'s score: ", playerOneScore, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), this.props.playerTwo['username'], "'s score: ", playerTwoScore);
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
-        className: "game-board absolute-center"
-      }, this.renderBoard(this.props.x, this.props.y), this.calculateScore()), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
-        className: "game-board-connections"
-      }, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(BoardConnections, {
-        connectionsArray: this.props.connectionsArray
-      })), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
-        className: "square-connections"
-      }, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(SquareConnections, {
-        squaresArray: this.props.squaresArray,
-        playerColor: this.props.currentPlayer['color']
-      })), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
-        className: "game-status"
-      }));
-    }
-  }]);
-
-  return Board;
-}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
-
-var SquareConnections =
-/*#__PURE__*/
-function (_React$Component4) {
-  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__["default"])(SquareConnections, _React$Component4);
-
-  function SquareConnections() {
-    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, SquareConnections);
-
-    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__["default"])(SquareConnections).apply(this, arguments));
-  }
-
-  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(SquareConnections, [{
-    key: "renderSquares",
-    value: function renderSquares() {
-      var _this10 = this;
-
-      var tempArray = [];
-
-      for (var i = 0; i < this.props.squaresArray.length; i++) {
-        tempArray.push(i);
-      }
-
-      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, tempArray.map(function (i) {
-        return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(Square, {
-          color: _this10.props.squaresArray[i]['color'],
-          connectorA: _this10.props.squaresArray[i]['square'][0][0],
-          connectorB: _this10.props.squaresArray[i]['square'][1][1],
-          connectorC: _this10.props.squaresArray[i]['square'][0][1],
-          connectorD: _this10.props.squaresArray[i]['square'][1][0]
-        });
-      }));
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, this.renderSquares());
-    }
-  }]);
-
-  return SquareConnections;
-}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
-
-var BoardConnections =
-/*#__PURE__*/
-function (_React$Component5) {
-  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__["default"])(BoardConnections, _React$Component5);
-
-  function BoardConnections() {
-    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, BoardConnections);
-
-    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__["default"])(BoardConnections).apply(this, arguments));
-  }
-
-  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(BoardConnections, [{
-    key: "renderConnections",
-    value: function renderConnections() {
-      var _this11 = this;
-
-      var tempArray = [];
-
-      for (var i = 0; i < this.props.connectionsArray.length; i++) {
-        tempArray.push(i);
-      }
-
-      ;
-      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, tempArray.map(function (i) {
-        return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(Connection, {
-          connectorA: _this11.props.connectionsArray[i][0],
-          connectorB: _this11.props.connectionsArray[i][1]
-        });
-      }));
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, this.renderConnections());
-    }
-  }]);
-
-  return BoardConnections;
-}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
-
-var Connector =
-/*#__PURE__*/
-function (_React$Component6) {
-  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__["default"])(Connector, _React$Component6);
-
-  function Connector() {
-    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, Connector);
-
-    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__["default"])(Connector).apply(this, arguments));
-  }
-
-  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(Connector, [{
-    key: "render",
-    value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("button", {
-        className: this.props.id,
-        onClick: this.props.clickHandler
-      });
-    }
-  }]);
-
-  return Connector;
-}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
-
-var Connection =
-/*#__PURE__*/
-function (_React$Component7) {
-  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__["default"])(Connection, _React$Component7);
-
-  function Connection() {
-    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, Connection);
-
-    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__["default"])(Connection).apply(this, arguments));
-  }
-
-  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(Connection, [{
-    key: "render",
-    value: function render() {
-      var connectorA = "connector".concat(this.props.connectorA),
-          connectorB = "connector".concat(this.props.connectorB);
-      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(react_lineto__WEBPACK_IMPORTED_MODULE_7___default.a, {
-        from: connectorA,
-        to: connectorB,
-        borderWidth: 2,
-        borderColor: "black"
-      });
-    }
-  }]);
-
-  return Connection;
-}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
-
-var Square =
-/*#__PURE__*/
-function (_React$Component8) {
-  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__["default"])(Square, _React$Component8);
-
-  function Square() {
-    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, Square);
-
-    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__["default"])(Square).apply(this, arguments));
-  }
-
-  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(Square, [{
-    key: "render",
-    value: function render() {
-      var connectorA = "connector".concat(this.props.connectorA),
-          connectorB = "connector".concat(this.props.connectorB),
-          connectorC = "connector".concat(this.props.connectorC),
-          connectorD = "connector".concat(this.props.connectorD);
-      return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(react_lineto__WEBPACK_IMPORTED_MODULE_7___default.a, {
-        from: connectorA,
-        to: connectorB,
-        borderColor: this.props.color,
-        borderWidth: 3
-      }), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(react_lineto__WEBPACK_IMPORTED_MODULE_7___default.a, {
-        from: connectorC,
-        to: connectorD,
-        borderColor: this.props.color,
-        borderWidth: 3
-      }), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(react_lineto__WEBPACK_IMPORTED_MODULE_7___default.a, {
-        from: connectorA,
-        to: connectorC,
-        borderColor: this.props.color,
-        borderWidth: 3
-      }), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(react_lineto__WEBPACK_IMPORTED_MODULE_7___default.a, {
-        from: connectorA,
-        to: connectorD,
-        borderColor: this.props.color,
-        borderWidth: 3
-      }), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(react_lineto__WEBPACK_IMPORTED_MODULE_7___default.a, {
-        from: connectorD,
-        to: connectorB,
-        borderColor: this.props.color,
-        borderWidth: 3
-      }), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(react_lineto__WEBPACK_IMPORTED_MODULE_7___default.a, {
-        from: connectorC,
-        to: connectorB,
-        borderColor: this.props.color,
-        borderWidth: 3
-      }));
-    }
-  }]);
-
-  return Square;
-}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
-
-/* harmony default export */ __webpack_exports__["default"] = (Game);
-
-/***/ }),
-
-/***/ "./components/lobby.js":
-/*!*****************************!*\
-  !*** ./components/lobby.js ***!
-  \*****************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/classCallCheck */ "./node_modules/@babel/runtime-corejs2/helpers/esm/classCallCheck.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/createClass */ "./node_modules/@babel/runtime-corejs2/helpers/esm/createClass.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/possibleConstructorReturn */ "./node_modules/@babel/runtime-corejs2/helpers/esm/possibleConstructorReturn.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/getPrototypeOf */ "./node_modules/@babel/runtime-corejs2/helpers/esm/getPrototypeOf.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/assertThisInitialized */ "./node_modules/@babel/runtime-corejs2/helpers/esm/assertThisInitialized.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/inherits */ "./node_modules/@babel/runtime-corejs2/helpers/esm/inherits.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _ChatBox_ChatBox_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./ChatBox/ChatBox.js */ "./components/ChatBox/ChatBox.js");
-/* harmony import */ var _ChatBox_ActiveUsers_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./ChatBox/ActiveUsers.js */ "./components/ChatBox/ActiveUsers.js");
-
-
-
-
-
-
-
-
-
-
-var Lobby = function Lobby() {
-  return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
-    className: "info-taker"
-  }, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(InfoTaker, null)));
-};
-
-var InfoTaker =
-/*#__PURE__*/
-function (_React$Component) {
-  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_5__["default"])(InfoTaker, _React$Component);
-
-  function InfoTaker(props) {
-    var _this;
-
-    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, InfoTaker);
-
-    _this = Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__["default"])(InfoTaker).call(this, props));
-    _this.state = {
-      username: '',
-      color: '',
-      submitted: false
-    };
-    _this.handleSubmit = _this.handleSubmit.bind(Object(_babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_4__["default"])(_this));
-    return _this;
-  }
-
-  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(InfoTaker, [{
-    key: "handleSubmit",
-    value: function handleSubmit(event) {
-      var _this2 = this;
-
-      event.preventDefault();
-      var name = event.target.elements.namedItem("username").value;
-      var nameOk = false;
-
-      function checkName() {
-        if (/\s/.test(name)) {
-          alert("No whitespace in the name, please");
-          return;
-        } else {
-          nameOk = true;
-        }
-      }
-
-      checkName();
-
-      if (!!name && nameOk) {
-        this.setState({
-          name: event.target.elements.namedItem("username").value,
-          color: event.target.elements.namedItem("color").value
-        }, function () {
-          _this2.setState({
-            submitted: true
-          });
-
-          return;
-        });
-      }
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      if (!this.state.submitted) {
-        return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("form", {
-          onSubmit: this.handleSubmit
-        }, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("label", null, "Please enter your name and choose a color!", react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("input", {
-          type: "text",
-          name: "username"
-        })), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("label", null, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("input", {
-          type: "color",
-          name: "color"
-        })), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("input", {
-          type: "submit",
-          value: "Submit"
-        }));
-      } else if (this.state.submitted) {
-        return react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(_ChatBox_ChatBox_js__WEBPACK_IMPORTED_MODULE_7__["default"], {
-          user: this.state.name,
-          color: this.state.color
-        })), react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
-          className: "active-users"
-        }, react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(_ChatBox_ActiveUsers_js__WEBPACK_IMPORTED_MODULE_8__["default"], {
-          userName: this.state.name,
-          userColor: this.state.color
-        })));
-      }
-    }
-  }]);
-
-  return InfoTaker;
-}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
-
-/* harmony default export */ __webpack_exports__["default"] = (Lobby);
-
-/***/ }),
-
-/***/ "./node_modules/@babel/runtime-corejs2/core-js/array/is-array.js":
-/*!***********************************************************************!*\
-  !*** ./node_modules/@babel/runtime-corejs2/core-js/array/is-array.js ***!
-  \***********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(/*! core-js/library/fn/array/is-array */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/fn/array/is-array.js");
-
-/***/ }),
-
-/***/ "./node_modules/@babel/runtime-corejs2/core-js/get-iterator.js":
-/*!*********************************************************************!*\
-  !*** ./node_modules/@babel/runtime-corejs2/core-js/get-iterator.js ***!
-  \*********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(/*! core-js/library/fn/get-iterator */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/fn/get-iterator.js");
-
-/***/ }),
 
 /***/ "./node_modules/@babel/runtime-corejs2/core-js/object/create.js":
 /*!**********************************************************************!*\
@@ -1736,17 +145,6 @@ module.exports = __webpack_require__(/*! core-js/library/fn/object/create */ "./
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(/*! core-js/library/fn/object/define-property */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/fn/object/define-property.js");
-
-/***/ }),
-
-/***/ "./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-names.js":
-/*!**************************************************************************************!*\
-  !*** ./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-names.js ***!
-  \**************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(/*! core-js/library/fn/object/get-own-property-names */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/fn/object/get-own-property-names.js");
 
 /***/ }),
 
@@ -1772,17 +170,6 @@ module.exports = __webpack_require__(/*! core-js/library/fn/object/set-prototype
 
 /***/ }),
 
-/***/ "./node_modules/@babel/runtime-corejs2/core-js/parse-int.js":
-/*!******************************************************************!*\
-  !*** ./node_modules/@babel/runtime-corejs2/core-js/parse-int.js ***!
-  \******************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(/*! core-js/library/fn/parse-int */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/fn/parse-int.js");
-
-/***/ }),
-
 /***/ "./node_modules/@babel/runtime-corejs2/core-js/symbol.js":
 /*!***************************************************************!*\
   !*** ./node_modules/@babel/runtime-corejs2/core-js/symbol.js ***!
@@ -1802,25 +189,6 @@ module.exports = __webpack_require__(/*! core-js/library/fn/symbol */ "./node_mo
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(/*! core-js/library/fn/symbol/iterator */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/fn/symbol/iterator.js");
-
-/***/ }),
-
-/***/ "./node_modules/@babel/runtime-corejs2/helpers/esm/arrayWithHoles.js":
-/*!***************************************************************************!*\
-  !*** ./node_modules/@babel/runtime-corejs2/helpers/esm/arrayWithHoles.js ***!
-  \***************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return _arrayWithHoles; });
-/* harmony import */ var _core_js_array_is_array__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../core-js/array/is-array */ "./node_modules/@babel/runtime-corejs2/core-js/array/is-array.js");
-/* harmony import */ var _core_js_array_is_array__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_core_js_array_is_array__WEBPACK_IMPORTED_MODULE_0__);
-
-function _arrayWithHoles(arr) {
-  if (_core_js_array_is_array__WEBPACK_IMPORTED_MODULE_0___default()(arr)) return arr;
-}
 
 /***/ }),
 
@@ -1895,36 +263,6 @@ function _createClass(Constructor, protoProps, staticProps) {
 
 /***/ }),
 
-/***/ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js":
-/*!***************************************************************************!*\
-  !*** ./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js ***!
-  \***************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return _defineProperty; });
-/* harmony import */ var _core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../core-js/object/define-property */ "./node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
-/* harmony import */ var _core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0__);
-
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    _core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0___default()(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-
-/***/ }),
-
 /***/ "./node_modules/@babel/runtime-corejs2/helpers/esm/getPrototypeOf.js":
 /*!***************************************************************************!*\
   !*** ./node_modules/@babel/runtime-corejs2/helpers/esm/getPrototypeOf.js ***!
@@ -1982,63 +320,6 @@ function _inherits(subClass, superClass) {
 
 /***/ }),
 
-/***/ "./node_modules/@babel/runtime-corejs2/helpers/esm/iterableToArrayLimit.js":
-/*!*********************************************************************************!*\
-  !*** ./node_modules/@babel/runtime-corejs2/helpers/esm/iterableToArrayLimit.js ***!
-  \*********************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return _iterableToArrayLimit; });
-/* harmony import */ var _core_js_get_iterator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../core-js/get-iterator */ "./node_modules/@babel/runtime-corejs2/core-js/get-iterator.js");
-/* harmony import */ var _core_js_get_iterator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_core_js_get_iterator__WEBPACK_IMPORTED_MODULE_0__);
-
-function _iterableToArrayLimit(arr, i) {
-  var _arr = [];
-  var _n = true;
-  var _d = false;
-  var _e = undefined;
-
-  try {
-    for (var _i = _core_js_get_iterator__WEBPACK_IMPORTED_MODULE_0___default()(arr), _s; !(_n = (_s = _i.next()).done); _n = true) {
-      _arr.push(_s.value);
-
-      if (i && _arr.length === i) break;
-    }
-  } catch (err) {
-    _d = true;
-    _e = err;
-  } finally {
-    try {
-      if (!_n && _i["return"] != null) _i["return"]();
-    } finally {
-      if (_d) throw _e;
-    }
-  }
-
-  return _arr;
-}
-
-/***/ }),
-
-/***/ "./node_modules/@babel/runtime-corejs2/helpers/esm/nonIterableRest.js":
-/*!****************************************************************************!*\
-  !*** ./node_modules/@babel/runtime-corejs2/helpers/esm/nonIterableRest.js ***!
-  \****************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return _nonIterableRest; });
-function _nonIterableRest() {
-  throw new TypeError("Invalid attempt to destructure non-iterable instance");
-}
-
-/***/ }),
-
 /***/ "./node_modules/@babel/runtime-corejs2/helpers/esm/possibleConstructorReturn.js":
 /*!**************************************************************************************!*\
   !*** ./node_modules/@babel/runtime-corejs2/helpers/esm/possibleConstructorReturn.js ***!
@@ -2087,28 +368,6 @@ function _setPrototypeOf(o, p) {
 
 /***/ }),
 
-/***/ "./node_modules/@babel/runtime-corejs2/helpers/esm/slicedToArray.js":
-/*!**************************************************************************!*\
-  !*** ./node_modules/@babel/runtime-corejs2/helpers/esm/slicedToArray.js ***!
-  \**************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return _slicedToArray; });
-/* harmony import */ var _arrayWithHoles__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./arrayWithHoles */ "./node_modules/@babel/runtime-corejs2/helpers/esm/arrayWithHoles.js");
-/* harmony import */ var _iterableToArrayLimit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./iterableToArrayLimit */ "./node_modules/@babel/runtime-corejs2/helpers/esm/iterableToArrayLimit.js");
-/* harmony import */ var _nonIterableRest__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./nonIterableRest */ "./node_modules/@babel/runtime-corejs2/helpers/esm/nonIterableRest.js");
-
-
-
-function _slicedToArray(arr, i) {
-  return Object(_arrayWithHoles__WEBPACK_IMPORTED_MODULE_0__["default"])(arr) || Object(_iterableToArrayLimit__WEBPACK_IMPORTED_MODULE_1__["default"])(arr, i) || Object(_nonIterableRest__WEBPACK_IMPORTED_MODULE_2__["default"])();
-}
-
-/***/ }),
-
 /***/ "./node_modules/@babel/runtime-corejs2/helpers/esm/typeof.js":
 /*!*******************************************************************!*\
   !*** ./node_modules/@babel/runtime-corejs2/helpers/esm/typeof.js ***!
@@ -2144,33 +403,6 @@ function _typeof(obj) {
 
 /***/ }),
 
-/***/ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/fn/array/is-array.js":
-/*!***********************************************************************************************!*\
-  !*** ./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/fn/array/is-array.js ***!
-  \***********************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(/*! ../../modules/es6.array.is-array */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/es6.array.is-array.js");
-module.exports = __webpack_require__(/*! ../../modules/_core */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_core.js").Array.isArray;
-
-
-/***/ }),
-
-/***/ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/fn/get-iterator.js":
-/*!*********************************************************************************************!*\
-  !*** ./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/fn/get-iterator.js ***!
-  \*********************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(/*! ../modules/web.dom.iterable */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/web.dom.iterable.js");
-__webpack_require__(/*! ../modules/es6.string.iterator */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/es6.string.iterator.js");
-module.exports = __webpack_require__(/*! ../modules/core.get-iterator */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/core.get-iterator.js");
-
-
-/***/ }),
-
 /***/ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/fn/object/create.js":
 /*!**********************************************************************************************!*\
   !*** ./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/fn/object/create.js ***!
@@ -2203,22 +435,6 @@ module.exports = function defineProperty(it, key, desc) {
 
 /***/ }),
 
-/***/ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/fn/object/get-own-property-names.js":
-/*!**************************************************************************************************************!*\
-  !*** ./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/fn/object/get-own-property-names.js ***!
-  \**************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(/*! ../../modules/es6.object.get-own-property-names */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/es6.object.get-own-property-names.js");
-var $Object = __webpack_require__(/*! ../../modules/_core */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_core.js").Object;
-module.exports = function getOwnPropertyNames(it) {
-  return $Object.getOwnPropertyNames(it);
-};
-
-
-/***/ }),
-
 /***/ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/fn/object/get-prototype-of.js":
 /*!********************************************************************************************************!*\
   !*** ./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/fn/object/get-prototype-of.js ***!
@@ -2241,19 +457,6 @@ module.exports = __webpack_require__(/*! ../../modules/_core */ "./node_modules/
 
 __webpack_require__(/*! ../../modules/es6.object.set-prototype-of */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/es6.object.set-prototype-of.js");
 module.exports = __webpack_require__(/*! ../../modules/_core */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_core.js").Object.setPrototypeOf;
-
-
-/***/ }),
-
-/***/ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/fn/parse-int.js":
-/*!******************************************************************************************!*\
-  !*** ./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/fn/parse-int.js ***!
-  \******************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(/*! ../modules/es6.parse-int */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/es6.parse-int.js");
-module.exports = __webpack_require__(/*! ../modules/_core */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_core.js").parseInt;
 
 
 /***/ }),
@@ -2360,40 +563,6 @@ module.exports = function (IS_INCLUDES) {
       if (O[index] === el) return IS_INCLUDES || index || 0;
     } return !IS_INCLUDES && -1;
   };
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_classof.js":
-/*!**********************************************************************************************!*\
-  !*** ./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_classof.js ***!
-  \**********************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// getting tag from 19.1.3.6 Object.prototype.toString()
-var cof = __webpack_require__(/*! ./_cof */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_cof.js");
-var TAG = __webpack_require__(/*! ./_wks */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_wks.js")('toStringTag');
-// ES3 wrong here
-var ARG = cof(function () { return arguments; }()) == 'Arguments';
-
-// fallback for IE11 Script Access Denied error
-var tryGet = function (it, key) {
-  try {
-    return it[key];
-  } catch (e) { /* empty */ }
-};
-
-module.exports = function (it) {
-  var O, T, B;
-  return it === undefined ? 'Undefined' : it === null ? 'Null'
-    // @@toStringTag case
-    : typeof (T = tryGet(O = Object(it), TAG)) == 'string' ? T
-    // builtinTag case
-    : ARG ? cof(O)
-    // ES3 arguments fallback
-    : (B = cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
 };
 
 
@@ -3266,26 +1435,6 @@ module.exports = function (KEY, exec) {
 
 /***/ }),
 
-/***/ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_parse-int.js":
-/*!************************************************************************************************!*\
-  !*** ./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_parse-int.js ***!
-  \************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var $parseInt = __webpack_require__(/*! ./_global */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_global.js").parseInt;
-var $trim = __webpack_require__(/*! ./_string-trim */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_string-trim.js").trim;
-var ws = __webpack_require__(/*! ./_string-ws */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_string-ws.js");
-var hex = /^[-+]?0[xX]/;
-
-module.exports = $parseInt(ws + '08') !== 8 || $parseInt(ws + '0x16') !== 22 ? function parseInt(str, radix) {
-  var string = $trim(String(str), 3);
-  return $parseInt(string, (radix >>> 0) || (hex.test(string) ? 16 : 10));
-} : $parseInt;
-
-
-/***/ }),
-
 /***/ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_property-desc.js":
 /*!****************************************************************************************************!*\
   !*** ./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_property-desc.js ***!
@@ -3434,60 +1583,6 @@ module.exports = function (TO_STRING) {
       : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
   };
 };
-
-
-/***/ }),
-
-/***/ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_string-trim.js":
-/*!**************************************************************************************************!*\
-  !*** ./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_string-trim.js ***!
-  \**************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var $export = __webpack_require__(/*! ./_export */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_export.js");
-var defined = __webpack_require__(/*! ./_defined */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_defined.js");
-var fails = __webpack_require__(/*! ./_fails */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_fails.js");
-var spaces = __webpack_require__(/*! ./_string-ws */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_string-ws.js");
-var space = '[' + spaces + ']';
-var non = '\u200b\u0085';
-var ltrim = RegExp('^' + space + space + '*');
-var rtrim = RegExp(space + space + '*$');
-
-var exporter = function (KEY, exec, ALIAS) {
-  var exp = {};
-  var FORCE = fails(function () {
-    return !!spaces[KEY]() || non[KEY]() != non;
-  });
-  var fn = exp[KEY] = FORCE ? exec(trim) : spaces[KEY];
-  if (ALIAS) exp[ALIAS] = fn;
-  $export($export.P + $export.F * FORCE, 'String', exp);
-};
-
-// 1 -> String#trimLeft
-// 2 -> String#trimRight
-// 3 -> String#trim
-var trim = exporter.trim = function (string, TYPE) {
-  string = String(defined(string));
-  if (TYPE & 1) string = string.replace(ltrim, '');
-  if (TYPE & 2) string = string.replace(rtrim, '');
-  return string;
-};
-
-module.exports = exporter;
-
-
-/***/ }),
-
-/***/ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_string-ws.js":
-/*!************************************************************************************************!*\
-  !*** ./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_string-ws.js ***!
-  \************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = '\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003' +
-  '\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFF';
 
 
 /***/ }),
@@ -3670,58 +1765,6 @@ $exports.store = store;
 
 /***/ }),
 
-/***/ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/core.get-iterator-method.js":
-/*!**************************************************************************************************************!*\
-  !*** ./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/core.get-iterator-method.js ***!
-  \**************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var classof = __webpack_require__(/*! ./_classof */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_classof.js");
-var ITERATOR = __webpack_require__(/*! ./_wks */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_wks.js")('iterator');
-var Iterators = __webpack_require__(/*! ./_iterators */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_iterators.js");
-module.exports = __webpack_require__(/*! ./_core */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_core.js").getIteratorMethod = function (it) {
-  if (it != undefined) return it[ITERATOR]
-    || it['@@iterator']
-    || Iterators[classof(it)];
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/core.get-iterator.js":
-/*!*******************************************************************************************************!*\
-  !*** ./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/core.get-iterator.js ***!
-  \*******************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var anObject = __webpack_require__(/*! ./_an-object */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_an-object.js");
-var get = __webpack_require__(/*! ./core.get-iterator-method */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/core.get-iterator-method.js");
-module.exports = __webpack_require__(/*! ./_core */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_core.js").getIterator = function (it) {
-  var iterFn = get(it);
-  if (typeof iterFn != 'function') throw TypeError(it + ' is not iterable!');
-  return anObject(iterFn.call(it));
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/es6.array.is-array.js":
-/*!********************************************************************************************************!*\
-  !*** ./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/es6.array.is-array.js ***!
-  \********************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 22.1.2.2 / 15.4.3.2 Array.isArray(arg)
-var $export = __webpack_require__(/*! ./_export */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_export.js");
-
-$export($export.S, 'Array', { isArray: __webpack_require__(/*! ./_is-array */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_is-array.js") });
-
-
-/***/ }),
-
 /***/ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/es6.array.iterator.js":
 /*!********************************************************************************************************!*\
   !*** ./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/es6.array.iterator.js ***!
@@ -3796,21 +1839,6 @@ $export($export.S + $export.F * !__webpack_require__(/*! ./_descriptors */ "./no
 
 /***/ }),
 
-/***/ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/es6.object.get-own-property-names.js":
-/*!***********************************************************************************************************************!*\
-  !*** ./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/es6.object.get-own-property-names.js ***!
-  \***********************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 19.1.2.7 Object.getOwnPropertyNames(O)
-__webpack_require__(/*! ./_object-sap */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_object-sap.js")('getOwnPropertyNames', function () {
-  return __webpack_require__(/*! ./_object-gopn-ext */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_object-gopn-ext.js").f;
-});
-
-
-/***/ }),
-
 /***/ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/es6.object.get-prototype-of.js":
 /*!*****************************************************************************************************************!*\
   !*** ./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/es6.object.get-prototype-of.js ***!
@@ -3852,21 +1880,6 @@ $export($export.S, 'Object', { setPrototypeOf: __webpack_require__(/*! ./_set-pr
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-
-
-/***/ }),
-
-/***/ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/es6.parse-int.js":
-/*!***************************************************************************************************!*\
-  !*** ./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/es6.parse-int.js ***!
-  \***************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var $export = __webpack_require__(/*! ./_export */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_export.js");
-var $parseInt = __webpack_require__(/*! ./_parse-int */ "./node_modules/@babel/runtime-corejs2/node_modules/core-js/library/modules/_parse-int.js");
-// 18.2.5 parseInt(string, radix)
-$export($export.G + $export.F * (parseInt != $parseInt), { parseInt: $parseInt });
 
 
 /***/ }),
@@ -4221,21 +2234,61 @@ for (var i = 0; i < DOMIterables.length; i++) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _pages_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../pages/style.css */ "./pages/style.css");
-/* harmony import */ var _pages_style_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_pages_style_css__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _components_lobby_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/lobby.js */ "./components/lobby.js");
-/* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! next/head */ "next/head");
-/* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(next_head__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/classCallCheck */ "./node_modules/@babel/runtime-corejs2/helpers/esm/classCallCheck.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/createClass */ "./node_modules/@babel/runtime-corejs2/helpers/esm/createClass.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/possibleConstructorReturn */ "./node_modules/@babel/runtime-corejs2/helpers/esm/possibleConstructorReturn.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/getPrototypeOf */ "./node_modules/@babel/runtime-corejs2/helpers/esm/getPrototypeOf.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/inherits */ "./node_modules/@babel/runtime-corejs2/helpers/esm/inherits.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _pages_style_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../pages/style.css */ "./pages/style.css");
+/* harmony import */ var _pages_style_css__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_pages_style_css__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! next/head */ "next/head");
+/* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(next_head__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var next_dynamic__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! next/dynamic */ "next/dynamic");
+/* harmony import */ var next_dynamic__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(next_dynamic__WEBPACK_IMPORTED_MODULE_8__);
 
 
 
 
 
-var Index = function Index() {
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_head__WEBPACK_IMPORTED_MODULE_3___default.a, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("title", null, "La Pipoette")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_lobby_js__WEBPACK_IMPORTED_MODULE_2__["default"], null)));
-};
+
+ //import Lobby from "../components/Lobby/index.js";
+
+
+
+var Lobby = next_dynamic__WEBPACK_IMPORTED_MODULE_8___default()(function () {
+  return __webpack_require__.e(/*! import() */ 2).then(__webpack_require__.bind(null, /*! ../components/Lobby/index.js */ "./components/Lobby/index.js"));
+}, {
+  ssr: false,
+  loadableGenerated: {
+    webpack: function webpack() {
+      return [/*require.resolve*/(/*! ../components/Lobby/index.js */ "./components/Lobby/index.js")];
+    },
+    modules: ["../components/Lobby/index.js"]
+  }
+});
+
+var Index =
+/*#__PURE__*/
+function (_React$Component) {
+  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_4__["default"])(Index, _React$Component);
+
+  function Index(props) {
+    Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, Index);
+
+    return Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__["default"])(Index).call(this, props));
+  }
+
+  Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(Index, [{
+    key: "render",
+    value: function render() {
+      return react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement(next_head__WEBPACK_IMPORTED_MODULE_7___default.a, null, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("title", null, "La Pipoette")), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement(Lobby, null)));
+    }
+  }]);
+
+  return Index;
+}(react__WEBPACK_IMPORTED_MODULE_5___default.a.Component);
 
 /* harmony default export */ __webpack_exports__["default"] = (Index);
 
@@ -4272,6 +2325,17 @@ module.exports = __webpack_require__(/*! /home/jbarreto/Documents/Projects/Le Pi
 /***/ (function(module, exports) {
 
 module.exports = require("axios");
+
+/***/ }),
+
+/***/ "next/dynamic":
+/*!*******************************!*\
+  !*** external "next/dynamic" ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("next/dynamic");
 
 /***/ }),
 
