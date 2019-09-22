@@ -38,10 +38,10 @@ class Board extends React.Component {
         let playerOneScore = 0,
             playerTwoScore = 0;
         for (let i=0; i<this.props.squaresArray.length; i++) {
-            if (this.props.squaresArray[i]['player'] == this.props.playerOne['username']) {
+            if (this.props.squaresArray[i]['player'] == this.props.playerOne.name) {
                 playerOneScore++;
             }
-            if (this.props.squaresArray[i]['player'] == this.props.playerTwo['username']) {
+            if (this.props.squaresArray[i]['player'] == this.props.playerTwo.name) {
                 playerTwoScore++;
             }
         }
@@ -52,18 +52,18 @@ class Board extends React.Component {
                 return (
                     <div>
                         <button onClick={this.props.triggerGameRestart}>End Game</button><br></br>
-                        {this.props.playerOne['username']} has won!<br></br>
-                        {this.props.playerOne['username']}: {playerOneScore}<br></br>
-                        {this.props.playerTwo['username']}: {playerTwoScore}
+                        {this.props.playerOne.name} has won!<br></br>
+                        {this.props.playerOne.name}: {playerOneScore}<br></br>
+                        {this.props.playerTwo.name}: {playerTwoScore}
                     </div>
                 );
             } else if (playerTwoScore>playerOneScore) {
                 return (
                     <div>
                         <button onClick={this.props.triggerGameRestart}>End Game</button><br></br>
-                        {this.props.playerTwo['username']} has won!<br></br>
-                        {this.props.playerTwo['username']}: {playerTwoScore}<br></br>
-                        {this.props.playerOne['username']}: {playerOneScore}
+                        {this.props.playerTwo.name} has won!<br></br>
+                        {this.props.playerTwo.name}: {playerTwoScore}<br></br>
+                        {this.props.playerOne.name}: {playerOneScore}
                     </div>
                 );
             } else if (playerOneScore==playerTwoScore) {
@@ -71,8 +71,8 @@ class Board extends React.Component {
                     <div>
                         <button onClick={this.props.triggerGameRestart}>End Game</button><br></br>
                         It's a tie!<br></br>
-                        {this.props.playerOne['username']}: {playerOneScore}<br></br>
-                        {this.props.playerTwo['username']}: {playerTwoScore}
+                        {this.props.playerOne.name}: {playerOneScore}<br></br>
+                        {this.props.playerTwo.name}: {playerTwoScore}
                     </div>
                 );
                 
@@ -83,10 +83,10 @@ class Board extends React.Component {
 
         return (
             <div>
-                It is {this.props.currentPlayer['username']}'s turn!<br></br><br></br>
+                It is {this.props.currentPlayer.userID==this.props.playerOne.userID ? this.props.playerOne.name : this.props.playerTwo.name }'s turn!<br></br><br></br>
                 The current score is:<br></br>
-                {this.props.playerOne['username']}'s score: {playerOneScore}<br></br>
-                {this.props.playerTwo['username']}'s score: {playerTwoScore}
+                {this.props.playerOne.name}'s score: {playerOneScore}<br></br>
+                {this.props.playerTwo.name}'s score: {playerTwoScore}
             </div>
         );
     }
@@ -101,7 +101,7 @@ class Board extends React.Component {
                 <BoardConnections connectionsArray={this.props.connectionsArray} />
             </div>
             <div className="square-connections">
-                <SquareConnections squaresArray={this.props.squaresArray} playerColor={this.props.currentPlayer['color']}/>
+                <SquareConnections squaresArray={this.props.squaresArray} /* playerColor={this.props.currentPlayer['color']} *//>
             </div>
             <div className="game-status">
                 

@@ -1,4 +1,3 @@
-import Pusher from 'pusher-js';
 import axios from 'axios';
 import Board from './Board.js';
 
@@ -6,8 +5,10 @@ class GameInstance extends React.Component {
     constructor(props) {
         super(props);
 
-        let x = props.boardSize[0]['x'],
-            y = props.boardSize[1]['y'],
+        console.log(props.boardSize);
+
+        let x = parseInt(props.boardSize.x, 10),
+            y = parseInt(props.boardSize.y, 10),
             connectionsArraySize = ((x-1)*y)+((y-1)*x);
 
         this.state = {
@@ -21,44 +22,33 @@ class GameInstance extends React.Component {
             legalCombos: this.generateLegalCombos(x, y)
         };
 
+        this.gameMessage = this.gameMessage.bind(this);
+    }
+
+    gameMessage(event) {
+        let data = JSON.parse(event.data);
+
+        if (data.type == "game-move") {
+            this.setState({ connectionsArray: data.gameState });
+            this.generateSquares();
+        }
+
+        if (data.type == "set-current-player") {
+            this.setState({ currentPlayer: data.currentPlayer })
+        }
+    }
+
+    sendMove (connectionsArray) {
+        this.props.socket.send(JSON.stringify({ type:"game-move", gameID: this.props.gameID, gameState: connectionsArray }));
         
-        this.pusher = new Pusher(process.env.PUSHER_APP_KEY, {
-            cluster: process.env.PUSHER_APP_CLUSTER,
-            authEndpoint: "/pusher/auth",
-            forceTLS: true,
-            auth: {
-                params: {
-                    username: this.props.player.username,
-                    color: this.props.player.color
-                }
-            }
-        });
     }
 
     componentDidMount () {
-        this.opponentChannel = this.pusher.subscribe(this.props.opponentChannel);
-        this.playerChannel = this.pusher.subscribe(this.props.playerChannel);
-
-
-
-         this.playerChannel.bind('client-set-connections', (data) => {
-            this.setState({connectionsArray: data}, () => {});
-         });
-         this.playerChannel.bind('client-set-squares', (data) => {
-            this.setState({squaresArray: data}, () => {});
-         });
-         this.playerChannel.bind('client-change-current-player', (data) => {
-            this.setState({currentPlayer: (this.state.currentPlayer==this.props.playerOne ? this.props.playerTwo : this.props.playerOne)}, () => {});
-         });
-         this.playerChannel.bind('client-game-over', (data) => {
-            this.setState({ gameOver: true });
-            
-        });
-
+        this.props.socket.addEventListener('message', this.gameMessage, true);
     }
 
     componentWillUnmount () {
-        this.pusher.disconnect();
+        this.props.socket.removeEventListener('message', this.gameMessage, true);
     }
 
     generateSquareConditions(x,y) {
@@ -116,8 +106,8 @@ class GameInstance extends React.Component {
     generateSquares() {
         //checks connections array and update state as to squares
         let squareConditions = this.state.squareConditions.slice(),
-            connectionsArray = this.state.connectionsArray.slice();
-        let squaresArray = this.state.squaresArray.slice();
+            connectionsArray = this.state.connectionsArray.slice(),
+            squaresArray = this.state.squaresArray.slice();
         
         
         for (let i=0; i<squareConditions.length; i++) {
@@ -156,9 +146,9 @@ class GameInstance extends React.Component {
             }
             if ((A && B && C && D) && !(sA && sB && sC && sD)) { //i.e., if (connectionsArray contains all of the elements of a single squareCondition)
                 
-                squaresArray.push({square: tempArray, player: this.state.currentPlayer['username'], color: this.state.currentPlayer['color']});
+                squaresArray.push({square: tempArray, player: this.state.currentPlayer['name'], color: this.state.currentPlayer['color']});
                 this.setState({squaresArray: squaresArray}, () => {
-                    this.opponentChannel.trigger('client-set-squares', squaresArray);
+                    /* this.opponentChannel.trigger('client-set-squares', squaresArray); */
                     this.checkEndGame(); 
                     return;
                 });
@@ -168,7 +158,7 @@ class GameInstance extends React.Component {
         }
         if (squaresArray.length == this.state.squaresArray.length) {
             this.setState({currentPlayer: (this.state.currentPlayer==this.props.playerOne ? this.props.playerTwo : this.props.playerOne) }, () => {
-                this.opponentChannel.trigger('client-change-current-player', 'null');
+                /* this.opponentChannel.trigger('client-change-current-player', 'null'); */
                 return;
             });
         }
@@ -180,23 +170,22 @@ class GameInstance extends React.Component {
     }
     checkEndGame(){
         let squaresArray = this.state.squaresArray.slice();
-        let x = this.props.boardSize[0]['x'];
-        let y = this.props.boardSize[1]['y']
+        let x = parseInt(this.props.boardSize.x, 10),
+            y = parseInt(this.props.boardSize.y, 10);
+
         if (squaresArray.length == (x-1)*(y-1)) {
 
             this.setState({ gameOver: true }, () => {});
-            this.opponentChannel.trigger('client-game-over', 'null');
+            /* this.opponentChannel.trigger('client-game-over', 'null'); */
 
             return;
         }
         return;
     }
     
-    
-
     connectTwo(a, b) {
         //is it my turn? if not, return
-        if (this.state.currentPlayer['username']!==this.props.player.username) {
+        if (this.state.currentPlayer.userID!==this.props.self.userID) {
             alert("it's not your turn!");
             return;
         }
@@ -227,10 +216,7 @@ class GameInstance extends React.Component {
 
 
                 this.setState({connectionsArray: tempArray}, () => {
-                    this.opponentChannel.trigger('client-set-connections', tempArray);
-
-                    this.generateSquares();
-                    
+                    this.sendMove(tempArray);                    
                     return;
                 });
                 
@@ -263,19 +249,15 @@ class GameInstance extends React.Component {
         
     }
     triggerGameRestart () {
-        this.playerChannel.trigger('client-restart-game', 'null');
-
-        axios.post('/remove_players', { player: this.props.player.id })
-                    .then((response) => {
-
-                    });
+        /* this.playerChannel.trigger('client-restart-game', 'null'); */
+        this.props.socket.send(JSON.stringify({ type:"game-over", player: this.props.self.userID }));
     }
 
     render () {
 
         return (
         <div className="game-instance">
-            <Board clickHandler={(i) => {this.clickHandler(i)}} x={this.props.boardSize[0]['x']} y={this.props.boardSize[1]['y']} connectionsArray={this.state.connectionsArray} currentPlayer={this.state.currentPlayer} playerOne={this.props.playerOne} playerTwo={this.props.playerTwo} squaresArray={this.state.squaresArray} gameOver={this.state.gameOver} triggerGameRestart={() => {this.triggerGameRestart()}}/>
+            <Board clickHandler={(i) => {this.clickHandler(i)}} x={this.props.boardSize.x} y={this.props.boardSize.x} connectionsArray={this.state.connectionsArray} currentPlayer={this.state.currentPlayer} playerOne={this.props.playerOne} playerTwo={this.props.playerTwo} squaresArray={this.state.squaresArray} gameOver={this.state.gameOver} triggerGameRestart={() => {this.triggerGameRestart()}}/>
             
         </div>
     );}

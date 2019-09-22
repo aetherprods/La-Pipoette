@@ -1,18 +1,12 @@
-import Lobby from "./Lobby.js";
+import Chat from "./Chat.js";
+import ActiveUsers from "./ActiveUsers.js";
 import dynamic from 'next/dynamic';
-
-/* const Lobby = dynamic(
-    () => import("./Lobby.js"),
-    { ssr: false }
-) */
+//import Socket from '../Socket/index';
 
 const Socket = dynamic(
     () => import("../Socket/index.js"),
     { ssr: false }
 );
-
-
-
 
 class InfoTaker extends React.Component {
     constructor(props) {
@@ -33,7 +27,7 @@ class InfoTaker extends React.Component {
         this.setConnection = this.setConnection.bind(this);
         this.setPGP = this.setPGP.bind(this);
     };
-    
+
     setInfo (userID, name, color, submitted) {        
         this.setState({ 
             name: name,
@@ -60,7 +54,6 @@ class InfoTaker extends React.Component {
         };
     };
 
-
     render() {
         if (this.state.submitted == false && this.state.connected == false) {
             return (
@@ -76,12 +69,22 @@ class InfoTaker extends React.Component {
                     </div>
                 </div>);
         } else if (this.state.submitted == true && this.state.connected == true) {
+            let self = {
+                userID: this.state.userID,
+                name: this.state.name,
+                color: this.state.color
+            };
+
             return (
                 <div>
                     <div className="lobby">
-                        <div>
-                            <Lobby userID={this.state.userID} user={this.state.name} color={this.state.color} socket={this.state.socket} />
-                        </div>
+                    <div>
+                        <Chat self={self} socket={this.state.socket} />
+                        {/* <ChatBox user={this.props.user} color={this.props.color} socket={this.props.socket} /> */}
+                    </div>
+                    <div className="active-users">
+                        <ActiveUsers self={self} socket={this.state.socket} />
+                    </div>
                     </div>
                 </div>);
         }
@@ -100,10 +103,10 @@ class Taker extends React.Component {
         let that = this,
             socket = that.props.socket;
 
-        socket.addEventListener('message', function (event) { //once we receive a message->
+        socket.addEventListener('message', function (event) { 
             let data = JSON.parse(event.data);
             
-            if (data.type == "identified"){ //->of type identified, we proceed to the lobby
+            if (data.type == "identified"){ 
                 console.log("identified:"+data.userID);
                 that.props.setInfo(data.userID, name, color, submitted);
             }
@@ -135,8 +138,8 @@ class Taker extends React.Component {
             }
         }
 
-        if (checkName(event.target.elements.namedItem("username").value) && checkColor(event.target.elements.namedItem("color").value)) {
-            let name = event.target.elements.namedItem("username").value,
+        if (checkName(event.target.elements.namedItem("name").value) && checkColor(event.target.elements.namedItem("color").value)) {
+            let name = event.target.elements.namedItem("name").value,
                 color = event.target.elements.namedItem("color").value,
                 submitted = true;
                             
@@ -153,7 +156,7 @@ class Taker extends React.Component {
                 <form onSubmit={this.handleSubmit}>
                     <label>
                         Please enter your name and choose a color!<br></br>
-                        <input type="text" name="username" />
+                        <input type="text" name="name" />
                     </label>
                     <label>
                         <input type="color" name="color" />

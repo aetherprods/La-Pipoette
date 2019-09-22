@@ -1,17 +1,10 @@
 import React from 'react';
-import OpenPGP from '../OpenPGP/index';
 
 class Socket extends React.Component {  //async WebSocket connection which passes the socket on to the parent upon entering OPEN state
     constructor(props) {
         super(props);
 
         this.connect = this.connect.bind(this);
-    }
-
-    componentDidMount() {
-        if (!this.props.pgp) {
-            OpenPGP(); //pls implement me
-        }        
     }
 
     connect(){

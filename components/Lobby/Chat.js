@@ -1,105 +1,96 @@
-import axios from 'axios';
-import Pusher from 'pusher-js';
-import ChatMessage from './ChatMessage';
-
-
 class Chat extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { chats: [] };
+
+        this.state = { messages: [] };
+        this.message = this.message.bind(this);
     }
+
+    message(event) {
+      let that = this; 
+
+      let data = JSON.parse(event.data);
+        if (data.type == "message") { 
+          const messages = that.state.messages;
+          messages.push(data);
+          that.setState({ messages: messages }, () => {
+            document.getElementById("chat-box").scrollTop = document.getElementById("chat-box").scrollHeight;
+          });
+        }
+
+        if (data.type == "history") {
+          const messages = that.state.messages;
+          
+          for (let message in data.history) {
+            messages.push(data.history[message]);
+          }
+          that.setState({ messages: messages }, () => {
+            document.getElementById("chat-box").scrollTop = document.getElementById("chat-box").scrollHeight;
+          });
+        }
+    }
+
     componentDidMount() {
-        this.pusher = new Pusher (process.env.PUSHER_APP_KEY, {
-            cluster: process.env.PUSHER_APP_CLUSTER,
-            authEndpoint: "/pusher/auth",
-            forceTLS: true,
-            auth: {
-                params: {
-                    username: this.props.activeUser,
-                    color: this.props.activeColor
-                }
-            }
-        });
-        this.channel = this.pusher.subscribe('presence-chat');
+      let socket = this.props.socket;
 
-        this.channel.bind('pusher:subscription_succeeded', (data) => {
-          (response) => {
-                          const chats = response.data.messages;
-                          this.setState({ chats }, () => {
-                            document.getElementById("chat-box").scrollTop = document.getElementById("chat-box").scrollHeight;
-                          });
-                        };
-        });
-        
-
-        this.channel.bind('new-message', ({ chat = null }) => {
-            const { chats } = this.state;
-            chat && chats.push(chat);
-            this.setState({ chats }, () => {
-              document.getElementById("chat-box").scrollTop = document.getElementById("chat-box").scrollHeight;
-            });
-        });
-
-
+      socket.addEventListener('message', this.message, true);
+      socket.send(JSON.stringify({ type:"get-chat-history" }));
     }
+
     componentWillUnmount() {
-        this.pusher.disconnect();
+      this.props.socket.removeEventListener('message', this.message, true);
     }
+
     handleKeyUp = evt => {
         const value = evt.target.value;
         
         if (evt.keyCode === 13 && !evt.shiftKey) {
-          const { activeUser, activeColor } = this.props;
-          const chat = { activeUser, activeColor, message: value, timestamp: +new Date };
+          const chat = { type: "message", userID: this.props.self.userID, message: value };
           
           evt.target.value = '';
-          axios.post('/message', chat);
+          this.props.socket.send(JSON.stringify(chat));
         }
       }
+
     render() {
-        return (this.props.activeUser && <div><div className="chat-box" id="chat-box">
-        
-          <div >
-            <h2>Welcome {this.props.activeUser}!</h2>
-          </div>
-
-          <div >
-    
-            {this.state.chats.map((chat, index) => {
-            
-              const previous = Math.max(0, index - 1);
-              const previousChat = this.state.chats[previous];
-              
-              const isFirst = previous === index;
-              const inSequence = chat.activeUser === previousChat.activeUser;
-              const hasDelay = Math.ceil((chat.timestamp - previousChat.timestamp) / (1000 * 60)) > 1;
-
-              
-              
-              return (
-                <div key={index}>
-                  { (isFirst || !inSequence || hasDelay) && (
-                    <div >
-                      
-                      <u><b><big>{!!(chat.activeUser) ? chat.activeUser : null}</big></b></u>
-                    </div>
-                  ) }
-                  
-                  <ChatMessage message={chat.message} color={chat.activeColor}/>
-                  
-                </div>
-              );
-              
-            })}
-    
-          </div>
-                              
+      return (<div>
+        <div >
+          <h2>Welcome {this.props.self.name}!</h2>
         </div>
-          <div>
+
+        <div className="chat-box" id="chat-box">
+          <MessageHistory messages={this.state.messages} />
+        </div>
+
+        <div>
           <textarea onKeyUp={this.handleKeyUp} placeholder="Enter a chat message"></textarea>
-        </div> </div>)
-      }
+        </div>
+        </div>)
+    }
       
+}
+
+class MessageHistory extends React.Component {
+  render() {
+    return(<div>
+      {this.props.messages.map((message, index) => {
+         
+          return(<div key={index}>
+            {(index==0 || message.userID!=this.props.messages[index-1].userID) && 
+            <u><b><big>{message.name}</big></b></u>}
+
+            <ChatMessage message={message.message} color={message.color} />
+  
+          </div>) 
+      })}
+    </div>)
+  }
+}
+
+class ChatMessage extends React.Component {
+  render() {
+      return (<div style={{color: `${this.props.color}`}}>{this.props.message}</div>);
+  }
 }
 
 export default Chat;
