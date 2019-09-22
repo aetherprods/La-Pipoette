@@ -8,7 +8,7 @@ const cors = require('cors'),
 
 
 //variables
-const port = process.env.PORT || 3000,
+const port = parseInt(process.env.PORT, 10) || 3000,
       dev = process.env.NODE_ENV !== 'production';
 
 //initializations
@@ -197,6 +197,7 @@ app.prepare().then(() => {
             let game = { playerOne, playerTwo, boardSize };
 
             wss.startGame(game);
+            res.send(null);
         });
 
         server.listen(port, err => {

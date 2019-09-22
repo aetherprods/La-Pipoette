@@ -4,6 +4,9 @@ const webpack = require('webpack');
 require('dotenv').config();
 
 module.exports = withCSS({
+    onDemandEntries: {
+      WebsocketPort: 3030
+    },
     webpack: config => {
         const env = Object.keys(process.env).reduce((acc, curr) => {
           acc[`process.env.${curr}`] = JSON.stringify(process.env[curr]);
