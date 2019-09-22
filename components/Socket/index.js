@@ -12,7 +12,7 @@ class Socket extends React.Component {  //async WebSocket connection which passe
 
         let connection = new Promise ((resolve, reject) => {
             let host = location.origin.replace(/^http/, 'ws');
-            let socket = new WebSocket('ws://localhost:3030/');   //open WebSocket connection         
+            let socket = new WebSocket(host);   //open WebSocket connection         
             socket.addEventListener('open', function (event) {
                 
                 that.props.setConnection(socket);  //on open, pass the connection up to our parent's state
