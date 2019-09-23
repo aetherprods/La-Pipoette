@@ -1,6 +1,6 @@
 //imports
 const cors = require('cors'),
-      WebSocket = require('ws'),
+      SocketServer = require('ws').Server,
       express = require('express'),
       next = require('next'),
       bodyParser = require('body-parser'),
@@ -23,15 +23,35 @@ app.prepare().then(() => {
         server.use(bodyParser.urlencoded({extended: false}));
         
 
+        
+
+
+        server.get('*', (req, res) => {
+            return handler(req, res);
+        });
+
+        server.post('/game_daemon', (req, res) => {
+            let { playerOne, playerTwo, boardSize } = req.body
+
+            let game = { playerOne, playerTwo, boardSize };
+
+            wss.startGame(game);
+            res.send(null);
+        });
+
+        server.listen(port, err => {
+            if (err) throw err;
+            console.log(`>Ready on http://localhost:${port}`);
+        });
+
         /*******************/
         /* START WS SERVER */
         /*******************/                
 
-        //set up users and history arrays
-        const wss = new WebSocket.Server({ port: 3030, server: server });
+        const wss = new SocketServer({ server });
      
 
-
+        //set up users and history arrays
         wss.chatHistory = [];
         wss.users = {};
         wss.games = {};
@@ -185,25 +205,6 @@ app.prepare().then(() => {
         /*****************/
         /* END WS SERVER */
         /*****************/
-
-
-        server.get('*', (req, res) => {
-            return handler(req, res);
-        });
-
-        server.post('/game_daemon', (req, res) => {
-            let { playerOne, playerTwo, boardSize } = req.body
-
-            let game = { playerOne, playerTwo, boardSize };
-
-            wss.startGame(game);
-            res.send(null);
-        });
-
-        server.listen(port, err => {
-            if (err) throw err;
-            console.log(`>Ready on http://localhost:${port}`);
-        });
     })
     .catch(ex => {
       console.error(ex.stack);

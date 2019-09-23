@@ -27,8 +27,6 @@
     "express": "^4.17.1",
     "next": "^9.0.5",
     "openpgp": "^4.6.0",
-    "pusher": "^2.2.1",
-    "pusher-js": "^4.4.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-lineto": "^3.1.3",
