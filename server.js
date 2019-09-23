@@ -82,7 +82,7 @@ app.prepare().then(() => {
 
 
             const gameID = (`${playerOne.userID}${playerTwo.userID}`);
-            wss.games[gameID] = {playerOne: playerOne.userID, playerTwo: playerTwo.userID}
+            wss.games[gameID] = {playerOne: playerOne.userID, playerTwo: playerTwo.userID, gameState: { connectionsArray: [], squaresArray: []}}
             
             wss.users[playerOne.userID].inGame = true;
             wss.users[playerTwo.userID].inGame = true;
@@ -108,10 +108,35 @@ app.prepare().then(() => {
         wss.checkUserID = function(userID) {
             return (wss.users.hasOwnProperty(userID));
         }
-        wss.updatePlayer = function (player, gameState, currentPlayer) {
+        wss.sendMove = function (player, gameState, currentPlayer) {
             let socket = wss.findSocket(player);
             socket.send(JSON.stringify({ type: "game-move", gameState: gameState }));
-            socket.send(JSON.stringify({ type: "set-current-player", currentPlayer: currentPlayer }));
+            
+        }
+        wss.updatePlayer = function (player, currentPlayer) {
+            let socket = wss.findSocket(player);
+            socket.send(JSON.stringify({ type: "set-current-player", currentPlayer }));
+        }
+        wss.updatePlayers = function (currentPlayer, p, q, gameID) {
+            if(wss.checkUserID(currentPlayer) && wss.checkUserID(p) && wss.checkUserID(q)) {
+                let cp = currentPlayer==p ? q : (currentPlayer==q ? p : null);
+
+                if (cp==null){return};
+
+                if (cp==wss.games[gameID].playerOne) {
+                    let nextPlayer = wss.users[cp];
+                    wss.updatePlayer(p, nextPlayer);
+                    wss.updatePlayer(q, nextPlayer);
+                } else if (cp==wss.games[gameID].playerTwo) {
+                    let nextPlayer = wss.users[cp];
+                    wss.updatePlayer(p, nextPlayer);
+                    wss.updatePlayer(q, nextPlayer);
+                }
+            
+            } else {
+                return
+            }
+            
         }
 
         wss.on('connection', function connection(ws, request) {       //set up global WebSocket listener for connections
@@ -160,15 +185,25 @@ app.prepare().then(() => {
                     //must do some legality checking here
                     //get our two relevant players from gameID
                     let p = wss.users[wss.games[data.gameID].playerOne],
-                        q = wss.users[wss.games[data.gameID].playerTwo];
+                        q = wss.users[wss.games[data.gameID].playerTwo],
+                        change = true;
 
+                    
+                    //we must check if the squares array is bigger. do not update currentPlayer if it is
+                    if (wss.games[data.gameID].gameState.squaresArray.length + 1 == data.gameState.squaresArray.length) {
+                        change = false;
+                    };
+
+                    //commit the changes
+                    wss.games[data.gameID].gameState = data.gameState;
+
+                    //push data
                     if (ws.userID == p.userID) {
-                        wss.updatePlayer(p.userID, data.gameState, q);
-                        wss.updatePlayer(q.userID, data.gameState, q);
-
+                        wss.sendMove(q.userID, data.gameState, q);
+                        change && wss.updatePlayers(p.userID, p.userID, q.userID, data.gameID);
                     } else if (ws.userID == q.userID) {
-                        wss.updatePlayer(p.userID, data.gameState, p);
-                        wss.updatePlayer(q.userID, data.gameState, p);
+                        wss.sendMove(p.userID, data.gameState, p);
+                        change && wss.updatePlayers(q.userID, p.userID, q.userID, data.gameID);
                     } else {
                         return;
                     }

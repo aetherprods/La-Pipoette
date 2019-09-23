@@ -29,8 +29,12 @@ class GameInstance extends React.Component {
         let data = JSON.parse(event.data);
 
         if (data.type == "game-move") {
-            this.setState({ connectionsArray: data.gameState });
-            this.generateSquares();
+            this.setState({ connectionsArray: data.gameState.connectionsArray });
+
+            if (data.gameState.squaresArray.length !== this.state.squaresArray.length) {
+                this.generateSquares(data.gameState.connectionsArray);
+            }
+            
         }
 
         if (data.type == "set-current-player") {
@@ -38,9 +42,8 @@ class GameInstance extends React.Component {
         }
     }
 
-    sendMove (connectionsArray) {
-        this.props.socket.send(JSON.stringify({ type:"game-move", gameID: this.props.gameID, gameState: connectionsArray }));
-        
+    sendMove (connectionsArray, squaresArray = []) {
+        this.props.socket.send(JSON.stringify({ type:"game-move", gameID: this.props.gameID, gameState: {connectionsArray, squaresArray} })); 
     }
 
     componentDidMount () {
@@ -103,12 +106,12 @@ class GameInstance extends React.Component {
         } 
         return tempArray;        
     }
-    generateSquares() {
+    generateSquares(connectionsArray) {
         //checks connections array and update state as to squares
         let squareConditions = this.state.squareConditions.slice(),
-            connectionsArray = this.state.connectionsArray.slice(),
             squaresArray = this.state.squaresArray.slice();
         
+        console.log(connectionsArray)
         
         for (let i=0; i<squareConditions.length; i++) {
             let A=false, B=false, C=false, D=false;
@@ -148,8 +151,8 @@ class GameInstance extends React.Component {
                 
                 squaresArray.push({square: tempArray, player: this.state.currentPlayer['name'], color: this.state.currentPlayer['color']});
                 this.setState({squaresArray: squaresArray}, () => {
-                    /* this.opponentChannel.trigger('client-set-squares', squaresArray); */
-                    this.checkEndGame(); 
+                    this.sendMove(this.state.connectionsArray, squaresArray);
+                    this.checkEndGame(this.state.squaresArray); 
                     return;
                 });
                 
@@ -157,15 +160,10 @@ class GameInstance extends React.Component {
 
         }
         if (squaresArray.length == this.state.squaresArray.length) {
-            this.setState({currentPlayer: (this.state.currentPlayer==this.props.playerOne ? this.props.playerTwo : this.props.playerOne) }, () => {
-                /* this.opponentChannel.trigger('client-change-current-player', 'null'); */
-                return;
-            });
-        }
-
-               
-
-        
+            
+            this.sendMove(this.state.connectionsArray, this.state.squaresArray);
+            this.checkEndGame(this.state.squaresArray);
+        }        
         return;
     }
     checkEndGame(){
@@ -188,8 +186,7 @@ class GameInstance extends React.Component {
         if (this.state.currentPlayer.userID!==this.props.self.userID) {
             alert("it's not your turn!");
             return;
-        }
-        
+        }        
 
         let testArray = [a, b],
             legalcombos = this.state.legalCombos;
@@ -205,7 +202,7 @@ class GameInstance extends React.Component {
                     alert("invalid selection");
                     return;
                 }
-                //has its inverse been connecter?
+                //has its inverse been connected?
                 found = tempArray.find(n => (n[0] == [x,y][1] && n[1] == [x,y][0]));
                 if (!!found == true){
                     alert("invalid selection");
@@ -214,9 +211,9 @@ class GameInstance extends React.Component {
                 //good to go
                 tempArray.push([x,y]);
 
-
                 this.setState({connectionsArray: tempArray}, () => {
-                    this.sendMove(tempArray);                    
+                    //this.sendMove(tempArray, );
+                    this.generateSquares(tempArray);
                     return;
                 });
                 

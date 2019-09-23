@@ -413,9 +413,12 @@ function (_React$Component) {
 
       if (data.type == "game-move") {
         this.setState({
-          connectionsArray: data.gameState
+          connectionsArray: data.gameState.connectionsArray
         });
-        this.generateSquares();
+
+        if (data.gameState.squaresArray.length !== this.state.squaresArray.length) {
+          this.generateSquares(data.gameState.connectionsArray);
+        }
       }
 
       if (data.type == "set-current-player") {
@@ -427,10 +430,14 @@ function (_React$Component) {
   }, {
     key: "sendMove",
     value: function sendMove(connectionsArray) {
+      var squaresArray = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
       this.props.socket.send(_babel_runtime_corejs2_core_js_json_stringify__WEBPACK_IMPORTED_MODULE_1___default()({
         type: "game-move",
         gameID: this.props.gameID,
-        gameState: connectionsArray
+        gameState: {
+          connectionsArray: connectionsArray,
+          squaresArray: squaresArray
+        }
       }));
     }
   }, {
@@ -511,13 +518,13 @@ function (_React$Component) {
     }
   }, {
     key: "generateSquares",
-    value: function generateSquares() {
+    value: function generateSquares(connectionsArray) {
       var _this2 = this;
 
       //checks connections array and update state as to squares
       var squareConditions = this.state.squareConditions.slice(),
-          connectionsArray = this.state.connectionsArray.slice(),
           squaresArray = this.state.squaresArray.slice();
+      console.log(connectionsArray);
 
       for (var i = 0; i < squareConditions.length; i++) {
         var A = false,
@@ -574,8 +581,9 @@ function (_React$Component) {
           this.setState({
             squaresArray: squaresArray
           }, function () {
-            /* this.opponentChannel.trigger('client-set-squares', squaresArray); */
-            _this2.checkEndGame();
+            _this2.sendMove(_this2.state.connectionsArray, squaresArray);
+
+            _this2.checkEndGame(_this2.state.squaresArray);
 
             return;
           });
@@ -583,12 +591,8 @@ function (_React$Component) {
       }
 
       if (squaresArray.length == this.state.squaresArray.length) {
-        this.setState({
-          currentPlayer: this.state.currentPlayer == this.props.playerOne ? this.props.playerTwo : this.props.playerOne
-        }, function () {
-          /* this.opponentChannel.trigger('client-change-current-player', 'null'); */
-          return;
-        });
+        this.sendMove(this.state.connectionsArray, this.state.squaresArray);
+        this.checkEndGame(this.state.squaresArray);
       }
 
       return;
@@ -644,7 +648,7 @@ function (_React$Component) {
             return {
               v: void 0
             };
-          } //has its inverse been connecter?
+          } //has its inverse been connected?
 
 
           found = tempArray.find(function (n) {
@@ -664,7 +668,8 @@ function (_React$Component) {
           _this3.setState({
             connectionsArray: tempArray
           }, function () {
-            _this3.sendMove(tempArray);
+            //this.sendMove(tempArray, );
+            _this3.generateSquares(tempArray);
 
             return;
           });
