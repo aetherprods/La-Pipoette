@@ -1,6 +1,6 @@
 //imports
 const cors = require('cors'),
-      SocketServer = require('ws').Server,
+      WebSocket = require('ws'),
       express = require('express'),
       next = require('next'),
       bodyParser = require('body-parser'),
@@ -39,16 +39,12 @@ app.prepare().then(() => {
             res.send(null);
         });
 
-        server.listen(port, err => {
-            if (err) throw err;
-            console.log(`>Ready on http://localhost:${port}`);
-        });
 
         /*******************/
         /* START WS SERVER */
         /*******************/                
 
-        const wss = new SocketServer({ server });
+        const wss = new WebSocket.Server({ server });
      
 
         //set up users and history arrays
@@ -205,7 +201,22 @@ app.prepare().then(() => {
         /*****************/
         /* END WS SERVER */
         /*****************/
+
+
+        let srv = server.listen(port, err => {
+            if (err) throw err;
+            console.log(`>Ready on http://localhost:${port}`);
+        });
+
+
+        srv.on('upgrade', function(req, socket, head) {
+            wss.handleUpgrade(req, socket, head, function connected(ws) {
+                wss.emit('connection', ws, req);
+            })
+        });
     })
+
+    
     .catch(ex => {
       console.error(ex.stack);
       process.exit(1);
